@@ -64,8 +64,7 @@ public class User {
         if(habit!=null && habits.contains(habit)){
             habit.complete();
             Random random = new Random();
-            //Exp += random.nextInt(10,21);
-            Exp += 50;
+            Exp += random.nextInt(10,21);
             checkLevelUp();
             checkTitel();
             return true;
@@ -75,8 +74,8 @@ public class User {
 
     public void checkLevelUp(){
         while (true){
-            if(Exp >= level*2){
-                Exp -= level*2;
+            if(Exp >= level*50){
+                Exp -= level*50;
                 level++;
             }
             else {
@@ -86,7 +85,21 @@ public class User {
     }
 
     public void checkTitel(){
-        if(level <=)
+        if(level>=5&&level<10){
+            titel = "Novice";
+        }
+        else if(level>=10&&level<15){
+            titel = "Apprentice";
+        }
+        else if(level>=15&&level<20){
+            titel = "Expert";
+        }
+        else if(level>=20&&level<25){
+            titel = "Legend";
+        }
+        else if(level>=25){
+            titel = "Master";
+        }
     }
 
     public void printHabits(){

@@ -20,7 +20,7 @@ public class Main {
         System.out.println(user.addHabit(habit6));
 
         user.printHabits();
-
+        user.printUser();
         System.out.println("--- Test completeHabits ---");
         user.completeHabit(habit1);
         user.completeHabit(habit2);
