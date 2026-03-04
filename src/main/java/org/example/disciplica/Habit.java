@@ -54,4 +54,8 @@ public class Habit {
         System.out.println("Habit: " + name);
     }
 
+    @Override
+    public String toString() {
+        return "Name: " + name + "; Description: " + description + "; isCompleted: " + isCompleted + "; Streak: " + streak;
+    }
 }
