@@ -10,18 +10,18 @@ public class Main {
 
         User user = new User("Simon");
 
-        // Create some initial habits
-        user.addHabit(new Habit("Exercise", "Go to the gym for 30 minutes"));
-        user.addHabit(new Habit("Read", "Read a book for 20 minutes"));
-        user.addHabit(new Habit("Meditate", "Meditate for 10 minutes"));
-        user.addHabit(new Habit("Sleep", "Go to bed before 10 PM"));
-        user.addHabit(new Habit("Study", "Study for 1 hour"));
+        // Create some initial tasks
+        user.addTask(new DailyHabit("Exercise", "Go to the gym for 30 minutes", 10));
+        user.addTask(new DailyHabit("Read", "Read a book for 20 minutes", 5));
+        user.addTask(new WeeklyHabit("Clean Room", "Tidy up the room", 20));
+        user.addTask(new OneTimeTask("Buy Groceries", "Get milk and eggs", 5));
+        user.addTask(new DailyHabit("Study", "Study for 1 hour", 15));
 
         boolean running = true;
         while (running) {
             System.out.println("\n--- Menu ---");
-            System.out.println("1. Show all habits");
-            System.out.println("2. Complete a habit");
+            System.out.println("1. Show all tasks");
+            System.out.println("2. Complete a task");
             System.out.println("3. Show stats");
             System.out.println("4. Exit");
             System.out.print("Choose an option: ");
@@ -30,30 +30,30 @@ public class Main {
 
             switch (input) {
                 case "1":
-                    System.out.println("\n--- All Habits ---");
-                    user.printHabits();
+                    System.out.println("\n--- All Tasks ---");
+                    user.printTasks();
                     break;
                 case "2":
-                    System.out.println("\n--- Complete a Habit ---");
-                    ArrayList<Habit> habits = user.getHabits();
-                    if (habits.isEmpty()) {
-                        System.out.println("No habits found.");
+                    System.out.println("\n--- Complete a Task ---");
+                    ArrayList<AbstractTask> tasks = user.getTasks();
+                    if (tasks.isEmpty()) {
+                        System.out.println("No tasks found.");
                     } else {
-                        for (int i = 0; i < habits.size(); i++) {
-                            Habit h = habits.get(i);
-                            String status = h.isCompleted() ? "[DONE]" : "[ ]";
-                            System.out.println((i + 1) + ". " + status + " " + h.getName());
+                        for (int i = 0; i < tasks.size(); i++) {
+                            AbstractTask t = tasks.get(i);
+                            String status = t.isCompleted() ? "[DONE]" : "[ ]";
+                            System.out.println((i + 1) + ". " + status + " " + t.getName() + " (" + t.getClass().getSimpleName() + ")");
                         }
-                        System.out.print("Enter habit number to complete: ");
+                        System.out.print("Enter task number to complete: ");
                         try {
                             int choice = Integer.parseInt(scanner.nextLine());
-                            if (choice > 0 && choice <= habits.size()) {
-                                Habit selectedHabit = habits.get(choice - 1);
-                                if (user.completeHabit(selectedHabit)) {
-                                    System.out.println("Completed habit: " + selectedHabit.getName());
-                                    System.out.println("You gained some experience!");
+                            if (choice > 0 && choice <= tasks.size()) {
+                                AbstractTask selectedTask = tasks.get(choice - 1);
+                                if (user.completeTask(selectedTask)) {
+                                    System.out.println("Completed task: " + selectedTask.getName());
+                                    System.out.println("You gained " + selectedTask.calculatePoints() + " experience points!");
                                 } else {
-                                    System.out.println("Could not complete habit. It might be already completed for today.");
+                                    System.out.println("Could not complete task. It might be already completed.");
                                 }
                             } else {
                                 System.out.println("Invalid choice.");
@@ -78,4 +78,3 @@ public class Main {
         scanner.close();
     }
 }
-

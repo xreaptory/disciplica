@@ -2,21 +2,20 @@ package org.example.disciplica;
 
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class User {
     private String username;
     private int level;
     private int Exp;
     private String titel;
-    private ArrayList<Habit> habits;
+    private ArrayList<Task> tasks;
 
     public User(String username) {
         this.username = username;
         titel = "Beginner";
         level = 1;
         Exp = 0;
-        habits = new ArrayList<>();
+        tasks = new ArrayList<>();
     }
 
     public int getExp() {
@@ -43,32 +42,31 @@ public class User {
         this.username = username;
     }
 
-    public boolean addHabit(Habit habit){
-        if(habit!=null && !habits.contains(habit)){
-            habits.add(habit);
+    public boolean addTask(org.example.disciplica.DailyHabit task){
+        if(task!=null && !tasks.contains(task)){
+            tasks.add(task);
             return true;
         }
         return false;
     }
 
-    public Habit removeHabit(Habit habit){
-        if(habit!=null && habits.contains(habit)){
-            Habit temp = habit;
-            habits.remove(habit);
+    public Task removeTask(Task task){
+        if(task!=null && tasks.contains(task)){
+            Task temp = task;
+            tasks.remove(task);
             return temp;
         }
         return null;
     }
 
-    public ArrayList<Habit> getHabits() {
-        return habits;
+    public ArrayList<Task> getTasks() {
+        return tasks;
     }
 
-    public boolean completeHabit(Habit habit){
-        if(habit!=null && habits.contains(habit)){
-            if(habit.complete()){
-                Random random = new Random();
-                Exp += random.nextInt(20,26);
+    public boolean completeTask(Task task){
+        if(task!=null && tasks.contains(task)){
+            if(task.complete()){
+                Exp += task.calculatePoints();
                 checkLevelUp();
                 checkTitel();
                 return true;
@@ -107,18 +105,21 @@ public class User {
         }
     }
 
-    public void printHabits(){
-        for(Habit h : habits){
-            System.out.println(h.toString());
+    public void printTasks() {
+        for (AbstractTask task : tasks) {
+            System.out.println(task);
         }
     }
 
     @Override
     public String toString() {
-        return "Username: " + username + "; Level: " + level + "; Exp: " + Exp + "; Habits: " + habits.size()+"; Titel: "+titel;
+        return "Username: " + username + "; Level: " + level + "; Exp: " + Exp + "; Tasks: " + tasks.size()+"; Titel: "+titel;
     }
 
     public void printUser(){
-        System.out.println(toString());
+        System.out.println("User: "+username);
+        System.out.println("Titel: "+titel);
+        System.out.println("Level: "+level);
+        System.out.println("Exp: "+Exp);
     }
 }
