@@ -68,7 +68,7 @@ public class User {
         if(habit!=null && habits.contains(habit)){
             if(habit.complete()){
                 Random random = new Random();
-                Exp += random.nextInt(10,21);
+                Exp += random.nextInt(20,26);
                 checkLevelUp();
                 checkTitel();
                 return true;
