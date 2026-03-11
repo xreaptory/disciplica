@@ -8,7 +8,7 @@ public class User {
     private int level;
     private int Exp;
     private String titel;
-    private ArrayList<Task> tasks;
+    private ArrayList<AbstractTask> tasks;
 
     public User(String username) {
         this.username = username;
@@ -17,32 +17,8 @@ public class User {
         Exp = 0;
         tasks = new ArrayList<>();
     }
-
-    public int getExp() {
-        return Exp;
-    }
-
-    public void setExp(int exp) {
-        Exp = exp;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public boolean addTask(org.example.disciplica.DailyHabit task){
+// ...existing code...
+    public boolean addTask(AbstractTask task){
         if(task!=null && !tasks.contains(task)){
             tasks.add(task);
             return true;
@@ -50,20 +26,20 @@ public class User {
         return false;
     }
 
-    public Task removeTask(Task task){
+    public AbstractTask removeTask(AbstractTask task){
         if(task!=null && tasks.contains(task)){
-            Task temp = task;
+            AbstractTask temp = task;
             tasks.remove(task);
             return temp;
         }
         return null;
     }
 
-    public ArrayList<Task> getTasks() {
+    public ArrayList<AbstractTask> getTasks() {
         return tasks;
     }
 
-    public boolean completeTask(Task task){
+    public boolean completeTask(AbstractTask task){
         if(task!=null && tasks.contains(task)){
             if(task.complete()){
                 Exp += task.calculatePoints();
