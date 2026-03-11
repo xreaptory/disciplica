@@ -1,6 +1,6 @@
 package org.example.disciplica;
 
-public class Habit {
+public class Habit implements Completable, Trackable {
     private String name;
     private String description;
     private boolean isCompleted;
@@ -27,6 +27,11 @@ public class Habit {
         this.description = description;
     }
 
+    @Override
+    public void getProgress() {
+
+    }
+
     public int getStreak() {
         return streak;
     }
@@ -46,6 +51,11 @@ public class Habit {
         isCompleted = true;
         streak++;
         return true;
+    }
+
+    @Override
+    public void getReward() {
+
     }
 
     public void resetStreak(){
