@@ -60,14 +60,19 @@ public class User {
         return null;
     }
 
+    public ArrayList<Habit> getHabits() {
+        return habits;
+    }
+
     public boolean completeHabit(Habit habit){
         if(habit!=null && habits.contains(habit)){
-            habit.complete();
-            Random random = new Random();
-            Exp += random.nextInt(10,21);
-            checkLevelUp();
-            checkTitel();
-            return true;
+            if(habit.complete()){
+                Random random = new Random();
+                Exp += random.nextInt(10,21);
+                checkLevelUp();
+                checkTitel();
+                return true;
+            }
         }
         return false;
     }

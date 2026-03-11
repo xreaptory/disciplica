@@ -40,6 +40,9 @@ public class Habit {
     }
 
     public boolean complete() {
+        if (isCompleted) {
+            return false;
+        }
         isCompleted = true;
         streak++;
         return true;
