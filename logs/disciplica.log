@@ -1,0 +1,125 @@
+2026-03-12 08:13:47.033 [main] INFO  com.disciplica.Main - Disciplica starting...
+2026-03-12 08:13:47.062 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Exercise', points=10
+2026-03-12 08:13:47.067 [main] INFO  com.disciplica.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-12 08:13:47.069 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Exercise', points=10
+2026-03-12 08:13:47.069 [main] INFO  com.disciplica.User - Task added: Exercise
+2026-03-12 08:13:47.070 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Read', points=5
+2026-03-12 08:13:47.070 [main] INFO  com.disciplica.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-12 08:13:47.071 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Read', points=5
+2026-03-12 08:13:47.071 [main] INFO  com.disciplica.User - Task added: Read
+2026-03-12 08:13:47.071 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Clean Room', points=20
+2026-03-12 08:13:47.071 [main] INFO  com.disciplica.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-12 08:13:47.072 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20
+2026-03-12 08:13:47.072 [main] INFO  com.disciplica.User - Task added: Clean Room
+2026-03-12 08:13:47.072 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Groceries', points=5
+2026-03-12 08:13:47.073 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-12 08:13:47.073 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5
+2026-03-12 08:13:47.073 [main] INFO  com.disciplica.User - Task added: Buy Groceries
+2026-03-12 08:13:47.073 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Study', points=15
+2026-03-12 08:13:47.074 [main] INFO  com.disciplica.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-12 08:13:47.074 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Study', points=15
+2026-03-12 08:13:47.074 [main] INFO  com.disciplica.User - Task added: Study
+2026-03-12 08:13:47.077 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-12 08:13:47.078 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-12 08:13:47.078 [main] DEBUG com.disciplica.Habit - Habit name set to 'Drink Water'
+2026-03-12 08:13:47.079 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-12 08:13:47.079 [main] DEBUG com.disciplica.Habit - Habit 'Drink Water' description set successfully
+2026-03-12 08:13:47.079 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Drink Water'
+2026-03-12 08:13:47.079 [main] INFO  com.disciplica.Main - Processing completable item: Habit
+2026-03-12 08:13:47.079 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-12 08:13:47.079 [main] INFO  com.disciplica.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-12 08:13:47.079 [main] DEBUG com.disciplica.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-12 08:13:47.082 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-12 08:13:47.083 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-12 08:13:47.087 [main] INFO  com.disciplica.Main - Completable item completed successfully
+2026-03-12 08:14:06.651 [main] DEBUG com.disciplica.Main - User input: 1
+2026-03-12 08:14:11.253 [main] DEBUG com.disciplica.Main - User input: 2
+2026-03-12 08:14:13.214 [main] DEBUG com.disciplica.DailyHabit - Attempting to complete DailyHabit 'Exercise'
+2026-03-12 08:14:13.215 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-12 08:14:13.215 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-12 08:14:13.215 [main] INFO  com.disciplica.DailyHabit - DailyHabit 'Exercise' completed. New streak: 1
+2026-03-12 08:14:13.215 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-12 08:14:13.215 [main] INFO  com.disciplica.User - Task completed and XP granted: Exercise
+2026-03-12 08:14:13.216 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-12 08:14:14.514 [main] DEBUG com.disciplica.Main - User input: 2
+2026-03-12 08:14:18.895 [main] DEBUG com.disciplica.DailyHabit - Attempting to complete DailyHabit 'Read'
+2026-03-12 08:14:18.896 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-12 08:14:18.896 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-12 08:14:18.896 [main] INFO  com.disciplica.DailyHabit - DailyHabit 'Read' completed. New streak: 1
+2026-03-12 08:14:18.896 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-12 08:14:18.896 [main] INFO  com.disciplica.User - Task completed and XP granted: Read
+2026-03-12 08:14:18.897 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-12 08:14:19.929 [main] DEBUG com.disciplica.Main - User input: 2
+2026-03-12 08:14:20.593 [main] DEBUG com.disciplica.WeeklyHabit - Attempting to complete WeeklyHabit 'Clean Room'
+2026-03-12 08:14:20.593 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Clean Room' (WeeklyHabit)
+2026-03-12 08:14:20.593 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Clean Room' (WeeklyHabit)
+2026-03-12 08:14:20.594 [main] INFO  com.disciplica.WeeklyHabit - WeeklyHabit 'Clean Room' completed. New streak: 1
+2026-03-12 08:14:20.594 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=15 = 35
+2026-03-12 08:14:20.594 [main] INFO  com.disciplica.User - Task completed and XP granted: Clean Room
+2026-03-12 08:14:20.594 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=15 = 35
+2026-03-12 08:14:21.421 [main] DEBUG com.disciplica.Main - User input: 2
+2026-03-12 08:14:22.672 [main] DEBUG com.disciplica.WeeklyHabit - Attempting to complete WeeklyHabit 'Clean Room'
+2026-03-12 08:14:22.672 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Clean Room' (WeeklyHabit)
+2026-03-12 08:14:22.673 [main] WARN  com.disciplica.AbstractTask - Attempted to complete already-completed task: 'Clean Room' (WeeklyHabit)
+2026-03-12 08:14:22.673 [main] WARN  com.disciplica.WeeklyHabit - WeeklyHabit 'Clean Room' was already completed, streak unchanged
+2026-03-12 08:14:23.432 [main] DEBUG com.disciplica.Main - User input: 2
+2026-03-12 08:14:24.037 [main] DEBUG com.disciplica.DailyHabit - Attempting to complete DailyHabit 'Study'
+2026-03-12 08:14:24.038 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Study' (DailyHabit)
+2026-03-12 08:14:24.038 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Study' (DailyHabit)
+2026-03-12 08:14:24.038 [main] INFO  com.disciplica.DailyHabit - DailyHabit 'Study' completed. New streak: 1
+2026-03-12 08:14:24.039 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Study': base=15 + streakBonus=5 = 20
+2026-03-12 08:14:24.039 [main] INFO  com.disciplica.User - Task completed and XP granted: Study
+2026-03-12 08:14:24.039 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Study': base=15 + streakBonus=5 = 20
+2026-03-12 08:14:25.133 [main] DEBUG com.disciplica.Main - User input: 2
+2026-03-12 08:14:27.234 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Buy Groceries' (OneTimeTask)
+2026-03-12 08:14:27.236 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Buy Groceries' (OneTimeTask)
+2026-03-12 08:14:27.236 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-12 08:14:27.236 [main] INFO  com.disciplica.User - Task completed and XP granted: Buy Groceries
+2026-03-12 08:14:27.236 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-12 08:14:28.958 [main] DEBUG com.disciplica.Main - User input: 2
+2026-03-12 08:14:29.740 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Buy Groceries' (OneTimeTask)
+2026-03-12 08:14:29.740 [main] WARN  com.disciplica.AbstractTask - Attempted to complete already-completed task: 'Buy Groceries' (OneTimeTask)
+2026-03-12 08:14:36.476 [main] DEBUG com.disciplica.Main - User input: 3
+2026-03-12 08:14:36.481 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-12 08:14:36.481 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-12 08:14:36.481 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=15 = 35
+2026-03-12 08:14:36.481 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-12 08:14:36.481 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Study': base=15 + streakBonus=5 = 20
+2026-03-12 08:14:54.133 [main] DEBUG com.disciplica.Main - User input: 4#
+2026-03-12 08:14:54.133 [main] WARN  com.disciplica.Main - Invalid menu option selected: 4#
+2026-03-12 08:14:57.290 [main] DEBUG com.disciplica.Main - User input: 4
+2026-03-12 08:14:57.291 [main] INFO  com.disciplica.Main - Application exiting
+2026-03-12 08:15:26.439 [main] INFO  com.disciplica.Main - Disciplica starting...
+2026-03-12 08:15:26.448 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Exercise', points=10
+2026-03-12 08:15:26.451 [main] INFO  com.disciplica.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-12 08:15:26.451 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Exercise', points=10
+2026-03-12 08:15:26.451 [main] INFO  com.disciplica.User - Task added: Exercise
+2026-03-12 08:15:26.451 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Read', points=5
+2026-03-12 08:15:26.451 [main] INFO  com.disciplica.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-12 08:15:26.451 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Read', points=5
+2026-03-12 08:15:26.452 [main] INFO  com.disciplica.User - Task added: Read
+2026-03-12 08:15:26.452 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Clean Room', points=20
+2026-03-12 08:15:26.452 [main] INFO  com.disciplica.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-12 08:15:26.452 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20
+2026-03-12 08:15:26.453 [main] INFO  com.disciplica.User - Task added: Clean Room
+2026-03-12 08:15:26.453 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Groceries', points=5
+2026-03-12 08:15:26.453 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-12 08:15:26.453 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5
+2026-03-12 08:15:26.453 [main] INFO  com.disciplica.User - Task added: Buy Groceries
+2026-03-12 08:15:26.454 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Study', points=15
+2026-03-12 08:15:26.454 [main] INFO  com.disciplica.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-12 08:15:26.454 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Study', points=15
+2026-03-12 08:15:26.454 [main] INFO  com.disciplica.User - Task added: Study
+2026-03-12 08:15:26.456 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-12 08:15:26.456 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-12 08:15:26.456 [main] DEBUG com.disciplica.Habit - Habit name set to 'Drink Water'
+2026-03-12 08:15:26.456 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-12 08:15:26.456 [main] DEBUG com.disciplica.Habit - Habit 'Drink Water' description set successfully
+2026-03-12 08:15:26.456 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Drink Water'
+2026-03-12 08:15:26.457 [main] INFO  com.disciplica.Main - Processing completable item: Habit
+2026-03-12 08:15:26.457 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-12 08:15:26.457 [main] INFO  com.disciplica.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-12 08:15:26.457 [main] DEBUG com.disciplica.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-12 08:15:26.459 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-12 08:15:26.460 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-12 08:15:26.463 [main] INFO  com.disciplica.Main - Completable item completed successfully

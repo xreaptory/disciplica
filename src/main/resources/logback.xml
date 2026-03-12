@@ -1,0 +1,55 @@
+<configuration>
+
+    <!-- ================================================================
+         CONSOLE APPENDER  –  colored, human-readable output
+         ================================================================ -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--
+                %highlight wraps the log-level token in ANSI colour:
+                  ERROR → red, WARN → yellow, INFO → green, DEBUG → cyan
+            -->
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ================================================================
+         FILE APPENDER  –  rolling daily log, kept for 30 days / 100 MB
+         ================================================================ -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/disciplica.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- One file per day; gz-compressed archives -->
+            <fileNamePattern>logs/disciplica.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ================================================================
+         LOGGER LEVELS  –  fine-grained control per package / class
+         ================================================================ -->
+
+    <!-- Show DEBUG and above for our own application code -->
+    <logger name="com.disciplica" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <!-- Suppress noisy SQLite / JDBC internals below WARN -->
+    <logger name="org.sqlite"   level="WARN"/>
+    <logger name="com.zaxxer"   level="WARN"/>
+
+    <!-- ================================================================
+         ROOT – catch-all for anything not matched above
+         ================================================================ -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>
+
