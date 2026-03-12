@@ -123,3 +123,1245 @@
 2026-03-12 08:15:26.459 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
 2026-03-12 08:15:26.460 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
 2026-03-12 08:15:26.463 [main] INFO  com.disciplica.Main - Completable item completed successfully
+2026-03-12 11:22:44.429 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.434 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.437 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.437 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.437 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.437 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.438 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.438 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.438 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.438 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.438 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.439 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.439 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.442 [main] INFO  c.d.CompletableProcessingTest - --- TEST: completeAbsentTaskThrowsHabitNotFoundException ---
+2026-03-12 11:22:44.442 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Phantom Habit', points=15
+2026-03-12 11:22:44.442 [main] INFO  com.disciplica.AbstractTask - Task created: 'Phantom Habit' (WeeklyHabit), points=15
+2026-03-12 11:22:44.442 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Phantom Habit', points=15
+2026-03-12 11:22:44.448 [main] ERROR com.disciplica.User - Attempted to complete non-existent task: Phantom Habit
+2026-03-12 11:22:44.450 [main] ERROR c.d.CompletableProcessingTest - Caught expected HabitNotFoundException: Task not found for completion: Phantom Habit
+2026-03-12 11:22:44.467 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.468 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.468 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.468 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.468 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.468 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.468 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.468 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.469 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.469 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.469 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.469 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.469 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.469 [main] INFO  c.d.CompletableProcessingTest - --- TEST: blankTaskNameThrowsInvalidHabitException ---
+2026-03-12 11:22:44.471 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='', points=10
+2026-03-12 11:22:44.471 [main] ERROR com.disciplica.AbstractTask - Task name must not be null or blank
+2026-03-12 11:22:44.471 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task name must not be null or blank
+2026-03-12 11:22:44.474 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.474 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.474 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.474 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.476 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.476 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.476 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.476 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.476 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.476 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.476 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.476 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.476 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.476 [main] INFO  c.d.CompletableProcessingTest - --- TEST: blankHabitNameThrowsException ---
+2026-03-12 11:22:44.479 [main] DEBUG com.disciplica.Habit - Creating Habit: name='  ', description='desc'
+2026-03-12 11:22:44.480 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='  '
+2026-03-12 11:22:44.480 [main] ERROR com.disciplica.Habit - Habit name must not be null or blank
+2026-03-12 11:22:44.480 [main] ERROR com.disciplica.Habit - Failed to create Habit with name='  ': Habit name must not be null or blank
+com.disciplica.InvalidHabitException: Habit name must not be null or blank
+	at com.disciplica.Habit.setName(Habit.java:33)
+	at com.disciplica.Habit.<init>(Habit.java:16)
+	at com.disciplica.CompletableProcessingTest.lambda$blankHabitNameThrowsException$4(CompletableProcessingTest.java:121)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at com.disciplica.CompletableProcessingTest.blankHabitNameThrowsException(CompletableProcessingTest.java:120)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:775)
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:216)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:212)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:137)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:201)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:170)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:94)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:59)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:142)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39)
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25)
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+2026-03-12 11:22:44.485 [main] ERROR c.d.CompletableProcessingTest - Caught expected IllegalArgumentException: Invalid habit data: Habit name must not be null or blank
+2026-03-12 11:22:44.490 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.490 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.491 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.491 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.491 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.491 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.491 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.491 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.492 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.492 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.492 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.492 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.492 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.493 [main] INFO  c.d.CompletableProcessingTest - --- TEST: habitAlreadyCompletedReturnsFalse ---
+2026-03-12 11:22:44.493 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Meditate', description='10-minute session'
+2026-03-12 11:22:44.493 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Meditate'
+2026-03-12 11:22:44.493 [main] DEBUG com.disciplica.Habit - Habit name set to 'Meditate'
+2026-03-12 11:22:44.493 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Meditate', new value='10-minute session'
+2026-03-12 11:22:44.493 [main] DEBUG com.disciplica.Habit - Habit 'Meditate' description set successfully
+2026-03-12 11:22:44.493 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Meditate'
+2026-03-12 11:22:44.493 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Meditate'
+2026-03-12 11:22:44.493 [main] INFO  com.disciplica.Habit - Habit completed: 'Meditate', new streak=1
+2026-03-12 11:22:44.494 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Meditate'
+2026-03-12 11:22:44.494 [main] WARN  com.disciplica.Habit - Habit already completed: Meditate
+2026-03-12 11:22:44.495 [main] INFO  c.d.CompletableProcessingTest - Second complete() correctly returned false (WARN logged)
+2026-03-12 11:22:44.498 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.499 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.499 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.500 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.500 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.500 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.500 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.500 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.500 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.500 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.501 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.501 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.501 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.502 [main] INFO  c.d.CompletableProcessingTest - --- TEST: negativePointsThrowsInvalidHabitException ---
+2026-03-12 11:22:44.503 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Bad Task', points=-5
+2026-03-12 11:22:44.503 [main] ERROR com.disciplica.AbstractTask - Task points must be non-negative, got -5 for task 'Bad Task'
+2026-03-12 11:22:44.504 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task points must be non-negative, got: -5
+2026-03-12 11:22:44.508 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.508 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.508 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.509 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.509 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.509 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.509 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.509 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.509 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.510 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.510 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.510 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.511 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.511 [main] INFO  c.d.CompletableProcessingTest - --- TEST: removeAbsentTaskThrowsHabitNotFoundException ---
+2026-03-12 11:22:44.511 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Ghost Task', points=5
+2026-03-12 11:22:44.512 [main] INFO  com.disciplica.AbstractTask - Task created: 'Ghost Task' (DailyHabit), points=5
+2026-03-12 11:22:44.512 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Ghost Task', points=5
+2026-03-12 11:22:44.513 [main] ERROR com.disciplica.User - Attempted to remove non-existent task: Ghost Task
+2026-03-12 11:22:44.513 [main] ERROR c.d.CompletableProcessingTest - Caught expected HabitNotFoundException: Task not found: Ghost Task
+2026-03-12 11:22:44.516 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.517 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.517 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.517 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.517 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.517 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.518 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.518 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.518 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.518 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.518 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.519 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.519 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.520 [main] INFO  c.d.CompletableProcessingTest - --- TEST: exceptionMessagesAreMeaningful ---
+2026-03-12 11:22:44.521 [main] INFO  c.d.CompletableProcessingTest - InvalidHabitException message: 'bad value: -1'
+2026-03-12 11:22:44.522 [main] INFO  c.d.CompletableProcessingTest - HabitNotFoundException message: 'not found: 'Run''
+2026-03-12 11:22:44.524 [main] INFO  c.d.CompletableProcessingTest - Cause constructors verified for both exception types
+2026-03-12 11:22:44.528 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.528 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.528 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.528 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.528 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.529 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.529 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.529 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.529 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.529 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.529 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.529 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.529 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.530 [main] INFO  c.d.CompletableProcessingTest - --- TEST: habitCompletesAndReturnsReward ---
+2026-03-12 11:22:44.530 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Hydrate', description='Drink water'
+2026-03-12 11:22:44.530 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Hydrate'
+2026-03-12 11:22:44.530 [main] DEBUG com.disciplica.Habit - Habit name set to 'Hydrate'
+2026-03-12 11:22:44.530 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Hydrate', new value='Drink water'
+2026-03-12 11:22:44.530 [main] DEBUG com.disciplica.Habit - Habit 'Hydrate' description set successfully
+2026-03-12 11:22:44.531 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Hydrate'
+2026-03-12 11:22:44.531 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Hydrate'
+2026-03-12 11:22:44.531 [main] INFO  com.disciplica.Habit - Habit completed: 'Hydrate', new streak=1
+2026-03-12 11:22:44.531 [main] DEBUG com.disciplica.Habit - Getting reward for Habit 'Hydrate', streak=1
+2026-03-12 11:22:44.533 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-12 11:22:44.533 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Hydrate': Habit Streak (15 pts) - Reward for completing Hydrate
+2026-03-12 11:22:44.537 [main] INFO  c.d.CompletableProcessingTest - Reward received: Habit Streak (15 pts) - Reward for completing Hydrate
+2026-03-12 11:22:44.541 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.541 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.541 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.541 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.541 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.542 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.542 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.542 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.542 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.542 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.542 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.543 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.543 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.543 [main] INFO  c.d.CompletableProcessingTest - --- TEST: addNullTaskThrowsInvalidHabitException ---
+2026-03-12 11:22:44.544 [main] ERROR com.disciplica.User - Attempted to add a null task
+2026-03-12 11:22:44.544 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Cannot add a null task
+2026-03-12 11:22:44.547 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.547 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.547 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.548 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.548 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.548 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.548 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.548 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.548 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.548 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.548 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.549 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.549 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.549 [main] INFO  c.d.CompletableProcessingTest - --- TEST: addDuplicateTaskThrowsInvalidHabitException ---
+2026-03-12 11:22:44.550 [main] WARN  com.disciplica.User - Attempted to add duplicate task: Morning Run
+2026-03-12 11:22:44.550 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task already exists: Morning Run
+2026-03-12 11:22:44.553 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:22:44.554 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:22:44.554 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:22:44.554 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:22:44.554 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:22:44.554 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:22:44.554 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:22:44.555 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:22:44.555 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:22:44.555 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:22:44.555 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:22:44.556 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:22:44.556 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:22:44.556 [main] INFO  c.d.CompletableProcessingTest - --- TEST: userCompletesTasksAndGainsXp ---
+2026-03-12 11:22:44.557 [main] DEBUG com.disciplica.DailyHabit - Attempting to complete DailyHabit 'Morning Run'
+2026-03-12 11:22:44.557 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Morning Run' (DailyHabit)
+2026-03-12 11:22:44.557 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Morning Run' (DailyHabit)
+2026-03-12 11:22:44.557 [main] INFO  com.disciplica.DailyHabit - DailyHabit 'Morning Run' completed. New streak: 1
+2026-03-12 11:22:44.557 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Morning Run': base=20 + streakBonus=5 = 25
+2026-03-12 11:22:44.557 [main] INFO  com.disciplica.User - Task completed and XP granted: Morning Run
+2026-03-12 11:22:44.558 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Morning Run': base=20 + streakBonus=5 = 25
+2026-03-12 11:22:44.558 [main] INFO  c.d.CompletableProcessingTest - Completed 'Morning Run', points=25
+2026-03-12 11:22:44.558 [main] DEBUG com.disciplica.WeeklyHabit - Attempting to complete WeeklyHabit 'Deep Clean'
+2026-03-12 11:22:44.558 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Deep Clean' (WeeklyHabit)
+2026-03-12 11:22:44.558 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Deep Clean' (WeeklyHabit)
+2026-03-12 11:22:44.558 [main] INFO  com.disciplica.WeeklyHabit - WeeklyHabit 'Deep Clean' completed. New streak: 1
+2026-03-12 11:22:44.558 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Deep Clean': base=30 + streakBonus=15 = 45
+2026-03-12 11:22:44.558 [main] INFO  com.disciplica.User - Task completed and XP granted: Deep Clean
+2026-03-12 11:22:44.558 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Deep Clean': base=30 + streakBonus=15 = 45
+2026-03-12 11:22:44.558 [main] INFO  c.d.CompletableProcessingTest - Completed 'Deep Clean', points=45
+2026-03-12 11:22:44.558 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Buy Gear' (OneTimeTask)
+2026-03-12 11:22:44.558 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Buy Gear' (OneTimeTask)
+2026-03-12 11:22:44.558 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Gear': 10
+2026-03-12 11:22:44.558 [main] INFO  com.disciplica.User - Task completed and XP granted: Buy Gear
+2026-03-12 11:22:44.558 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Gear': 10
+2026-03-12 11:22:44.558 [main] INFO  c.d.CompletableProcessingTest - Completed 'Buy Gear', points=10
+2026-03-12 11:22:44.559 [main] INFO  c.d.CompletableProcessingTest - User after completing all tasks: Username: TestUser; Level: 2; Exp: 30; Tasks: 3; Titel: Beginner
+2026-03-12 11:24:07.749 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.754 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.757 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.757 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.758 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.758 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.758 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.758 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.759 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.759 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.759 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.759 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.759 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.763 [main] INFO  c.d.CompletableProcessingTest - --- TEST: completeAbsentTaskThrowsHabitNotFoundException ---
+2026-03-12 11:24:07.763 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Phantom Habit', points=15
+2026-03-12 11:24:07.764 [main] INFO  com.disciplica.AbstractTask - Task created: 'Phantom Habit' (WeeklyHabit), points=15
+2026-03-12 11:24:07.764 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Phantom Habit', points=15
+2026-03-12 11:24:07.770 [main] ERROR com.disciplica.User - Attempted to complete non-existent task: Phantom Habit
+2026-03-12 11:24:07.771 [main] ERROR c.d.CompletableProcessingTest - Caught expected HabitNotFoundException: Task not found for completion: Phantom Habit
+2026-03-12 11:24:07.793 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.793 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.793 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.794 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.794 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.794 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.794 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.794 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.795 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.795 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.796 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.796 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.796 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.797 [main] INFO  c.d.CompletableProcessingTest - --- TEST: blankTaskNameThrowsInvalidHabitException ---
+2026-03-12 11:24:07.798 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='', points=10
+2026-03-12 11:24:07.798 [main] ERROR com.disciplica.AbstractTask - Task name must not be null or blank
+2026-03-12 11:24:07.799 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task name must not be null or blank
+2026-03-12 11:24:07.802 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.802 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.803 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.803 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.803 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.803 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.803 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.803 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.803 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.804 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.804 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.804 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.804 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.804 [main] INFO  c.d.CompletableProcessingTest - --- TEST: blankHabitNameThrowsException ---
+2026-03-12 11:24:07.807 [main] DEBUG com.disciplica.Habit - Creating Habit: name='  ', description='desc'
+2026-03-12 11:24:07.807 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='  '
+2026-03-12 11:24:07.808 [main] ERROR com.disciplica.Habit - Habit name must not be null or blank
+2026-03-12 11:24:07.808 [main] ERROR com.disciplica.Habit - Failed to create Habit with name='  ': Habit name must not be null or blank
+com.disciplica.InvalidHabitException: Habit name must not be null or blank
+	at com.disciplica.Habit.setName(Habit.java:33)
+	at com.disciplica.Habit.<init>(Habit.java:16)
+	at com.disciplica.CompletableProcessingTest.lambda$blankHabitNameThrowsException$4(CompletableProcessingTest.java:121)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at com.disciplica.CompletableProcessingTest.blankHabitNameThrowsException(CompletableProcessingTest.java:120)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:775)
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:216)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:212)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:137)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:201)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:170)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:94)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:59)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:142)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39)
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25)
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+2026-03-12 11:24:07.814 [main] ERROR c.d.CompletableProcessingTest - Caught expected IllegalArgumentException: Invalid habit data: Habit name must not be null or blank
+2026-03-12 11:24:07.819 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.820 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.820 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.820 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.820 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.821 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.821 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.821 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.821 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.822 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.822 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.822 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.822 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.823 [main] INFO  c.d.CompletableProcessingTest - --- TEST: habitAlreadyCompletedReturnsFalse ---
+2026-03-12 11:24:07.824 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Meditate', description='10-minute session'
+2026-03-12 11:24:07.824 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Meditate'
+2026-03-12 11:24:07.824 [main] DEBUG com.disciplica.Habit - Habit name set to 'Meditate'
+2026-03-12 11:24:07.824 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Meditate', new value='10-minute session'
+2026-03-12 11:24:07.824 [main] DEBUG com.disciplica.Habit - Habit 'Meditate' description set successfully
+2026-03-12 11:24:07.824 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Meditate'
+2026-03-12 11:24:07.824 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Meditate'
+2026-03-12 11:24:07.825 [main] INFO  com.disciplica.Habit - Habit completed: 'Meditate', new streak=1
+2026-03-12 11:24:07.825 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Meditate'
+2026-03-12 11:24:07.825 [main] WARN  com.disciplica.Habit - Habit already completed: Meditate
+2026-03-12 11:24:07.826 [main] INFO  c.d.CompletableProcessingTest - Second complete() correctly returned false (WARN logged)
+2026-03-12 11:24:07.831 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.832 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.832 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.832 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.832 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.832 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.832 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.833 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.833 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.833 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.833 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.833 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.833 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.834 [main] INFO  c.d.CompletableProcessingTest - --- TEST: negativePointsThrowsInvalidHabitException ---
+2026-03-12 11:24:07.835 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Bad Task', points=-5
+2026-03-12 11:24:07.835 [main] ERROR com.disciplica.AbstractTask - Task points must be non-negative, got -5 for task 'Bad Task'
+2026-03-12 11:24:07.836 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task points must be non-negative, got: -5
+2026-03-12 11:24:07.839 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.839 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.839 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.839 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.840 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.840 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.840 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.840 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.840 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.840 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.840 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.840 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.841 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.841 [main] INFO  c.d.CompletableProcessingTest - --- TEST: removeAbsentTaskThrowsHabitNotFoundException ---
+2026-03-12 11:24:07.841 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Ghost Task', points=5
+2026-03-12 11:24:07.842 [main] INFO  com.disciplica.AbstractTask - Task created: 'Ghost Task' (DailyHabit), points=5
+2026-03-12 11:24:07.842 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Ghost Task', points=5
+2026-03-12 11:24:07.843 [main] ERROR com.disciplica.User - Attempted to remove non-existent task: Ghost Task
+2026-03-12 11:24:07.843 [main] ERROR c.d.CompletableProcessingTest - Caught expected HabitNotFoundException: Task not found: Ghost Task
+2026-03-12 11:24:07.847 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.848 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.848 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.848 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.848 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.848 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.849 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.849 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.849 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.849 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.849 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.850 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.850 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.851 [main] INFO  c.d.CompletableProcessingTest - --- TEST: exceptionMessagesAreMeaningful ---
+2026-03-12 11:24:07.851 [main] INFO  c.d.CompletableProcessingTest - InvalidHabitException message: 'bad value: -1'
+2026-03-12 11:24:07.852 [main] INFO  c.d.CompletableProcessingTest - HabitNotFoundException message: 'not found: 'Run''
+2026-03-12 11:24:07.853 [main] INFO  c.d.CompletableProcessingTest - Cause constructors verified for both exception types
+2026-03-12 11:24:07.856 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.856 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.857 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.857 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.857 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.857 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.857 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.857 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.857 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.857 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.857 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.857 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.857 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.858 [main] INFO  c.d.CompletableProcessingTest - --- TEST: habitCompletesAndReturnsReward ---
+2026-03-12 11:24:07.858 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Hydrate', description='Drink water'
+2026-03-12 11:24:07.858 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Hydrate'
+2026-03-12 11:24:07.858 [main] DEBUG com.disciplica.Habit - Habit name set to 'Hydrate'
+2026-03-12 11:24:07.858 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Hydrate', new value='Drink water'
+2026-03-12 11:24:07.858 [main] DEBUG com.disciplica.Habit - Habit 'Hydrate' description set successfully
+2026-03-12 11:24:07.858 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Hydrate'
+2026-03-12 11:24:07.858 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Hydrate'
+2026-03-12 11:24:07.859 [main] INFO  com.disciplica.Habit - Habit completed: 'Hydrate', new streak=1
+2026-03-12 11:24:07.859 [main] DEBUG com.disciplica.Habit - Getting reward for Habit 'Hydrate', streak=1
+2026-03-12 11:24:07.860 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-12 11:24:07.861 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Hydrate': Habit Streak (15 pts) - Reward for completing Hydrate
+2026-03-12 11:24:07.867 [main] INFO  c.d.CompletableProcessingTest - Reward received: Habit Streak (15 pts) - Reward for completing Hydrate
+2026-03-12 11:24:07.870 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.870 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.870 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.870 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.871 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.871 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.871 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.871 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.871 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.871 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.871 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.871 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.871 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.872 [main] INFO  c.d.CompletableProcessingTest - --- TEST: addNullTaskThrowsInvalidHabitException ---
+2026-03-12 11:24:07.872 [main] ERROR com.disciplica.User - Attempted to add a null task
+2026-03-12 11:24:07.873 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Cannot add a null task
+2026-03-12 11:24:07.876 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.876 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.876 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.876 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.876 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.876 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.876 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.876 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.876 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.877 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.877 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.877 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.877 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.878 [main] INFO  c.d.CompletableProcessingTest - --- TEST: addDuplicateTaskThrowsInvalidHabitException ---
+2026-03-12 11:24:07.878 [main] WARN  com.disciplica.User - Attempted to add duplicate task: Morning Run
+2026-03-12 11:24:07.879 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task already exists: Morning Run
+2026-03-12 11:24:07.882 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:24:07.883 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:24:07.883 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:24:07.883 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:24:07.883 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:24:07.883 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:24:07.883 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:24:07.884 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:24:07.884 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:24:07.884 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:24:07.884 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:24:07.884 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:24:07.884 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:24:07.885 [main] INFO  c.d.CompletableProcessingTest - --- TEST: userCompletesTasksAndGainsXp ---
+2026-03-12 11:24:07.885 [main] DEBUG com.disciplica.DailyHabit - Attempting to complete DailyHabit 'Morning Run'
+2026-03-12 11:24:07.885 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Morning Run' (DailyHabit)
+2026-03-12 11:24:07.886 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Morning Run' (DailyHabit)
+2026-03-12 11:24:07.886 [main] INFO  com.disciplica.DailyHabit - DailyHabit 'Morning Run' completed. New streak: 1
+2026-03-12 11:24:07.886 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Morning Run': base=20 + streakBonus=5 = 25
+2026-03-12 11:24:07.886 [main] INFO  com.disciplica.User - Task completed and XP granted: Morning Run
+2026-03-12 11:24:07.886 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Morning Run': base=20 + streakBonus=5 = 25
+2026-03-12 11:24:07.886 [main] INFO  c.d.CompletableProcessingTest - Completed 'Morning Run', points=25
+2026-03-12 11:24:07.886 [main] DEBUG com.disciplica.WeeklyHabit - Attempting to complete WeeklyHabit 'Deep Clean'
+2026-03-12 11:24:07.886 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Deep Clean' (WeeklyHabit)
+2026-03-12 11:24:07.886 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Deep Clean' (WeeklyHabit)
+2026-03-12 11:24:07.887 [main] INFO  com.disciplica.WeeklyHabit - WeeklyHabit 'Deep Clean' completed. New streak: 1
+2026-03-12 11:24:07.887 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Deep Clean': base=30 + streakBonus=15 = 45
+2026-03-12 11:24:07.887 [main] INFO  com.disciplica.User - Task completed and XP granted: Deep Clean
+2026-03-12 11:24:07.887 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Deep Clean': base=30 + streakBonus=15 = 45
+2026-03-12 11:24:07.887 [main] INFO  c.d.CompletableProcessingTest - Completed 'Deep Clean', points=45
+2026-03-12 11:24:07.887 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Buy Gear' (OneTimeTask)
+2026-03-12 11:24:07.887 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Buy Gear' (OneTimeTask)
+2026-03-12 11:24:07.887 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Gear': 10
+2026-03-12 11:24:07.888 [main] INFO  com.disciplica.User - Task completed and XP granted: Buy Gear
+2026-03-12 11:24:07.888 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Gear': 10
+2026-03-12 11:24:07.888 [main] INFO  c.d.CompletableProcessingTest - Completed 'Buy Gear', points=10
+2026-03-12 11:24:07.888 [main] INFO  c.d.CompletableProcessingTest - User after completing all tasks: Username: TestUser; Level: 2; Exp: 30; Tasks: 3; Titel: Beginner
+2026-03-12 11:25:34.076 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.082 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.085 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.085 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.085 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.086 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.086 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.086 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.086 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.087 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.087 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.087 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.087 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.091 [main] INFO  c.d.CompletableProcessingTest - --- TEST: completeAbsentTaskThrowsHabitNotFoundException ---
+2026-03-12 11:25:34.091 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Phantom Habit', points=15
+2026-03-12 11:25:34.092 [main] INFO  com.disciplica.AbstractTask - Task created: 'Phantom Habit' (WeeklyHabit), points=15
+2026-03-12 11:25:34.092 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Phantom Habit', points=15
+2026-03-12 11:25:34.097 [main] ERROR com.disciplica.User - Attempted to complete non-existent task: Phantom Habit
+2026-03-12 11:25:34.098 [main] ERROR c.d.CompletableProcessingTest - Caught expected HabitNotFoundException: Task not found for completion: Phantom Habit
+2026-03-12 11:25:34.123 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.124 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.125 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.125 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.125 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.125 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.126 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.126 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.126 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.126 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.127 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.127 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.127 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.128 [main] INFO  c.d.CompletableProcessingTest - --- TEST: blankTaskNameThrowsInvalidHabitException ---
+2026-03-12 11:25:34.129 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='', points=10
+2026-03-12 11:25:34.129 [main] ERROR com.disciplica.AbstractTask - Task name must not be null or blank
+2026-03-12 11:25:34.130 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task name must not be null or blank
+2026-03-12 11:25:34.133 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.134 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.134 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.134 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.134 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.134 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.135 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.135 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.135 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.135 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.135 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.135 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.136 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.137 [main] INFO  c.d.CompletableProcessingTest - --- TEST: blankHabitNameThrowsException ---
+2026-03-12 11:25:34.140 [main] DEBUG com.disciplica.Habit - Creating Habit: name='  ', description='desc'
+2026-03-12 11:25:34.140 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='  '
+2026-03-12 11:25:34.140 [main] ERROR com.disciplica.Habit - Habit name must not be null or blank
+2026-03-12 11:25:34.141 [main] ERROR com.disciplica.Habit - Failed to create Habit with name='  ': Habit name must not be null or blank
+com.disciplica.InvalidHabitException: Habit name must not be null or blank
+	at com.disciplica.Habit.setName(Habit.java:33)
+	at com.disciplica.Habit.<init>(Habit.java:16)
+	at com.disciplica.CompletableProcessingTest.lambda$blankHabitNameThrowsException$0(CompletableProcessingTest.java:121)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at com.disciplica.CompletableProcessingTest.blankHabitNameThrowsException(CompletableProcessingTest.java:120)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:775)
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:216)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:212)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:137)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:201)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:170)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:94)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:59)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:142)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39)
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25)
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+2026-03-12 11:25:34.146 [main] ERROR c.d.CompletableProcessingTest - Caught expected IllegalArgumentException: Invalid habit data: Habit name must not be null or blank
+2026-03-12 11:25:34.151 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.152 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.152 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.153 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.153 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.153 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.153 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.153 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.153 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.154 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.154 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.154 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.154 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.155 [main] INFO  c.d.CompletableProcessingTest - --- TEST: habitAlreadyCompletedReturnsFalse ---
+2026-03-12 11:25:34.155 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Meditate', description='10-minute session'
+2026-03-12 11:25:34.155 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Meditate'
+2026-03-12 11:25:34.155 [main] DEBUG com.disciplica.Habit - Habit name set to 'Meditate'
+2026-03-12 11:25:34.156 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Meditate', new value='10-minute session'
+2026-03-12 11:25:34.156 [main] DEBUG com.disciplica.Habit - Habit 'Meditate' description set successfully
+2026-03-12 11:25:34.156 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Meditate'
+2026-03-12 11:25:34.156 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Meditate'
+2026-03-12 11:25:34.156 [main] INFO  com.disciplica.Habit - Habit completed: 'Meditate', new streak=1
+2026-03-12 11:25:34.156 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Meditate'
+2026-03-12 11:25:34.156 [main] WARN  com.disciplica.Habit - Habit already completed: Meditate
+2026-03-12 11:25:34.157 [main] INFO  c.d.CompletableProcessingTest - Second complete() correctly returned false (WARN logged)
+2026-03-12 11:25:34.160 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.161 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.161 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.161 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.161 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.161 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.161 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.161 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.162 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.162 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.162 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.162 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.162 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.162 [main] INFO  c.d.CompletableProcessingTest - --- TEST: negativePointsThrowsInvalidHabitException ---
+2026-03-12 11:25:34.163 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Bad Task', points=-5
+2026-03-12 11:25:34.163 [main] ERROR com.disciplica.AbstractTask - Task points must be non-negative, got -5 for task 'Bad Task'
+2026-03-12 11:25:34.164 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task points must be non-negative, got: -5
+2026-03-12 11:25:34.167 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.167 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.167 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.167 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.168 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.168 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.168 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.168 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.168 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.168 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.168 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.168 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.168 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.169 [main] INFO  c.d.CompletableProcessingTest - --- TEST: removeAbsentTaskThrowsHabitNotFoundException ---
+2026-03-12 11:25:34.169 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Ghost Task', points=5
+2026-03-12 11:25:34.169 [main] INFO  com.disciplica.AbstractTask - Task created: 'Ghost Task' (DailyHabit), points=5
+2026-03-12 11:25:34.169 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Ghost Task', points=5
+2026-03-12 11:25:34.170 [main] ERROR com.disciplica.User - Attempted to remove non-existent task: Ghost Task
+2026-03-12 11:25:34.171 [main] ERROR c.d.CompletableProcessingTest - Caught expected HabitNotFoundException: Task not found: Ghost Task
+2026-03-12 11:25:34.174 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.174 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.174 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.174 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.175 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.175 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.175 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.175 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.175 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.175 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.175 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.176 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.176 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.176 [main] INFO  c.d.CompletableProcessingTest - --- TEST: exceptionMessagesAreMeaningful ---
+2026-03-12 11:25:34.177 [main] INFO  c.d.CompletableProcessingTest - InvalidHabitException message: 'bad value: -1'
+2026-03-12 11:25:34.177 [main] INFO  c.d.CompletableProcessingTest - HabitNotFoundException message: 'not found: 'Run''
+2026-03-12 11:25:34.178 [main] INFO  c.d.CompletableProcessingTest - Cause constructors verified for both exception types
+2026-03-12 11:25:34.182 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.182 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.183 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.183 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.183 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.183 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.183 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.183 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.183 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.184 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.184 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.184 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.184 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.185 [main] INFO  c.d.CompletableProcessingTest - --- TEST: habitCompletesAndReturnsReward ---
+2026-03-12 11:25:34.185 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Hydrate', description='Drink water'
+2026-03-12 11:25:34.185 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Hydrate'
+2026-03-12 11:25:34.185 [main] DEBUG com.disciplica.Habit - Habit name set to 'Hydrate'
+2026-03-12 11:25:34.185 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Hydrate', new value='Drink water'
+2026-03-12 11:25:34.185 [main] DEBUG com.disciplica.Habit - Habit 'Hydrate' description set successfully
+2026-03-12 11:25:34.185 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Hydrate'
+2026-03-12 11:25:34.185 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Hydrate'
+2026-03-12 11:25:34.186 [main] INFO  com.disciplica.Habit - Habit completed: 'Hydrate', new streak=1
+2026-03-12 11:25:34.186 [main] DEBUG com.disciplica.Habit - Getting reward for Habit 'Hydrate', streak=1
+2026-03-12 11:25:34.187 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-12 11:25:34.187 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Hydrate': Habit Streak (15 pts) - Reward for completing Hydrate
+2026-03-12 11:25:34.190 [main] INFO  c.d.CompletableProcessingTest - Reward received: Habit Streak (15 pts) - Reward for completing Hydrate
+2026-03-12 11:25:34.194 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.194 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.194 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.194 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.194 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.195 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.195 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.195 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.195 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.195 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.195 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.195 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.195 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.196 [main] INFO  c.d.CompletableProcessingTest - --- TEST: addNullTaskThrowsInvalidHabitException ---
+2026-03-12 11:25:34.196 [main] ERROR com.disciplica.User - Attempted to add a null task
+2026-03-12 11:25:34.196 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Cannot add a null task
+2026-03-12 11:25:34.200 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.200 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.201 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.201 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.201 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.201 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.201 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.201 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.202 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.202 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.202 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.202 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.202 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.203 [main] INFO  c.d.CompletableProcessingTest - --- TEST: addDuplicateTaskThrowsInvalidHabitException ---
+2026-03-12 11:25:34.204 [main] WARN  com.disciplica.User - Attempted to add duplicate task: Morning Run
+2026-03-12 11:25:34.204 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task already exists: Morning Run
+2026-03-12 11:25:34.207 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:25:34.208 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:25:34.208 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:25:34.208 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:25:34.208 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:25:34.208 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:25:34.209 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:25:34.209 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:25:34.209 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:25:34.209 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:25:34.210 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:25:34.210 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:25:34.210 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:25:34.211 [main] INFO  c.d.CompletableProcessingTest - --- TEST: userCompletesTasksAndGainsXp ---
+2026-03-12 11:25:34.211 [main] DEBUG com.disciplica.DailyHabit - Attempting to complete DailyHabit 'Morning Run'
+2026-03-12 11:25:34.212 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Morning Run' (DailyHabit)
+2026-03-12 11:25:34.212 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Morning Run' (DailyHabit)
+2026-03-12 11:25:34.212 [main] INFO  com.disciplica.DailyHabit - DailyHabit 'Morning Run' completed. New streak: 1
+2026-03-12 11:25:34.212 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Morning Run': base=20 + streakBonus=5 = 25
+2026-03-12 11:25:34.212 [main] INFO  com.disciplica.User - Task completed and XP granted: Morning Run
+2026-03-12 11:25:34.212 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Morning Run': base=20 + streakBonus=5 = 25
+2026-03-12 11:25:34.212 [main] INFO  c.d.CompletableProcessingTest - Completed 'Morning Run', points=25
+2026-03-12 11:25:34.213 [main] DEBUG com.disciplica.WeeklyHabit - Attempting to complete WeeklyHabit 'Deep Clean'
+2026-03-12 11:25:34.213 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Deep Clean' (WeeklyHabit)
+2026-03-12 11:25:34.213 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Deep Clean' (WeeklyHabit)
+2026-03-12 11:25:34.213 [main] INFO  com.disciplica.WeeklyHabit - WeeklyHabit 'Deep Clean' completed. New streak: 1
+2026-03-12 11:25:34.213 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Deep Clean': base=30 + streakBonus=15 = 45
+2026-03-12 11:25:34.213 [main] INFO  com.disciplica.User - Task completed and XP granted: Deep Clean
+2026-03-12 11:25:34.213 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Deep Clean': base=30 + streakBonus=15 = 45
+2026-03-12 11:25:34.213 [main] INFO  c.d.CompletableProcessingTest - Completed 'Deep Clean', points=45
+2026-03-12 11:25:34.214 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Buy Gear' (OneTimeTask)
+2026-03-12 11:25:34.214 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Buy Gear' (OneTimeTask)
+2026-03-12 11:25:34.214 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Gear': 10
+2026-03-12 11:25:34.214 [main] INFO  com.disciplica.User - Task completed and XP granted: Buy Gear
+2026-03-12 11:25:34.215 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Gear': 10
+2026-03-12 11:25:34.215 [main] INFO  c.d.CompletableProcessingTest - Completed 'Buy Gear', points=10
+2026-03-12 11:25:34.215 [main] INFO  c.d.CompletableProcessingTest - User after completing all tasks: Username: TestUser; Level: 2; Exp: 30; Tasks: 3; Titel: Beginner
+2026-03-12 11:26:40.419 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.423 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.425 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.426 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.426 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.426 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.426 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.426 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.427 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.427 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.427 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.428 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.428 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.431 [main] INFO  c.d.CompletableProcessingTest - --- TEST: completeAbsentTaskThrowsHabitNotFoundException ---
+2026-03-12 11:26:40.431 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Phantom Habit', points=15
+2026-03-12 11:26:40.431 [main] INFO  com.disciplica.AbstractTask - Task created: 'Phantom Habit' (WeeklyHabit), points=15
+2026-03-12 11:26:40.432 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Phantom Habit', points=15
+2026-03-12 11:26:40.437 [main] ERROR com.disciplica.User - Attempted to complete non-existent task: Phantom Habit
+2026-03-12 11:26:40.438 [main] ERROR c.d.CompletableProcessingTest - Caught expected HabitNotFoundException: Task not found for completion: Phantom Habit
+2026-03-12 11:26:40.457 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.458 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.458 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.458 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.458 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.459 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.459 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.459 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.459 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.459 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.459 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.459 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.459 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.460 [main] INFO  c.d.CompletableProcessingTest - --- TEST: blankTaskNameThrowsInvalidHabitException ---
+2026-03-12 11:26:40.462 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='', points=10
+2026-03-12 11:26:40.462 [main] ERROR com.disciplica.AbstractTask - Task name must not be null or blank
+2026-03-12 11:26:40.462 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task name must not be null or blank
+2026-03-12 11:26:40.464 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.466 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.466 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.466 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.466 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.466 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.467 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.467 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.467 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.467 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.467 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.467 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.467 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.469 [main] INFO  c.d.CompletableProcessingTest - --- TEST: blankHabitNameThrowsException ---
+2026-03-12 11:26:40.472 [main] DEBUG com.disciplica.Habit - Creating Habit: name='  ', description='desc'
+2026-03-12 11:26:40.472 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='  '
+2026-03-12 11:26:40.472 [main] ERROR com.disciplica.Habit - Habit name must not be null or blank
+2026-03-12 11:26:40.472 [main] ERROR com.disciplica.Habit - Failed to create Habit with name='  ': Habit name must not be null or blank
+com.disciplica.InvalidHabitException: Habit name must not be null or blank
+	at com.disciplica.Habit.setName(Habit.java:33)
+	at com.disciplica.Habit.<init>(Habit.java:16)
+	at com.disciplica.CompletableProcessingTest.lambda$blankHabitNameThrowsException$0(CompletableProcessingTest.java:121)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at com.disciplica.CompletableProcessingTest.blankHabitNameThrowsException(CompletableProcessingTest.java:120)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:775)
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:479)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:161)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:152)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:91)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:112)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:94)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:87)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:216)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:212)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:137)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:201)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:170)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:94)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:59)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:142)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$1(InterceptingLauncher.java:39)
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25)
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:38)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+2026-03-12 11:26:40.477 [main] ERROR c.d.CompletableProcessingTest - Caught expected IllegalArgumentException: Invalid habit data: Habit name must not be null or blank
+2026-03-12 11:26:40.481 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.481 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.481 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.481 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.481 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.483 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.483 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.483 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.483 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.483 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.484 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.484 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.485 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.485 [main] INFO  c.d.CompletableProcessingTest - --- TEST: habitAlreadyCompletedReturnsFalse ---
+2026-03-12 11:26:40.486 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Meditate', description='10-minute session'
+2026-03-12 11:26:40.486 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Meditate'
+2026-03-12 11:26:40.486 [main] DEBUG com.disciplica.Habit - Habit name set to 'Meditate'
+2026-03-12 11:26:40.486 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Meditate', new value='10-minute session'
+2026-03-12 11:26:40.486 [main] DEBUG com.disciplica.Habit - Habit 'Meditate' description set successfully
+2026-03-12 11:26:40.486 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Meditate'
+2026-03-12 11:26:40.486 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Meditate'
+2026-03-12 11:26:40.486 [main] INFO  com.disciplica.Habit - Habit completed: 'Meditate', new streak=1
+2026-03-12 11:26:40.486 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Meditate'
+2026-03-12 11:26:40.487 [main] WARN  com.disciplica.Habit - Habit already completed: Meditate
+2026-03-12 11:26:40.487 [main] INFO  c.d.CompletableProcessingTest - Second complete() correctly returned false (WARN logged)
+2026-03-12 11:26:40.490 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.491 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.491 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.491 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.491 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.491 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.491 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.491 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.491 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.492 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.492 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.492 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.492 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.492 [main] INFO  c.d.CompletableProcessingTest - --- TEST: negativePointsThrowsInvalidHabitException ---
+2026-03-12 11:26:40.493 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Bad Task', points=-5
+2026-03-12 11:26:40.493 [main] ERROR com.disciplica.AbstractTask - Task points must be non-negative, got -5 for task 'Bad Task'
+2026-03-12 11:26:40.494 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task points must be non-negative, got: -5
+2026-03-12 11:26:40.496 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.496 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.496 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.496 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.496 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.497 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.497 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.497 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.497 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.497 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.497 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.497 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.497 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.498 [main] INFO  c.d.CompletableProcessingTest - --- TEST: removeAbsentTaskThrowsHabitNotFoundException ---
+2026-03-12 11:26:40.498 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Ghost Task', points=5
+2026-03-12 11:26:40.498 [main] INFO  com.disciplica.AbstractTask - Task created: 'Ghost Task' (DailyHabit), points=5
+2026-03-12 11:26:40.498 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Ghost Task', points=5
+2026-03-12 11:26:40.499 [main] ERROR com.disciplica.User - Attempted to remove non-existent task: Ghost Task
+2026-03-12 11:26:40.499 [main] ERROR c.d.CompletableProcessingTest - Caught expected HabitNotFoundException: Task not found: Ghost Task
+2026-03-12 11:26:40.502 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.503 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.503 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.503 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.503 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.503 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.503 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.503 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.503 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.504 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.504 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.504 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.505 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.505 [main] INFO  c.d.CompletableProcessingTest - --- TEST: exceptionMessagesAreMeaningful ---
+2026-03-12 11:26:40.506 [main] INFO  c.d.CompletableProcessingTest - InvalidHabitException message: 'bad value: -1'
+2026-03-12 11:26:40.506 [main] INFO  c.d.CompletableProcessingTest - HabitNotFoundException message: 'not found: 'Run''
+2026-03-12 11:26:40.507 [main] INFO  c.d.CompletableProcessingTest - Cause constructors verified for both exception types
+2026-03-12 11:26:40.511 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.511 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.511 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.511 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.512 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.512 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.512 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.512 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.512 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.512 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.512 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.512 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.512 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.513 [main] INFO  c.d.CompletableProcessingTest - --- TEST: habitCompletesAndReturnsReward ---
+2026-03-12 11:26:40.513 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Hydrate', description='Drink water'
+2026-03-12 11:26:40.513 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Hydrate'
+2026-03-12 11:26:40.513 [main] DEBUG com.disciplica.Habit - Habit name set to 'Hydrate'
+2026-03-12 11:26:40.513 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Hydrate', new value='Drink water'
+2026-03-12 11:26:40.513 [main] DEBUG com.disciplica.Habit - Habit 'Hydrate' description set successfully
+2026-03-12 11:26:40.513 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Hydrate'
+2026-03-12 11:26:40.513 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Hydrate'
+2026-03-12 11:26:40.513 [main] INFO  com.disciplica.Habit - Habit completed: 'Hydrate', new streak=1
+2026-03-12 11:26:40.514 [main] DEBUG com.disciplica.Habit - Getting reward for Habit 'Hydrate', streak=1
+2026-03-12 11:26:40.515 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-12 11:26:40.515 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Hydrate': Habit Streak (15 pts) - Reward for completing Hydrate
+2026-03-12 11:26:40.518 [main] INFO  c.d.CompletableProcessingTest - Reward received: Habit Streak (15 pts) - Reward for completing Hydrate
+2026-03-12 11:26:40.522 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.522 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.522 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.522 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.522 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.523 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.523 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.523 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.523 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.523 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.523 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.523 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.523 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.524 [main] INFO  c.d.CompletableProcessingTest - --- TEST: addNullTaskThrowsInvalidHabitException ---
+2026-03-12 11:26:40.525 [main] ERROR com.disciplica.User - Attempted to add a null task
+2026-03-12 11:26:40.525 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Cannot add a null task
+2026-03-12 11:26:40.527 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.527 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.528 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.528 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.528 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.528 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.528 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.528 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.528 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.528 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.528 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.528 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.528 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.529 [main] INFO  c.d.CompletableProcessingTest - --- TEST: addDuplicateTaskThrowsInvalidHabitException ---
+2026-03-12 11:26:40.529 [main] WARN  com.disciplica.User - Attempted to add duplicate task: Morning Run
+2026-03-12 11:26:40.530 [main] ERROR c.d.CompletableProcessingTest - Caught expected InvalidHabitException: Task already exists: Morning Run
+2026-03-12 11:26:40.533 [main] INFO  c.d.CompletableProcessingTest - === Test setUp: creating fresh User ===
+2026-03-12 11:26:40.533 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Morning Run', points=20
+2026-03-12 11:26:40.534 [main] INFO  com.disciplica.AbstractTask - Task created: 'Morning Run' (DailyHabit), points=20
+2026-03-12 11:26:40.534 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Morning Run', points=20
+2026-03-12 11:26:40.534 [main] INFO  com.disciplica.User - Task added: Morning Run
+2026-03-12 11:26:40.534 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Deep Clean', points=30
+2026-03-12 11:26:40.534 [main] INFO  com.disciplica.AbstractTask - Task created: 'Deep Clean' (WeeklyHabit), points=30
+2026-03-12 11:26:40.534 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Deep Clean', points=30
+2026-03-12 11:26:40.535 [main] INFO  com.disciplica.User - Task added: Deep Clean
+2026-03-12 11:26:40.535 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Gear', points=10
+2026-03-12 11:26:40.536 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Gear' (OneTimeTask), points=10
+2026-03-12 11:26:40.536 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Gear', points=10
+2026-03-12 11:26:40.536 [main] INFO  com.disciplica.User - Task added: Buy Gear
+2026-03-12 11:26:40.537 [main] INFO  c.d.CompletableProcessingTest - --- TEST: userCompletesTasksAndGainsXp ---
+2026-03-12 11:26:40.537 [main] DEBUG com.disciplica.DailyHabit - Attempting to complete DailyHabit 'Morning Run'
+2026-03-12 11:26:40.537 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Morning Run' (DailyHabit)
+2026-03-12 11:26:40.537 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Morning Run' (DailyHabit)
+2026-03-12 11:26:40.537 [main] INFO  com.disciplica.DailyHabit - DailyHabit 'Morning Run' completed. New streak: 1
+2026-03-12 11:26:40.537 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Morning Run': base=20 + streakBonus=5 = 25
+2026-03-12 11:26:40.537 [main] INFO  com.disciplica.User - Task completed and XP granted: Morning Run
+2026-03-12 11:26:40.537 [main] DEBUG com.disciplica.DailyHabit - Calculated points for DailyHabit 'Morning Run': base=20 + streakBonus=5 = 25
+2026-03-12 11:26:40.537 [main] INFO  c.d.CompletableProcessingTest - Completed 'Morning Run', points=25
+2026-03-12 11:26:40.537 [main] DEBUG com.disciplica.WeeklyHabit - Attempting to complete WeeklyHabit 'Deep Clean'
+2026-03-12 11:26:40.537 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Deep Clean' (WeeklyHabit)
+2026-03-12 11:26:40.537 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Deep Clean' (WeeklyHabit)
+2026-03-12 11:26:40.537 [main] INFO  com.disciplica.WeeklyHabit - WeeklyHabit 'Deep Clean' completed. New streak: 1
+2026-03-12 11:26:40.538 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Deep Clean': base=30 + streakBonus=15 = 45
+2026-03-12 11:26:40.538 [main] INFO  com.disciplica.User - Task completed and XP granted: Deep Clean
+2026-03-12 11:26:40.538 [main] DEBUG com.disciplica.WeeklyHabit - Calculated points for WeeklyHabit 'Deep Clean': base=30 + streakBonus=15 = 45
+2026-03-12 11:26:40.538 [main] INFO  c.d.CompletableProcessingTest - Completed 'Deep Clean', points=45
+2026-03-12 11:26:40.538 [main] DEBUG com.disciplica.AbstractTask - complete() called on 'Buy Gear' (OneTimeTask)
+2026-03-12 11:26:40.538 [main] INFO  com.disciplica.AbstractTask - Task completed: 'Buy Gear' (OneTimeTask)
+2026-03-12 11:26:40.538 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Gear': 10
+2026-03-12 11:26:40.538 [main] INFO  com.disciplica.User - Task completed and XP granted: Buy Gear
+2026-03-12 11:26:40.538 [main] DEBUG com.disciplica.OneTimeTask - Calculated points for OneTimeTask 'Buy Gear': 10
+2026-03-12 11:26:40.538 [main] INFO  c.d.CompletableProcessingTest - Completed 'Buy Gear', points=10
+2026-03-12 11:26:40.539 [main] INFO  c.d.CompletableProcessingTest - User after completing all tasks: Username: TestUser; Level: 2; Exp: 30; Tasks: 3; Titel: Beginner
