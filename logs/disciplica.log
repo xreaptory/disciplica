@@ -123,3 +123,37 @@
 2026-03-12 08:15:26.459 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
 2026-03-12 08:15:26.460 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
 2026-03-12 08:15:26.463 [main] INFO  com.disciplica.Main - Completable item completed successfully
+2026-03-12 11:01:21.870 [main] INFO  com.disciplica.Main - Disciplica starting...
+2026-03-12 11:01:21.881 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Exercise', points=10
+2026-03-12 11:01:21.885 [main] INFO  com.disciplica.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-12 11:01:21.885 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Exercise', points=10
+2026-03-12 11:01:21.886 [main] INFO  com.disciplica.User - Task added: Exercise
+2026-03-12 11:01:21.886 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Read', points=5
+2026-03-12 11:01:21.886 [main] INFO  com.disciplica.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-12 11:01:21.886 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Read', points=5
+2026-03-12 11:01:21.886 [main] INFO  com.disciplica.User - Task added: Read
+2026-03-12 11:01:21.886 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Clean Room', points=20
+2026-03-12 11:01:21.887 [main] INFO  com.disciplica.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-12 11:01:21.887 [main] DEBUG com.disciplica.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20
+2026-03-12 11:01:21.887 [main] INFO  com.disciplica.User - Task added: Clean Room
+2026-03-12 11:01:21.887 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Buy Groceries', points=5
+2026-03-12 11:01:21.888 [main] INFO  com.disciplica.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-12 11:01:21.888 [main] DEBUG com.disciplica.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5
+2026-03-12 11:01:21.888 [main] INFO  com.disciplica.User - Task added: Buy Groceries
+2026-03-12 11:01:21.888 [main] DEBUG com.disciplica.AbstractTask - AbstractTask constructor: name='Study', points=15
+2026-03-12 11:01:21.889 [main] INFO  com.disciplica.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-12 11:01:21.889 [main] DEBUG com.disciplica.DailyHabit - DailyHabit created: name='Study', points=15
+2026-03-12 11:01:21.889 [main] INFO  com.disciplica.User - Task added: Study
+2026-03-12 11:01:21.891 [main] DEBUG com.disciplica.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-12 11:01:21.891 [main] DEBUG com.disciplica.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-12 11:01:21.892 [main] DEBUG com.disciplica.Habit - Habit name set to 'Drink Water'
+2026-03-12 11:01:21.892 [main] DEBUG com.disciplica.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-12 11:01:21.892 [main] DEBUG com.disciplica.Habit - Habit 'Drink Water' description set successfully
+2026-03-12 11:01:21.892 [main] INFO  com.disciplica.Habit - Habit created successfully: 'Drink Water'
+2026-03-12 11:01:21.893 [main] INFO  com.disciplica.Main - Processing completable item: Habit
+2026-03-12 11:01:21.893 [main] DEBUG com.disciplica.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-12 11:01:21.893 [main] INFO  com.disciplica.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-12 11:01:21.893 [main] DEBUG com.disciplica.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-12 11:01:21.895 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-12 11:01:21.895 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-12 11:01:21.899 [main] INFO  com.disciplica.Main - Completable item completed successfully
