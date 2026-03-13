@@ -1,5 +1,6 @@
-package com.disciplica;
+package com.disciplica.domain.model;
 
+import com.disciplica.domain.exception.InvalidHabitException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
@@ -10,23 +11,22 @@ public class WeeklyHabit extends AbstractTask {
     private int streak;
 
     @JsonCreator
-    public WeeklyHabit(
-            @JsonProperty("name") String name,
-            @JsonProperty("description") String description,
-            @JsonProperty("points") int points,
-            @JsonProperty("streak") int streak,
-            @JsonProperty("completed") boolean completed) throws InvalidHabitException {
-        super(name, description, points);
-        this.streak = streak;
-        if (completed) {
-            super.complete(); // Restore completed state
-        }
-        logger.debug("WeeklyHabit created: name='{}', points={}, streak={}, completed={}", name, points, streak, completed);
+    public WeeklyHabit(WeeklyHabitState state) throws InvalidHabitException {
+        super(state.name(), state.description(), state.points());
+        streak = state.streak();
+        restoreCompletedState(state.completed());
+        logger.debug("WeeklyHabit created: name='{}', points={}, streak={}, completed={}", state.name(),
+                state.points(), streak, state.completed());
     }
 
-    // Convenience constructor for creating new habits
     public WeeklyHabit(String name, String description, int points) throws InvalidHabitException {
-        this(name, description, points, 0, false);
+        this(new WeeklyHabitState(name, description, points, 0, false));
+    }
+
+    private void restoreCompletedState(boolean completed) {
+        if (completed) {
+            super.complete();
+        }
     }
 
     @Override
@@ -44,13 +44,17 @@ public class WeeklyHabit extends AbstractTask {
     public boolean complete() {
         logger.debug("Attempting to complete WeeklyHabit '{}'", getName());
         boolean completedNow = super.complete();
+        updateStreakAfterCompletion(completedNow);
+        return completedNow;
+    }
+
+    private void updateStreakAfterCompletion(boolean completedNow) {
         if (completedNow) {
             streak++;
             logger.info("WeeklyHabit '{}' completed. New streak: {}", getName(), streak);
-        } else {
-            logger.warn("WeeklyHabit '{}' was already completed, streak unchanged", getName());
+            return;
         }
-        return completedNow;
+        logger.warn("WeeklyHabit '{}' was already completed, streak unchanged", getName());
     }
 
     @Override
@@ -65,4 +69,14 @@ public class WeeklyHabit extends AbstractTask {
     public String toString() {
         return super.toString() + " [Streak: " + streak + "]";
     }
+
+    public record WeeklyHabitState(
+            @JsonProperty("name") String name,
+            @JsonProperty("description") String description,
+            @JsonProperty("points") int points,
+            @JsonProperty("streak") int streak,
+            @JsonProperty("completed") boolean completed) {
+    }
 }
+
+

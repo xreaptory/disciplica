@@ -1,5 +1,7 @@
-package com.disciplica;
+package com.disciplica.domain.model;
 
+import com.disciplica.domain.contract.Trackable;
+import com.disciplica.domain.exception.InvalidHabitException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -21,27 +23,40 @@ public abstract class AbstractTask implements Trackable {
     private final String name;
     private final String description;
     private boolean isCompleted;
-    private final int points; // Base points
+    private final int points;
 
     public AbstractTask(String name, String description, int points) throws InvalidHabitException {
-        logger.debug("AbstractTask constructor: name='{}', points={}", name, points);
-        if (name == null || name.isBlank()) {
-            logger.error("Task name must not be null or blank");
-            throw new InvalidHabitException("Task name must not be null or blank");
-        }
-        if (description == null) {
-            logger.error("Task description must not be null for task '{}'", name);
-            throw new InvalidHabitException("Task description must not be null");
-        }
-        if (points < 0) {
-            logger.error("Task points must be non-negative, got {} for task '{}'", points, name);
-            throw new InvalidHabitException("Task points must be non-negative, got: " + points);
-        }
+        validateName(name);
+        validateDescription(description, name);
+        validatePoints(points, name);
         this.name = name;
         this.description = description;
         this.points = points;
-        this.isCompleted = false;
+        isCompleted = false;
         logger.info("Task created: '{}' ({}), points={}", name, this.getClass().getSimpleName(), points);
+    }
+
+    private void validateName(String candidateName) throws InvalidHabitException {
+        if (candidateName == null || candidateName.isBlank()) {
+            logger.error("Task name must not be null or blank");
+            throw new InvalidHabitException("Task name must not be null or blank");
+        }
+    }
+
+    private void validateDescription(String candidateDescription, String taskName)
+            throws InvalidHabitException {
+        if (candidateDescription == null) {
+            logger.error("Task description must not be null for task '{}'", taskName);
+            throw new InvalidHabitException("Task description must not be null");
+        }
+    }
+
+    private void validatePoints(int candidatePoints, String taskName) throws InvalidHabitException {
+        if (candidatePoints < 0) {
+            logger.error("Task points must be non-negative, got {} for task '{}'", candidatePoints,
+                    taskName);
+            throw new InvalidHabitException("Task points must be non-negative, got: " + candidatePoints);
+        }
     }
 
     @Override
@@ -57,7 +72,7 @@ public abstract class AbstractTask implements Trackable {
         return isCompleted;
     }
 
-    // Jackson uses 'getCompleted' for serialization of boolean 'completed' property
+    // Jackson expects this exact bean getter name for the persisted "completed" field.
     public boolean getCompleted() {
         return isCompleted;
     }
@@ -85,7 +100,6 @@ public abstract class AbstractTask implements Trackable {
         return isCompleted ? 100 : 0;
     }
 
-    /** Returns the current streak count. Subclasses may override. */
     @Override
     public int getStreak() {
         return 0;
@@ -96,3 +110,5 @@ public abstract class AbstractTask implements Trackable {
         return "Name: " + name + " (" + this.getClass().getSimpleName() + ") - " + (isCompleted ? "[DONE]" : "[ ]");
     }
 }
+
+

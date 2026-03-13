@@ -1,0 +1,38 @@
+{
+  "tasks" : [ {
+    "type" : "DailyHabit",
+    "name" : "Exercise",
+    "description" : "Go to the gym for 30 minutes",
+    "points" : 10,
+    "streak" : 0,
+    "completed" : false
+  }, {
+    "type" : "DailyHabit",
+    "name" : "Read",
+    "description" : "Read a book for 20 minutes",
+    "points" : 5,
+    "streak" : 0,
+    "completed" : false
+  }, {
+    "type" : "WeeklyHabit",
+    "name" : "Clean Room",
+    "description" : "Tidy up the room",
+    "points" : 20,
+    "streak" : 1,
+    "completed" : true
+  }, {
+    "type" : "OneTimeTask",
+    "name" : "Buy Groceries",
+    "description" : "Get milk and eggs",
+    "points" : 5,
+    "completed" : false,
+    "streak" : 0
+  }, {
+    "type" : "DailyHabit",
+    "name" : "Study",
+    "description" : "Study for 1 hour",
+    "points" : 15,
+    "streak" : 0,
+    "completed" : false
+  } ]
+}

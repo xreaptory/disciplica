@@ -1,16 +1,12 @@
-package com.disciplica;
+package com.disciplica.infrastructure.persistence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.disciplica.domain.exception.HabitNotFoundException;
+import com.disciplica.domain.exception.InvalidHabitException;
+import com.disciplica.domain.model.Habit;
+import com.disciplica.domain.repository.Repository;
+import org.slf4j.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-/**
- * In-memory, type-safe repository for {@link Habit} entities.
- * Implements {@link Repository Repository&lt;Habit&gt;}.
- */
 public class HabitRepository implements Repository<Habit> {
 
     private static final Logger logger = LoggerFactory.getLogger(HabitRepository.class);
@@ -19,25 +15,32 @@ public class HabitRepository implements Repository<Habit> {
     @Override
     public void save(Habit entity) throws InvalidHabitException {
         logger.debug("HabitRepository.save() called for '{}'", entity);
+        validateEntity(entity);
+        replaceExisting(entity);
+        habits.add(entity);
+        logger.info("Habit '{}' saved to repository ({} total)", entity.getName(), habits.size());
+    }
+
+    private void validateEntity(Habit entity) throws InvalidHabitException {
         if (entity == null) {
             logger.error("Cannot save a null Habit");
             throw new InvalidHabitException("Cannot save a null Habit");
         }
-        // Update if exists, otherwise add
-        Optional<Habit> existing = findByName(entity.getName());
-        if (existing.isPresent()) {
-            habits.remove(existing.get());
+    }
+
+    private void replaceExisting(Habit entity) {
+        Optional<Habit> existingHabit = findByName(entity.getName());
+        if (existingHabit.isPresent()) {
+            habits.remove(existingHabit.get());
             logger.debug("Replacing existing Habit '{}'", entity.getName());
         }
-        habits.add(entity);
-        logger.info("Habit '{}' saved to repository ({} total)", entity.getName(), habits.size());
     }
 
     @Override
     public Optional<Habit> findByName(String name) {
         logger.debug("HabitRepository.findByName() called, name='{}'", name);
         return habits.stream()
-                .filter(h -> h.getName().equals(name))
+            .filter(habit -> habit.getName().equals(name))
                 .findFirst();
     }
 
@@ -59,4 +62,6 @@ public class HabitRepository implements Repository<Habit> {
         logger.info("Habit '{}' deleted from repository ({} remaining)", name, habits.size());
     }
 }
+
+
 

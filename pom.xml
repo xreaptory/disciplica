@@ -84,7 +84,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <mainClass>com.disciplica.Main</mainClass>
+                    <mainClass>com.disciplica.bootstrap.Main</mainClass>
                 </configuration>
             </plugin>
 
@@ -105,7 +105,7 @@
                             <transformers>
                                 <!-- Set the Main-Class manifest entry -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.disciplica.Main</mainClass>
+                                    <mainClass>com.disciplica.bootstrap.Main</mainClass>
                                 </transformer>
                                 <!-- Merge logback/SLF4J service-loader files so logging initialises correctly -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
