@@ -1,5 +1,6 @@
-package com.disciplica;
+package com.disciplica.domain.model;
 
+import com.disciplica.domain.contract.Trackable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,12 +46,12 @@ public class Reward implements Trackable {
 
     @Override
     public int getProgress() {
-        return 0; // Rewards are not progress-tracked
+        return 0;
     }
 
     @Override
     public int getStreak() {
-        return 0; // Rewards do not have streaks
+        return 0;
     }
 
     @Override
@@ -58,3 +59,5 @@ public class Reward implements Trackable {
         return name + " (" + pointsRequired + " pts) - " + description;
     }
 }
+
+

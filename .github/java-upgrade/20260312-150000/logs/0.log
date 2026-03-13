@@ -1,0 +1,569 @@
+2026-03-12T10:18:51.228Z [INFO] ----------------------invoke list_jdks----------------------
+2026-03-12T10:18:51.232Z [INFO] [Tool.invoke]({name: list_jdks, input: {
+  "sessionId": "20260312-150000",
+  "additionalSearchPaths": [
+    "C:\\Java"
+  ],
+  "projectPath": "c:\\Users\\tekin\\OneDrive\\Documents\\2. Schuljahr\\2. Semester\\POS\\Projekt\\Disciplica"
+}}).
+2026-03-12T10:18:51.236Z [INFO] [Tool.invoke] do invoke.
+2026-03-12T10:18:51.338Z [INFO] [Tool.invoke]({result: {
+  "message": "We found following jdks in your system:\n\n1. Java 17.0.12\n   📁 Path: C:\\Program Files\\Java\\jdk-17\\bin\n   🏷️ Source: others\n\n2. Java 17.0.15\n   📁 Path: C:\\Users\\tekin\\.jdks\\ms-17.0.15\\bin\n   🏷️ Source: others\n\n3. Java 21.0.7\n   📁 Path: C:\\Users\\tekin\\.jdks\\ms-21.0.7\\bin\n   🏷️ Source: others\n\n4. Java 24.0.1\n   📁 Path: C:\\Users\\tekin\\.jdks\\corretto-24.0.1\\bin\n   🏷️ Source: others\n\n5. Java 24\n   📁 Path: C:\\Users\\tekin\\.jdks\\openjdk-24\\bin\n   🏷️ Source: others\n\n6. Java 25\n   📁 Path: C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.0.36-hotspot\\bin\n   🏷️ Source: PATH\n\n7. Java 25.0.1\n   📁 Path: C:\\Users\\tekin\\.jdks\\openjdk-25.0.1\\bin\n   🏷️ Source: others\n\nTotal: 7 JDK installation(s) found"
+}}).
+2026-03-12T10:18:51.342Z [INFO] ----------------------invoked list_jdks----------------------
+2026-03-12T10:18:51.369Z [INFO] ---------------------prepare list_mavens----------------------
+2026-03-12T10:18:51.374Z [INFO] [Tool.prepareInvocation]({name: list_mavens, input: {
+  "sessionId": "20260312-150000",
+  "includeVersion": true
+}}).
+2026-03-12T10:18:51.379Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-03-12T10:18:51.384Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "List mavens"
+}}).
+2026-03-12T10:18:51.389Z [INFO] ----------------------prepared list_mavens----------------------
+2026-03-12T10:18:51.448Z [INFO] ----------------------invoke list_mavens----------------------
+2026-03-12T10:18:51.453Z [INFO] [Tool.invoke]({name: list_mavens, input: {
+  "sessionId": "20260312-150000",
+  "includeVersion": true,
+  "projectPath": "c:\\Users\\tekin\\OneDrive\\Documents\\2. Schuljahr\\2. Semester\\POS\\Projekt\\Disciplica"
+}}).
+2026-03-12T10:18:51.459Z [INFO] [Tool.invoke] do invoke.
+2026-03-12T10:18:51.471Z [INFO] [Tool.invoke]({result: {
+  "message": "No Maven installations found."
+}}).
+2026-03-12T10:18:51.476Z [INFO] ----------------------invoked list_mavens----------------------
+2026-03-12T10:20:28.631Z [INFO] ---------------------prepare confirm_upgrade_plan----------------------
+2026-03-12T10:20:28.636Z [INFO] [Tool.prepareInvocation]({name: confirm_upgrade_plan, input: {
+  "sessionId": "20260312-150000"
+}}).
+2026-03-12T10:20:28.642Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-03-12T10:20:28.648Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Review [upgrade plan](file:///c:/Users/tekin/OneDrive/Documents/2. Schuljahr/2. Semester/POS/Projekt/Disciplica/.github/java-upgrade/20260312-150000/plan.md)",
+  "confirmationMessages": {
+    "title": "Plan generated",
+    "message": "Please review the generated plan and make any necessary adjustments before proceeding. You can modify the generated [`plan.md`](file:///c:/Users/tekin/OneDrive/Documents/2. Schuljahr/2. Semester/POS/Projekt/Disciplica/.github/java-upgrade/20260312-150000/plan.md) directly."
+  }
+}}).
+2026-03-12T10:20:28.654Z [INFO] ----------------------prepared confirm_upgrade_plan----------------------
+2026-03-12T10:20:32.658Z [INFO] ----------------------invoke confirm_upgrade_plan----------------------
+2026-03-12T10:20:32.663Z [INFO] [Tool.invoke]({name: confirm_upgrade_plan, input: {
+  "sessionId": "20260312-150000",
+  "projectPath": "c:\\Users\\tekin\\OneDrive\\Documents\\2. Schuljahr\\2. Semester\\POS\\Projekt\\Disciplica"
+}}).
+2026-03-12T10:20:32.669Z [INFO] [Tool.invoke] do invoke.
+2026-03-12T10:20:32.674Z [INFO] Upgrade plan confirmed successfully.
+2026-03-12T10:20:32.693Z [INFO] [Tool.invoke]({result: {
+  "message": "Generated plan is reviewed and confirmed by the user! the upgrade process will start now and be tracked in markdown file: c:\\Users\\tekin\\OneDrive\\Documents\\2. Schuljahr\\2. Semester\\POS\\Projekt\\Disciplica\\.github\\java-upgrade\\20260312-150000\\progress.md."
+}}).
+2026-03-12T10:20:32.698Z [INFO] ----------------------invoked confirm_upgrade_plan----------------------
+2026-03-12T11:45:30.594Z [INFO] ---------------------prepare validate_cves_for_java----------------------
+2026-03-12T11:45:30.602Z [INFO] [Tool.prepareInvocation]({name: validate_cves_for_java, input: {
+  "dependencies": [
+    "org.junit.jupiter:junit-jupiter-engine:jar:5.12.1:test",
+    "org.slf4j:slf4j-api:jar:2.0.17:compile",
+    "ch.qos.logback:logback-classic:jar:1.5.16:compile",
+    "ch.qos.logback:logback-core:jar:1.5.16:compile",
+    "org.junit.jupiter:junit-jupiter-api:jar:5.12.1:test",
+    "org.junit.platform:junit-platform-launcher:jar:1.12.1:test",
+    "org.xerial:sqlite-jdbc:jar:3.49.1.0:compile"
+  ],
+  "projectPath": "c:\\Users\\tekin\\OneDrive\\Documents\\2. Schuljahr\\2. Semester\\POS\\Projekt\\Disciplica",
+  "sessionId": "20260312-150000"
+}}).
+2026-03-12T11:45:30.607Z [INFO] [Tool.prepareInvocation] do prepare invocation.
+2026-03-12T11:45:30.617Z [INFO] [Tool.prepareInvocation]({result: {
+  "invocationMessage": "Validate CVEs"
+}}).
+2026-03-12T11:45:30.622Z [INFO] ----------------------prepared validate_cves_for_java----------------------
+2026-03-12T11:45:30.686Z [INFO] ----------------------invoke validate_cves_for_java----------------------
+2026-03-12T11:45:30.691Z [INFO] [Tool.invoke]({name: validate_cves_for_java, input: {
+  "dependencies": [
+    "org.junit.jupiter:junit-jupiter-engine:jar:5.12.1:test",
+    "org.slf4j:slf4j-api:jar:2.0.17:compile",
+    "ch.qos.logback:logback-classic:jar:1.5.16:compile",
+    "ch.qos.logback:logback-core:jar:1.5.16:compile",
+    "org.junit.jupiter:junit-jupiter-api:jar:5.12.1:test",
+    "org.junit.platform:junit-platform-launcher:jar:1.12.1:test",
+    "org.xerial:sqlite-jdbc:jar:3.49.1.0:compile"
+  ],
+  "projectPath": "c:\\Users\\tekin\\OneDrive\\Documents\\2. Schuljahr\\2. Semester\\POS\\Projekt\\Disciplica",
+  "sessionId": "20260312-150000"
+}}).
+2026-03-12T11:45:30.696Z [INFO] [Tool.invoke] do invoke.
+2026-03-12T11:45:30.702Z [INFO] Project c:\Users\tekin\OneDrive\Documents\2. Schuljahr\2. Semester\POS\Projekt\Disciplica is a maven project, try to get java version from pom.xml
+2026-03-12T11:45:30.710Z [INFO] Project java version: 25
+2026-03-12T11:45:30.715Z [INFO] Maven project detected.
+2026-03-12T11:45:30.720Z [INFO] Build tool type: mvnw
+2026-03-12T11:45:30.810Z [INFO] JDK: {
+  "name": "java",
+  "path": "C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.0.36-hotspot\\bin",
+  "version": "25"
+}
+2026-03-12T11:45:30.815Z [INFO] Build tool: {
+  "name": "mvnw",
+  "path": ".",
+  "version": ""
+}
+2026-03-12T11:45:30.820Z [INFO] Project config: {
+  "buildTool": {
+    "path": ".",
+    "name": "mvnw",
+    "version": ""
+  },
+  "jdk": {
+    "path": "C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.0.36-hotspot\\bin",
+    "name": "java",
+    "version": "25"
+  },
+  "name": "Disciplica",
+  "dir": "c:\\Users\\tekin\\OneDrive\\Documents\\2. Schuljahr\\2. Semester\\POS\\Projekt\\Disciplica"
+}
+2026-03-12T11:45:30.830Z [INFO] [Environment] Running command (Java undefined): mvnw dependency:tree -B
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/C:/Users/tekin/.m2/wrapper/dists/apache-maven-3.8.5-bin/5i5jha092a3i37g0paqnfr15e0/apache-maven-3.8.5/lib/jansi-2.4.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/C:/Users/tekin/.m2/wrapper/dists/apache-maven-3.8.5-bin/5i5jha092a3i37g0paqnfr15e0/apache-maven-3.8.5/lib/guava-25.1-android.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.habittracker:disciplica >---------------------
+[INFO] Building Disciplica 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ disciplica ---
+[INFO] com.habittracker:disciplica:jar:1.0-SNAPSHOT
+[INFO] +- org.junit.jupiter:junit-jupiter-api:jar:5.12.1:test
+[INFO] |  +- org.opentest4j:opentest4j:jar:1.3.0:test
+[INFO] |  +- org.junit.platform:junit-platform-commons:jar:1.12.1:test
+[INFO] |  \- org.apiguardian:apiguardian-api:jar:1.1.2:test
+[INFO] +- org.junit.jupiter:junit-jupiter-engine:jar:5.12.1:test
+[INFO] |  \- org.junit.platform:junit-platform-engine:jar:1.12.1:test
+[INFO] +- org.junit.platform:junit-platform-launcher:jar:1.12.1:test
+[INFO] +- org.slf4j:slf4j-api:jar:2.0.17:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.5.16:compile
+[INFO] +- ch.qos.logback:logback-core:jar:1.5.16:compile
+[INFO] \- org.xerial:sqlite-jdbc:jar:3.49.1.0:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.286 s
+[INFO] Finished at: 2026-03-12T12:45:35+01:00
+[INFO] ------------------------------------------------------------------------
+2026-03-12T11:45:35.542Z [INFO] [MavenBuildTool] Successfully got dependency tree of c:\Users\tekin\OneDrive\Documents\2. Schuljahr\2. Semester\POS\Projekt\Disciplica
+2026-03-12T11:45:35.548Z [INFO] [MavenBuildTool] Getting Java version of c:\Users\tekin\OneDrive\Documents\2. Schuljahr\2. Semester\POS\Projekt\Disciplica from pom.xml
+2026-03-12T11:45:35.555Z [INFO] [MavenBuildTool] Searching for pom.xml files in c:\Users\tekin\OneDrive\Documents\2. Schuljahr\2. Semester\POS\Projekt\Disciplica
+2026-03-12T11:45:35.561Z [INFO] [MavenBuildTool] Getting all module coordinates of c:\Users\tekin\OneDrive\Documents\2. Schuljahr\2. Semester\POS\Projekt\Disciplica
+2026-03-12T11:45:35.566Z [INFO] [MavenBuildTool] Getting effective POMs of c:\Users\tekin\OneDrive\Documents\2. Schuljahr\2. Semester\POS\Projekt\Disciplica
+2026-03-12T11:45:35.572Z [INFO] [Environment] Running command (Java undefined): mvnw help:effective-pom -Doutput=effective-pom-ca475c81-1b4e-4f28-8fe6-b2d7708b33d8.log
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/C:/Users/tekin/.m2/wrapper/dists/apache-maven-3.8.5-bin/5i5jha092a3i37g0paqnfr15e0/apache-maven-3.8.5/lib/jansi-2.4.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/C:/Users/tekin/.m2/wrapper/dists/apache-maven-3.8.5-bin/5i5jha092a3i37g0paqnfr15e0/apache-maven-3.8.5/lib/guava-25.1-android.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-release-plugin/2.5.3/maven-release-plugin-2.5.3.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 11 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-release-plugin/2.5.3/maven-release-plugin-2.5.3.pom (11 kB at 11 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/release/maven-release/2.5.3/maven-release-2.5.3.pom
+Progress (1): 4.1 kBProgress (1): 5.0 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/release/maven-release/2.5.3/maven-release-2.5.3.pom (5.0 kB at 49 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/27/maven-parent-27.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kBProgress (1): 20 kBProgress (1): 25 kBProgress (1): 29 kBProgress (1): 33 kBProgress (1): 37 kBProgress (1): 41 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/27/maven-parent-27.pom (41 kB at 306 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/apache/17/apache-17.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/apache/17/apache-17.pom (16 kB at 40 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-release-plugin/2.5.3/maven-release-plugin-2.5.3.jar
+Progress (1): 2.3/53 kBProgress (1): 4.7/53 kBProgress (1): 7.5/53 kBProgress (1): 10/53 kB Progress (1): 13/53 kBProgress (1): 16/53 kBProgress (1): 18/53 kBProgress (1): 21/53 kBProgress (1): 24/53 kBProgress (1): 27/53 kBProgress (1): 31/53 kBProgress (1): 35/53 kBProgress (1): 39/53 kBProgress (1): 43/53 kBProgress (1): 47/53 kBProgress (1): 51/53 kBProgress (1): 53 kB                      Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-release-plugin/2.5.3/maven-release-plugin-2.5.3.jar (53 kB at 134 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kBProgress (1): 20 kBProgress (1): 21 kBProgress (2): 21 kB | 4.1 kBProgress (2): 21 kB | 8.2 kBProgress (2): 21 kB | 12 kB Progress (2): 21 kB | 14 kB                           Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml (21 kB at 95 kB/s)
+Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml (14 kB at 62 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-help-plugin/maven-metadata.xml
+Progress (1): 807 B                   Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-help-plugin/maven-metadata.xml (807 B at 10 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-help-plugin/3.5.1/maven-help-plugin-3.5.1.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 10 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-help-plugin/3.5.1/maven-help-plugin-3.5.1.pom (10 kB at 108 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/43/maven-plugins-43.pom
+Progress (1): 4.1 kBProgress (1): 7.5 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/43/maven-plugins-43.pom (7.5 kB at 80 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-help-plugin/3.5.1/maven-help-plugin-3.5.1.jar
+Progress (1): 2.3/65 kBProgress (1): 5.0/65 kBProgress (1): 7.7/65 kBProgress (1): 10/65 kB Progress (1): 13/65 kBProgress (1): 16/65 kBProgress (1): 19/65 kBProgress (1): 21/65 kBProgress (1): 24/65 kBProgress (1): 27/65 kBProgress (1): 30/65 kBProgress (1): 33/65 kBProgress (1): 37/65 kBProgress (1): 41/65 kBProgress (1): 45/65 kBProgress (1): 49/65 kBProgress (1): 53/65 kBProgress (1): 57/65 kBProgress (1): 61/65 kBProgress (1): 65 kB                      Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-help-plugin/3.5.1/maven-help-plugin-3.5.1.jar (65 kB at 487 kB/s)
+[INFO] 
+[INFO] --------------------< com.habittracker:disciplica >---------------------
+[INFO] Building Disciplica 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-help-plugin:3.5.1:effective-pom (default-cli) @ disciplica ---
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools-generators/3.13.1/maven-plugin-tools-generators-3.13.1.pom
+Progress (1): 4.1 kBProgress (1): 4.1 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools-generators/3.13.1/maven-plugin-tools-generators-3.13.1.pom (4.1 kB at 38 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools/3.13.1/maven-plugin-tools-3.13.1.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kBProgress (1): 18 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools/3.13.1/maven-plugin-tools-3.13.1.pom (18 kB at 55 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.plexus/0.9.0.M3/org.eclipse.sisu.plexus-0.9.0.M3.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kBProgress (1): 17 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.plexus/0.9.0.M3/org.eclipse.sisu.plexus-0.9.0.M3.pom (17 kB at 189 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/sisu-inject/0.9.0.M3/sisu-inject-0.9.0.M3.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kBProgress (1): 20 kBProgress (1): 24 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/sisu-inject/0.9.0.M3/sisu-inject-0.9.0.M3.pom (24 kB at 277 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.inject/0.9.0.M3/org.eclipse.sisu.inject-0.9.0.M3.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kBProgress (1): 20 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.inject/0.9.0.M3/org.eclipse.sisu.inject-0.9.0.M3.pom (20 kB at 209 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.17.2/jsoup-1.17.2.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.17.2/jsoup-1.17.2.pom (16 kB at 50 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/4.0.0/maven-reporting-api-4.0.0.pom
+Progress (1): 2.8 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/4.0.0/maven-reporting-api-4.0.0.pom (2.8 kB at 31 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/43/maven-shared-components-43.pom
+Progress (1): 3.8 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/43/maven-shared-components-43.pom (3.8 kB at 23 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity-api/1.3/plexus-interactivity-api-1.3.pom
+Progress (1): 1.7 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity-api/1.3/plexus-interactivity-api-1.3.pom (1.7 kB at 19 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity/1.3/plexus-interactivity-1.3.pom
+Progress (1): 1.9 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity/1.3/plexus-interactivity-1.3.pom (1.9 kB at 19 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream/1.4.20/xstream-1.4.20.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kBProgress (1): 20 kBProgress (1): 25 kBProgress (1): 25 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream/1.4.20/xstream-1.4.20.pom (25 kB at 228 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream-parent/1.4.20/xstream-parent-1.4.20.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kBProgress (1): 20 kBProgress (1): 25 kBProgress (1): 29 kBProgress (1): 33 kBProgress (1): 37 kBProgress (1): 41 kBProgress (1): 44 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream-parent/1.4.20/xstream-parent-1.4.20.pom (44 kB at 363 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/io/github/x-stream/mxparser/1.2.2/mxparser-1.2.2.pom
+Progress (1): 4.1 kBProgress (1): 8.2 kBProgress (1): 12 kB Progress (1): 16 kBProgress (1): 20 kBProgress (1): 24 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/io/github/x-stream/mxparser/1.2.2/mxparser-1.2.2.pom (24 kB at 36 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.pom
+Progress (1): 386 B                   Downloaded from central: https://repo.maven.apache.org/maven2/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.pom (386 B at 4.2 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools-generators/3.13.1/maven-plugin-tools-generators-3.13.1.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.plexus/0.9.0.M3/org.eclipse.sisu.plexus-0.9.0.M3.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.inject/0.9.0.M3/org.eclipse.sisu.inject-0.9.0.M3.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.17.2/jsoup-1.17.2.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/4.0.0/maven-reporting-api-4.0.0.jar
+Progress (1): 3.8/44 kBProgress (1): 7.8/44 kBProgress (1): 12/44 kB Progress (1): 16/44 kBProgress (1): 20/44 kBProgress (1): 24/44 kBProgress (1): 28/44 kBProgress (1): 32/44 kBProgress (1): 37/44 kBProgress (1): 41/44 kBProgress (1): 44 kB   Progress (2): 44 kB | 4.1/216 kBProgress (2): 44 kB | 7.7/216 kBProgress (2): 44 kB | 12/216 kB Progress (2): 44 kB | 16/216 kBProgress (2): 44 kB | 20/216 kBProgress (2): 44 kB | 24/216 kBProgress (2): 44 kB | 28/216 kBProgress (2): 44 kB | 32/216 kBProgress (2): 44 kB | 36/216 kBProgress (2): 44 kB | 40/216 kBProgress (2): 44 kB | 45/216 kBProgress (2): 44 kB | 49/216 kBProgress (2): 44 kB | 53/216 kBProgress (2): 44 kB | 57/216 kBProgress (2): 44 kB | 61/216 kBProgress (2): 44 kB | 65/216 kBProgress (2): 44 kB | 69/216 kBProgress (2): 44 kB | 73/216 kBProgress (2): 44 kB | 77/216 kBProgress (2): 44 kB | 81/216 kBProgress (2): 44 kB | 86/216 kBProgress (2): 44 kB | 90/216 kBProgress (2): 44 kB | 94/216 kBProgress (2): 44 kB | 98/216 kBProgress (2): 44 kB | 102/216 kBProgress (2): 44 kB | 106/216 kBProgress (2): 44 kB | 110/216 kBProgress (2): 44 kB | 114/216 kBProgress (2): 44 kB | 118/216 kBProgress (2): 44 kB | 122/216 kBProgress (2): 44 kB | 126/216 kBProgress (2): 44 kB | 131/216 kBProgress (2): 44 kB | 135/216 kBProgress (2): 44 kB | 139/216 kBProgress (2): 44 kB | 143/216 kBProgress (2): 44 kB | 147/216 kBProgress (2): 44 kB | 151/216 kBProgress (2): 44 kB | 155/216 kBProgress (2): 44 kB | 159/216 kBProgress (2): 44 kB | 163/216 kBProgress (2): 44 kB | 167/216 kBProgress (2): 44 kB | 172/216 kBProgress (2): 44 kB | 176/216 kBProgress (2): 44 kB | 180/216 kBProgress (2): 44 kB | 184/216 kBProgress (2): 44 kB | 188/216 kBProgress (2): 44 kB | 192/216 kBProgress (2): 44 kB | 196/216 kBProgress (3): 44 kB | 196/216 kB | 2.3/446 kBProgress (3): 44 kB | 196/216 kB | 5.0/446 kBProgress (4): 44 kB | 196/216 kB | 5.0/446 kB | 2.3/434 kBProgress (4): 44 kB | 196/216 kB | 7.7/446 kB | 2.3/434 kBProgress (4): 44 kB | 200/216 kB | 7.7/446 kB | 2.3/434 kBProgress (4): 44 kB | 200/216 kB | 7.7/446 kB | 5.0/434 kBProgress (4): 44 kB | 200/216 kB | 10/446 kB | 5.0/434 kB Progress (4): 44 kB | 204/216 kB | 10/446 kB | 5.0/434 kBProgress (4): 44 kB | 208/216 kB | 10/446 kB | 5.0/434 kBProgress (4): 44 kB | 208/216 kB | 10/446 kB | 7.7/434 kBProgress (4): 44 kB | 213/216 kB | 10/446 kB | 7.7/434 kBProgress (4): 44 kB | 213/216 kB | 10/446 kB | 10/434 kB Progress (4): 44 kB | 216 kB | 10/446 kB | 10/434 kB    Progress (4): 44 kB | 216 kB | 13/446 kB | 10/434 kBProgress (4): 44 kB | 216 kB | 13/446 kB | 13/434 kBProgress (4): 44 kB | 216 kB | 16/446 kB | 13/434 kBProgress (4): 44 kB | 216 kB | 16/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 19/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 21/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 24/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 27/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 30/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 33/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 36/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 38/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 41/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 44/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 46/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 49/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 52/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 55/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 59/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 63/446 kB | 16/434 kBProgress (4): 44 kB | 216 kB | 63/446 kB | 18/434 kBProgress (4): 44 kB | 216 kB | 63/446 kB | 21/434 kBProgress (4): 44 kB | 216 kB | 63/446 kB | 24/434 kBProgress (4): 44 kB | 216 kB | 63/446 kB | 27/434 kBProgress (4): 44 kB | 216 kB | 63/446 kB | 29/434 kBProgress (4): 44 kB | 216 kB | 63/446 kB | 32/434 kBProgress (4): 44 kB | 216 kB | 63/446 kB | 35/434 kBProgress (4): 44 kB | 216 kB | 67/446 kB | 35/434 kBProgress (4): 44 kB | 216 kB | 67/446 kB | 38/434 kBProgress (4): 44 kB | 216 kB | 71/446 kB | 38/434 kBProgress (4): 44 kB | 216 kB | 71/446 kB | 40/434 kBProgress (4): 44 kB | 216 kB | 75/446 kB | 40/434 kBProgress (4): 44 kB | 216 kB | 75/446 kB | 43/434 kBProgress (4): 44 kB | 216 kB | 79/446 kB | 43/434 kBProgress (4): 44 kB | 216 kB | 79/446 kB | 46/434 kBProgress (5): 44 kB | 216 kB | 79/446 kB | 46/434 kB | 2.3/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 46/434 kB | 2.3/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 49/434 kB | 2.3/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 51/434 kB | 2.3/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 54/434 kB | 2.3/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 58/434 kB | 2.3/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 62/434 kB | 2.3/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 66/434 kB | 2.3/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 70/434 kB | 2.3/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 70/434 kB | 5.0/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 70/434 kB | 7.7/9.8 kBProgress (5): 44 kB | 216 kB | 83/446 kB | 70/434 kB | 9.8 kB    Progress (5): 44 kB | 216 kB | 87/446 kB | 70/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 87/446 kB | 74/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 92/446 kB | 74/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 92/446 kB | 79/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 96/446 kB | 79/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 96/446 kB | 81/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 100/446 kB | 81/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 100/446 kB | 85/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 104/446 kB | 85/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 104/446 kB | 89/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 108/446 kB | 89/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 108/446 kB | 93/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 112/446 kB | 93/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 112/446 kB | 97/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 116/446 kB | 97/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 120/446 kB | 97/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 122/446 kB | 97/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 126/446 kB | 97/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 131/446 kB | 97/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 131/446 kB | 101/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 135/446 kB | 101/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 135/446 kB | 105/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 135/446 kB | 109/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 139/446 kB | 109/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 143/446 kB | 109/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 147/446 kB | 109/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 109/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 114/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 118/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 122/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 126/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 130/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 134/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 138/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 142/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 146/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 150/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 154/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 159/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 163/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 167/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 171/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 175/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 179/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 183/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 187/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 191/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 195/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 198/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 202/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 206/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 210/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 214/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 218/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 222/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 226/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 230/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 234/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 239/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 243/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 247/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 251/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 255/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 259/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 263/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 267/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 271/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 274/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 278/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 282/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 286/434 kB | 9.8 kBProgress (5): 44 kB | 216 kB | 151/446 kB | 290/434 kB | 9.8 kB                                                               Downloaded from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.plexus/0.9.0.M3/org.eclipse.sisu.plexus-0.9.0.M3.jar (216 kB at 680 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity-api/1.3/plexus-interactivity-api-1.3.jar
+Progress (4): 44 kB | 151/446 kB | 294/434 kB | 9.8 kBProgress (4): 44 kB | 151/446 kB | 298/434 kB | 9.8 kBProgress (4): 44 kB | 151/446 kB | 302/434 kB | 9.8 kBProgress (4): 44 kB | 151/446 kB | 306/434 kB | 9.8 kBProgress (4): 44 kB | 151/446 kB | 311/434 kB | 9.8 kBProgress (4): 44 kB | 151/446 kB | 315/434 kB | 9.8 kBProgress (4): 44 kB | 151/446 kB | 319/434 kB | 9.8 kBProgress (4): 44 kB | 151/446 kB | 323/434 kB | 9.8 kB                                                      Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools-generators/3.13.1/maven-plugin-tools-generators-3.13.1.jar (44 kB at 118 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/4.0.1/plexus-utils-4.0.1.jar
+Progress (3): 151/446 kB | 327/434 kB | 9.8 kBProgress (3): 151/446 kB | 331/434 kB | 9.8 kBProgress (3): 151/446 kB | 335/434 kB | 9.8 kBProgress (3): 151/446 kB | 339/434 kB | 9.8 kBProgress (3): 151/446 kB | 343/434 kB | 9.8 kBProgress (3): 151/446 kB | 347/434 kB | 9.8 kBProgress (3): 151/446 kB | 352/434 kB | 9.8 kBProgress (3): 151/446 kB | 356/434 kB | 9.8 kBProgress (3): 151/446 kB | 360/434 kB | 9.8 kBProgress (3): 151/446 kB | 364/434 kB | 9.8 kBProgress (3): 151/446 kB | 368/434 kB | 9.8 kBProgress (3): 151/446 kB | 372/434 kB | 9.8 kBProgress (3): 151/446 kB | 376/434 kB | 9.8 kBProgress (3): 151/446 kB | 380/434 kB | 9.8 kBProgress (3): 151/446 kB | 384/434 kB | 9.8 kBProgress (3): 151/446 kB | 388/434 kB | 9.8 kBProgress (3): 151/446 kB | 392/434 kB | 9.8 kBProgress (3): 151/446 kB | 397/434 kB | 9.8 kBProgress (3): 151/446 kB | 401/434 kB | 9.8 kBProgress (3): 151/446 kB | 405/434 kB | 9.8 kBProgress (3): 151/446 kB | 409/434 kB | 9.8 kBProgress (3): 151/446 kB | 413/434 kB | 9.8 kBProgress (3): 151/446 kB | 417/434 kB | 9.8 kBProgress (3): 151/446 kB | 421/434 kB | 9.8 kBProgress (3): 151/446 kB | 425/434 kB | 9.8 kBProgress (3): 151/446 kB | 429/434 kB | 9.8 kBProgress (3): 151/446 kB | 433/434 kB | 9.8 kBProgress (3): 151/446 kB | 434 kB | 9.8 kB                                              Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/4.0.0/maven-reporting-api-4.0.0.jar (9.8 kB at 16 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream/1.4.20/xstream-1.4.20.jar
+Progress (3): 151/446 kB | 434 kB | 4.1/10 kBProgress (3): 151/446 kB | 434 kB | 7.7/10 kBProgress (3): 151/446 kB | 434 kB | 10 kB    Progress (4): 151/446 kB | 434 kB | 10 kB | 2.3/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 5.0/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 7.7/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 10/645 kB Progress (4): 151/446 kB | 434 kB | 10 kB | 13/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 16/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 19/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 21/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 24/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 27/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 30/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 32/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 35/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 38/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 41/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 43/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 47/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 52/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 56/645 kBProgress (4): 151/446 kB | 434 kB | 10 kB | 60/645 kB                                                     Downloaded from central: https://repo.maven.apache.org/maven2/org/eclipse/sisu/org.eclipse.sisu.inject/0.9.0.M3/org.eclipse.sisu.inject-0.9.0.M3.jar (434 kB at 601 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/io/github/x-stream/mxparser/1.2.2/mxparser-1.2.2.jar
+Progress (3): 151/446 kB | 10 kB | 64/645 kBProgress (3): 151/446 kB | 10 kB | 68/645 kBProgress (3): 151/446 kB | 10 kB | 72/645 kBProgress (3): 151/446 kB | 10 kB | 76/645 kBProgress (3): 151/446 kB | 10 kB | 80/645 kBProgress (3): 151/446 kB | 10 kB | 82/645 kBProgress (3): 151/446 kB | 10 kB | 86/645 kBProgress (3): 151/446 kB | 10 kB | 90/645 kBProgress (4): 151/446 kB | 10 kB | 90/645 kB | 4.1/30 kBProgress (4): 151/446 kB | 10 kB | 90/645 kB | 7.7/30 kBProgress (4): 151/446 kB | 10 kB | 90/645 kB | 12/30 kB Progress (4): 151/446 kB | 10 kB | 90/645 kB | 16/30 kBProgress (4): 151/446 kB | 10 kB | 90/645 kB | 20/30 kBProgress (4): 151/446 kB | 10 kB | 90/645 kB | 24/30 kBProgress (4): 151/446 kB | 10 kB | 90/645 kB | 28/30 kBProgress (4): 151/446 kB | 10 kB | 90/645 kB | 30 kB   Progress (4): 151/446 kB | 10 kB | 95/645 kB | 30 kBProgress (4): 151/446 kB | 10 kB | 99/645 kB | 30 kBProgress (4): 151/446 kB | 10 kB | 103/645 kB | 30 kBProgress (4): 151/446 kB | 10 kB | 107/645 kB | 30 kBProgress (4): 151/446 kB | 10 kB | 111/645 kB | 30 kBProgress (4): 151/446 kB | 10 kB | 115/645 kB | 30 kB                                                     Downloaded from central: https://repo.maven.apache.org/maven2/io/github/x-stream/mxparser/1.2.2/mxparser-1.2.2.jar (30 kB at 35 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar
+Progress (3): 151/446 kB | 10 kB | 119/645 kBProgress (3): 151/446 kB | 10 kB | 123/645 kBProgress (3): 151/446 kB | 10 kB | 127/645 kBProgress (3): 151/446 kB | 10 kB | 131/645 kBProgress (3): 151/446 kB | 10 kB | 136/645 kBProgress (3): 151/446 kB | 10 kB | 140/645 kBProgress (3): 151/446 kB | 10 kB | 144/645 kBProgress (3): 151/446 kB | 10 kB | 148/645 kBProgress (3): 151/446 kB | 10 kB | 150/645 kBProgress (3): 151/446 kB | 10 kB | 154/645 kBProgress (3): 151/446 kB | 10 kB | 158/645 kBProgress (3): 151/446 kB | 10 kB | 162/645 kBProgress (3): 151/446 kB | 10 kB | 166/645 kBProgress (3): 151/446 kB | 10 kB | 170/645 kBProgress (3): 151/446 kB | 10 kB | 174/645 kBProgress (3): 151/446 kB | 10 kB | 179/645 kBProgress (3): 151/446 kB | 10 kB | 183/645 kBProgress (3): 151/446 kB | 10 kB | 187/645 kBProgress (3): 151/446 kB | 10 kB | 191/645 kBProgress (3): 151/446 kB | 10 kB | 195/645 kBProgress (3): 151/446 kB | 10 kB | 199/645 kBProgress (3): 151/446 kB | 10 kB | 203/645 kBProgress (3): 151/446 kB | 10 kB | 207/645 kBProgress (3): 151/446 kB | 10 kB | 211/645 kBProgress (3): 151/446 kB | 10 kB | 215/645 kBProgress (3): 151/446 kB | 10 kB | 220/645 kBProgress (3): 151/446 kB | 10 kB | 224/645 kBProgress (4): 151/446 kB | 10 kB | 224/645 kB | 4.1/7.2 kBProgress (4): 151/446 kB | 10 kB | 224/645 kB | 7.2 kB    Progress (4): 151/446 kB | 10 kB | 228/645 kB | 7.2 kBProgress (4): 151/446 kB | 10 kB | 232/645 kB | 7.2 kBProgress (4): 151/446 kB | 10 kB | 236/645 kB | 7.2 kBProgress (4): 151/446 kB | 10 kB | 240/645 kB | 7.2 kB                                                      Downloaded from central: https://repo.maven.apache.org/maven2/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar (7.2 kB at 6.2 kB/s)
+Progress (3): 151/446 kB | 10 kB | 244/645 kBProgress (3): 151/446 kB | 10 kB | 248/645 kBProgress (3): 151/446 kB | 10 kB | 252/645 kBProgress (3): 151/446 kB | 10 kB | 256/645 kBProgress (3): 151/446 kB | 10 kB | 261/645 kBProgress (3): 151/446 kB | 10 kB | 265/645 kBProgress (3): 151/446 kB | 10 kB | 269/645 kBProgress (3): 151/446 kB | 10 kB | 273/645 kBProgress (3): 151/446 kB | 10 kB | 277/645 kBProgress (3): 151/446 kB | 10 kB | 281/645 kBProgress (3): 151/446 kB | 10 kB | 285/645 kBProgress (3): 151/446 kB | 10 kB | 289/645 kB                                             Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity-api/1.3/plexus-interactivity-api-1.3.jar (10 kB at 8.3 kB/s)
+Progress (2): 151/446 kB | 293/645 kBProgress (2): 151/446 kB | 297/645 kBProgress (2): 151/446 kB | 301/645 kBProgress (2): 151/446 kB | 306/645 kBProgress (2): 151/446 kB | 310/645 kBProgress (2): 151/446 kB | 314/645 kBProgress (2): 151/446 kB | 318/645 kBProgress (2): 151/446 kB | 322/645 kBProgress (2): 151/446 kB | 326/645 kBProgress (2): 151/446 kB | 330/645 kBProgress (2): 151/446 kB | 334/645 kBProgress (2): 151/446 kB | 338/645 kBProgress (2): 151/446 kB | 342/645 kBProgress (2): 151/446 kB | 347/645 kBProgress (2): 151/446 kB | 351/645 kBProgress (3): 151/446 kB | 351/645 kB | 3.8/193 kBProgress (3): 151/446 kB | 355/645 kB | 3.8/193 kBProgress (3): 151/446 kB | 359/645 kB | 3.8/193 kBProgress (3): 151/446 kB | 363/645 kB | 3.8/193 kBProgress (3): 151/446 kB | 367/645 kB | 3.8/193 kBProgress (3): 151/446 kB | 367/645 kB | 7.8/193 kBProgress (3): 151/446 kB | 367/645 kB | 12/193 kB Progress (3): 151/446 kB | 367/645 kB | 16/193 kBProgress (3): 151/446 kB | 367/645 kB | 20/193 kBProgress (3): 151/446 kB | 367/645 kB | 24/193 kBProgress (3): 151/446 kB | 367/645 kB | 28/193 kBProgress (3): 151/446 kB | 367/645 kB | 32/193 kBProgress (3): 151/446 kB | 367/645 kB | 36/193 kBProgress (3): 151/446 kB | 367/645 kB | 40/193 kBProgress (3): 151/446 kB | 367/645 kB | 44/193 kBProgress (3): 151/446 kB | 367/645 kB | 48/193 kBProgress (3): 151/446 kB | 367/645 kB | 53/193 kBProgress (3): 151/446 kB | 367/645 kB | 57/193 kBProgress (3): 151/446 kB | 367/645 kB | 61/193 kBProgress (3): 151/446 kB | 367/645 kB | 65/193 kBProgress (3): 151/446 kB | 367/645 kB | 69/193 kBProgress (3): 151/446 kB | 367/645 kB | 73/193 kBProgress (3): 151/446 kB | 371/645 kB | 73/193 kBProgress (3): 151/446 kB | 375/645 kB | 73/193 kBProgress (3): 151/446 kB | 379/645 kB | 73/193 kBProgress (3): 151/446 kB | 383/645 kB | 73/193 kBProgress (3): 151/446 kB | 383/645 kB | 77/193 kBProgress (3): 151/446 kB | 383/645 kB | 81/193 kBProgress (3): 151/446 kB | 383/645 kB | 85/193 kBProgress (3): 151/446 kB | 383/645 kB | 89/193 kBProgress (3): 151/446 kB | 383/645 kB | 93/193 kBProgress (3): 151/446 kB | 383/645 kB | 98/193 kBProgress (3): 151/446 kB | 383/645 kB | 102/193 kBProgress (3): 151/446 kB | 383/645 kB | 106/193 kBProgress (3): 151/446 kB | 387/645 kB | 106/193 kBProgress (3): 151/446 kB | 392/645 kB | 106/193 kBProgress (3): 151/446 kB | 396/645 kB | 106/193 kBProgress (3): 151/446 kB | 400/645 kB | 106/193 kBProgress (3): 151/446 kB | 400/645 kB | 110/193 kBProgress (3): 151/446 kB | 400/645 kB | 114/193 kBProgress (3): 151/446 kB | 400/645 kB | 118/193 kBProgress (3): 151/446 kB | 400/645 kB | 122/193 kBProgress (3): 151/446 kB | 400/645 kB | 126/193 kBProgress (3): 151/446 kB | 400/645 kB | 130/193 kBProgress (3): 151/446 kB | 400/645 kB | 134/193 kBProgress (3): 151/446 kB | 400/645 kB | 139/193 kBProgress (3): 151/446 kB | 400/645 kB | 143/193 kBProgress (3): 151/446 kB | 404/645 kB | 143/193 kBProgress (3): 151/446 kB | 408/645 kB | 143/193 kBProgress (3): 151/446 kB | 412/645 kB | 143/193 kBProgress (3): 151/446 kB | 416/645 kB | 143/193 kBProgress (3): 151/446 kB | 416/645 kB | 147/193 kBProgress (3): 151/446 kB | 416/645 kB | 151/193 kBProgress (3): 151/446 kB | 416/645 kB | 155/193 kBProgress (3): 151/446 kB | 416/645 kB | 159/193 kBProgress (3): 151/446 kB | 416/645 kB | 163/193 kBProgress (3): 151/446 kB | 416/645 kB | 167/193 kBProgress (3): 151/446 kB | 416/645 kB | 171/193 kBProgress (3): 151/446 kB | 416/645 kB | 175/193 kBProgress (3): 151/446 kB | 416/645 kB | 179/193 kBProgress (3): 151/446 kB | 416/645 kB | 184/193 kBProgress (3): 151/446 kB | 416/645 kB | 188/193 kBProgress (3): 151/446 kB | 416/645 kB | 192/193 kBProgress (3): 151/446 kB | 416/645 kB | 193 kB                                                  Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/4.0.1/plexus-utils-4.0.1.jar (193 kB at 115 kB/s)
+Progress (2): 155/446 kB | 416/645 kBProgress (2): 159/446 kB | 416/645 kBProgress (2): 163/446 kB | 416/645 kBProgress (2): 167/446 kB | 416/645 kBProgress (2): 171/446 kB | 416/645 kBProgress (2): 176/446 kB | 416/645 kBProgress (2): 180/446 kB | 416/645 kBProgress (2): 184/446 kB | 416/645 kBProgress (2): 188/446 kB | 416/645 kBProgress (2): 192/446 kB | 416/645 kBProgress (2): 196/446 kB | 416/645 kBProgress (2): 200/446 kB | 416/645 kBProgress (2): 204/446 kB | 416/645 kBProgress (2): 208/446 kB | 416/645 kBProgress (2): 210/446 kB | 416/645 kBProgress (2): 215/446 kB | 416/645 kBProgress (2): 219/446 kB | 416/645 kBProgress (2): 223/446 kB | 416/645 kBProgress (2): 227/446 kB | 416/645 kBProgress (2): 231/446 kB | 416/645 kBProgress (2): 235/446 kB | 416/645 kBProgress (2): 239/446 kB | 416/645 kBProgress (2): 243/446 kB | 416/645 kBProgress (2): 247/446 kB | 416/645 kBProgress (2): 251/446 kB | 416/645 kBProgress (2): 256/446 kB | 416/645 kBProgress (2): 260/446 kB | 416/645 kBProgress (2): 264/446 kB | 416/645 kBProgress (2): 268/446 kB | 416/645 kBProgress (2): 272/446 kB | 416/645 kBProgress (2): 276/446 kB | 416/645 kBProgress (2): 280/446 kB | 416/645 kBProgress (2): 284/446 kB | 416/645 kBProgress (2): 288/446 kB | 416/645 kBProgress (2): 291/446 kB | 416/645 kBProgress (2): 295/446 kB | 416/645 kBProgress (2): 299/446 kB | 416/645 kBProgress (2): 303/446 kB | 416/645 kBProgress (2): 307/446 kB | 416/645 kBProgress (2): 311/446 kB | 416/645 kBProgress (2): 315/446 kB | 416/645 kBProgress (2): 319/446 kB | 416/645 kBProgress (2): 324/446 kB | 416/645 kBProgress (2): 328/446 kB | 416/645 kBProgress (2): 332/446 kB | 416/645 kBProgress (2): 336/446 kB | 416/645 kBProgress (2): 340/446 kB | 416/645 kBProgress (2): 344/446 kB | 416/645 kBProgress (2): 348/446 kB | 416/645 kBProgress (2): 352/446 kB | 416/645 kBProgress (2): 356/446 kB | 416/645 kBProgress (2): 360/446 kB | 416/645 kBProgress (2): 365/446 kB | 416/645 kBProgress (2): 369/446 kB | 416/645 kBProgress (2): 373/446 kB | 416/645 kBProgress (2): 377/446 kB | 416/645 kBProgress (2): 381/446 kB | 416/645 kBProgress (2): 385/446 kB | 416/645 kBProgress (2): 389/446 kB | 416/645 kBProgress (2): 393/446 kB | 416/645 kBProgress (2): 397/446 kB | 416/645 kBProgress (2): 401/446 kB | 416/645 kBProgress (2): 406/446 kB | 416/645 kBProgress (2): 410/446 kB | 416/645 kBProgress (2): 414/446 kB | 416/645 kBProgress (2): 418/446 kB | 416/645 kBProgress (2): 422/446 kB | 416/645 kBProgress (2): 426/446 kB | 416/645 kBProgress (2): 430/446 kB | 416/645 kBProgress (2): 434/446 kB | 416/645 kBProgress (2): 438/446 kB | 416/645 kBProgress (2): 442/446 kB | 416/645 kBProgress (2): 446 kB | 416/645 kB    Progress (2): 446 kB | 420/645 kBProgress (2): 446 kB | 424/645 kBProgress (2): 446 kB | 428/645 kBProgress (2): 446 kB | 433/645 kBProgress (2): 446 kB | 437/645 kBProgress (2): 446 kB | 441/645 kBProgress (2): 446 kB | 445/645 kBProgress (2): 446 kB | 449/645 kBProgress (2): 446 kB | 453/645 kBProgress (2): 446 kB | 457/645 kBProgress (2): 446 kB | 461/645 kBProgress (2): 446 kB | 465/645 kBProgress (2): 446 kB | 469/645 kBProgress (2): 446 kB | 474/645 kBProgress (2): 446 kB | 478/645 kBProgress (2): 446 kB | 482/645 kBProgress (2): 446 kB | 486/645 kBProgress (2): 446 kB | 490/645 kBProgress (2): 446 kB | 494/645 kBProgress (2): 446 kB | 498/645 kBProgress (2): 446 kB | 502/645 kBProgress (2): 446 kB | 506/645 kBProgress (2): 446 kB | 510/645 kBProgress (2): 446 kB | 514/645 kBProgress (2): 446 kB | 519/645 kBProgress (2): 446 kB | 523/645 kBProgress (2): 446 kB | 527/645 kBProgress (2): 446 kB | 531/645 kBProgress (2): 446 kB | 535/645 kBProgress (2): 446 kB | 539/645 kBProgress (2): 446 kB | 543/645 kBProgress (2): 446 kB | 547/645 kBProgress (2): 446 kB | 551/645 kBProgress (2): 446 kB | 555/645 kBProgress (2): 446 kB | 560/645 kBProgress (2): 446 kB | 564/645 kB                                 Downloaded from central: https://repo.maven.apache.org/maven2/org/jsoup/jsoup/1.17.2/jsoup-1.17.2.jar (446 kB at 186 kB/s)
+Progress (1): 568/645 kBProgress (1): 572/645 kBProgress (1): 576/645 kBProgress (1): 580/645 kBProgress (1): 584/645 kBProgress (1): 588/645 kBProgress (1): 592/645 kBProgress (1): 596/645 kBProgress (1): 600/645 kBProgress (1): 605/645 kBProgress (1): 609/645 kBProgress (1): 613/645 kBProgress (1): 617/645 kBProgress (1): 621/645 kBProgress (1): 625/645 kBProgress (1): 629/645 kBProgress (1): 633/645 kBProgress (1): 637/645 kBProgress (1): 641/645 kBProgress (1): 645 kB                        Downloaded from central: https://repo.maven.apache.org/maven2/com/thoughtworks/xstream/xstream/1.4.20/xstream-1.4.20.jar (645 kB at 228 kB/s)
+[INFO] Effective-POM written to: c:\Users\tekin\OneDrive\Documents\2. Schuljahr\2. Semester\POS\Projekt\Disciplica\effective-pom-ca475c81-1b4e-4f28-8fe6-b2d7708b33d8.log
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  9.747 s
+[INFO] Finished at: 2026-03-12T12:45:47+01:00
+[INFO] ------------------------------------------------------------------------
+2026-03-12T11:45:47.529Z [INFO] [MavenBuildTool] Found pom.xml files: c:\Users\tekin\OneDrive\Documents\2. Schuljahr\2. Semester\POS\Projekt\Disciplica\pom.xml
+2026-03-12T11:45:47.538Z [INFO] [MavenBuildTool] Java version found in c:\Users\tekin\OneDrive\Documents\2. Schuljahr\2. Semester\POS\Projekt\Disciplica\pom.xml: 25
+2026-03-12T11:45:47.606Z [INFO] Getting CVEs for dependencies: org.junit.jupiter:junit-jupiter-engine:jar:5.12.1:test,org.slf4j:slf4j-api:jar:2.0.17:compile,ch.qos.logback:logback-classic:jar:1.5.16:compile,ch.qos.logback:logback-core:jar:1.5.16:compile,org.junit.jupiter:junit-jupiter-api:jar:5.12.1:test,org.junit.platform:junit-platform-launcher:jar:1.12.1:test,org.xerial:sqlite-jdbc:jar:3.49.1.0:compile
+2026-03-12T11:45:47.615Z [INFO] getting CVEs for dependencies:
+ - org.junit.jupiter:junit-jupiter-engine:jar:5.12.1:test
+  - org.slf4j:slf4j-api:jar:2.0.17:compile
+  - ch.qos.logback:logback-classic:jar:1.5.16:compile
+  - ch.qos.logback:logback-core:jar:1.5.16:compile
+  - org.junit.jupiter:junit-jupiter-api:jar:5.12.1:test
+  - org.junit.platform:junit-platform-launcher:jar:1.12.1:test
+  - org.xerial:sqlite-jdbc:jar:3.49.1.0:compile...
+2026-03-12T11:45:47.622Z [INFO] getting gitHub access token...
+2026-03-12T11:45:56.038Z [INFO] Processing batch 1/1, size: 7
+2026-03-12T11:45:56.049Z [INFO] Proxy configuration: HTTPS_PROXY=(not set), HTTP_PROXY=(not set), NO_PROXY=(not set), NODE_EXTRA_CA_CERTS=(not set), vscode http.proxy=(not set), hasProxy=false
+2026-03-12T11:45:56.059Z [INFO] No proxy detected, using direct connection.
+2026-03-12T11:45:56.073Z [INFO] listing CVEs from GitHub for dependencies [
+  "org.junit.jupiter:junit-jupiter-engine:jar:5.12.1:test",
+  "org.slf4j:slf4j-api:jar:2.0.17:compile",
+  "ch.qos.logback:logback-classic:jar:1.5.16:compile",
+  "ch.qos.logback:logback-core:jar:1.5.16:compile",
+  "org.junit.jupiter:junit-jupiter-api:jar:5.12.1:test",
+  "org.junit.platform:junit-platform-launcher:jar:1.12.1:test",
+  "org.xerial:sqlite-jdbc:jar:3.49.1.0:compile"
+]
+2026-03-12T11:45:56.836Z [INFO] Fetched 7 total advisories across all pages
+2026-03-12T11:45:56.847Z [INFO] grouping CVEs and finding max patched version by dep...
+2026-03-12T11:45:56.856Z [INFO] done getting 2 CVEs for 7 dependencies
+2026-03-12T11:45:56.865Z [INFO] calculating patched version by dep...
+2026-03-12T11:45:56.875Z [WARN] Skipping CVE calculation for ch.qos.logback:logback-classic:jar due to invalid semver
+2026-03-12T11:45:56.883Z [WARN] Skipping CVE calculation for ch.qos.logback:logback-core:jar due to invalid semver
+2026-03-12T11:45:56.893Z [INFO] finished getting CVEs for dependencies.
+2026-03-12T11:45:56.901Z [INFO] Found 2 dependencies with known CVEs
+2026-03-12T11:45:56.915Z [INFO] CVE issues found:
+- Dependency `ch.qos.logback:logback-classic:jar` has **2** known CVEs need to be fixed:
+  - [CVE-2017-5929](https://github.com/advisories/GHSA-vmfg-rjjm-rjrj): QOS.ch Logback vulnerable to Deserialization of Untrusted Data
+    - **Severity**: **CRITICAL**
+    - **Details**: QOS.ch Logback before 1.2.0 has a serialization vulnerability affecting the SocketServer and ServerSocketReceiver components. The RemoteStreamAppenderClient class in logback-classic and the SocketNode classes in logback-classic and logback-access allow data to be deserialized over a Java Socket, via an ObjectInputStream, without validating the data beforehand. When data is received from the Socket, to be logged, it is deserialized into Java objects.An attacker can exploit this vulnerability by sending malicious, serialized Java objects over the connection to the Socket, which may result in execution of arbitrary code when those objects are deserialized. Note that although logback-core is implicated by the Logback project here, the Sonatype Security Research team discovered that the vulnerability is actually present in the logback-classic and logback-access components. Versions prior to 1.2.0 are vulnerable, as stated in the advisory.
+  - [CVE-2023-6378](https://github.com/advisories/GHSA-vmq6-5m68-f53m): logback serialization vulnerability
+    - **Severity**: **HIGH**
+    - **Details**: A serialization vulnerability in logback receiver component part of logback allows an attacker to mount a Denial-Of-Service attack by sending poisoned data.
+      
+      This is only exploitable if logback receiver component is deployed. See https://logback.qos.ch/manual/receivers.html
+- Dependency `ch.qos.logback:logback-core:jar` has **7** known CVEs need to be fixed:
+  - [CVE-2017-5929](https://github.com/advisories/GHSA-vmfg-rjjm-rjrj): QOS.ch Logback vulnerable to Deserialization of Untrusted Data
+    - **Severity**: **CRITICAL**
+    - **Details**: QOS.ch Logback before 1.2.0 has a serialization vulnerability affecting the SocketServer and ServerSocketReceiver components. The RemoteStreamAppenderClient class in logback-classic and the SocketNode classes in logback-classic and logback-access allow data to be deserialized over a Java Socket, via an ObjectInputStream, without validating the data beforehand. When data is received from the Socket, to be logged, it is deserialized into Java objects.An attacker can exploit this vulnerability by sending malicious, serialized Java objects over the connection to the Socket, which may result in execution of arbitrary code when those objects are deserialized. Note that although logback-core is implicated by the Logback project here, the Sonatype Security Research team discovered that the vulnerability is actually present in the logback-classic and logback-access components. Versions prior to 1.2.0 are vulnerable, as stated in the advisory.
+  - [CVE-2021-42550](https://github.com/advisories/GHSA-668q-qrv7-99fm): Deserialization of Untrusted Data in logback
+    - **Severity**: **MEDIUM**
+    - **Details**: In logback version 1.2.7 and prior versions, an attacker with the required privileges to edit configurations files could craft a malicious configuration allowing to execute arbitrary code loaded from LDAP servers.
+  - [CVE-2023-6378](https://github.com/advisories/GHSA-vmq6-5m68-f53m): logback serialization vulnerability
+    - **Severity**: **HIGH**
+    - **Details**: A serialization vulnerability in logback receiver component part of logback allows an attacker to mount a Denial-Of-Service attack by sending poisoned data.
+      
+      This is only exploitable if logback receiver component is deployed. See https://logback.qos.ch/manual/receivers.html
+  - [CVE-2024-12801](https://github.com/advisories/GHSA-6v67-2wr5-gvf4): QOS.CH logback-core Server-Side Request Forgery vulnerability
+    - **Severity**: **LOW**
+    - **Details**: Server-Side Request Forgery (SSRF) in SaxEventRecorder by QOS.CH logback version 1.5.12 on the Java platform, allows an attacker to forge requests by compromising logback configuration files in XML.
+       
+      The attacks involves the modification of DOCTYPE declaration in  XML configuration files.
+  - [CVE-2024-12798](https://github.com/advisories/GHSA-pr98-23f8-jwxv): QOS.CH logback-core Expression Language Injection vulnerability
+    - **Severity**: **MEDIUM**
+    - **Details**: ACE vulnerability in JaninoEventEvaluator by QOS.CH logback-core up to and including version 1.5.12 in Java applications allows attackers to execute arbitrary code by compromising an existing logback configuration file or by injecting an environment variable before program execution.
+      
+      Malicious logback configuration files can allow the attacker to execute arbitrary code using the JaninoEventEvaluator extension.
+      
+      A successful attack requires the user to have write access to a configuration file. Alternatively, the attacker could inject a malicious environment variable pointing to a malicious configuration file. In both cases, the attack requires existing privilege.
+  - [CVE-2025-11226](https://github.com/advisories/GHSA-25qh-j22f-pwp8): QOS.CH logback-core is vulnerable to Arbitrary Code Execution through file processing
+    - **Severity**: **MEDIUM**
+    - **Details**: QOS.CH logback-core versions up to 1.5.18 contain an ACE vulnerability in conditional configuration file processing in Java applications. This vulnerability allows an attacker to execute arbitrary code by compromising an existing logback configuration file or by injecting a malicious environment variable before program execution.
+      
+      A successful attack requires the Janino library and Spring Framework to be present on the user's class path. Additionally, the attacker must have write access to a configuration file. Alternatively, the attacker could inject a malicious environment variable pointing to a malicious configuration file. In both cases, the attack requires existing privileges.
+  - [CVE-2026-1225](https://github.com/advisories/GHSA-qqpg-mvqg-649v): Logback allows an attacker to instantiate classes already present on the class path
+    - **Severity**: **LOW**
+    - **Details**: ACE vulnerability in configuration file processing  by QOS.CH logback-core up to and including version 1.5.24 in Java applications, allows an attacker to instantiate classes already present on the class path by compromising an existing logback configuration file.
+      
+      The instantiation of a potentially malicious Java class requires that said class is present on the user's class-path. In addition, the attacker must  have write access to a configuration file. However, after successful instantiation, the instance is very likely to be discarded with no further ado.
+2026-03-12T11:45:56.928Z [INFO] [Tool.invoke]({result: {
+  "message": "The following dependencies have known CVEs that need to be fixed:\n- Dependency `ch.qos.logback:logback-classic:jar` has **2** known CVEs need to be fixed:\n  - [CVE-2017-5929](https://github.com/advisories/GHSA-vmfg-rjjm-rjrj): QOS.ch Logback vulnerable to Deserialization of Untrusted Data\n    - **Severity**: **CRITICAL**\n    - **Details**: QOS.ch Logback before 1.2.0 has a serialization vulnerability affecting the SocketServer and ServerSocketReceiver components. The RemoteStreamAppenderClient class in logback-classic and the SocketNode classes in logback-classic and logback-access allow data to be deserialized over a Java Socket, via an ObjectInputStream, without validating the data beforehand. When data is received from the Socket, to be logged, it is deserialized into Java objects.An attacker can exploit this vulnerability by sending malicious, serialized Java objects over the connection to the Socket, which may result in execution of arbitrary code when those objects are deserialized. Note that although logback-core is implicated by the Logback project here, the Sonatype Security Research team discovered that the vulnerability is actually present in the logback-classic and logback-access components. Versions prior to 1.2.0 are vulnerable, as stated in the advisory.\n  - [CVE-2023-6378](https://github.com/advisories/GHSA-vmq6-5m68-f53m): logback serialization vulnerability\n    - **Severity**: **HIGH**\n    - **Details**: A serialization vulnerability in logback receiver component part of logback allows an attacker to mount a Denial-Of-Service attack by sending poisoned data.\n      \n      This is only exploitable if logback receiver component is deployed. See https://logback.qos.ch/manual/receivers.html\n- Dependency `ch.qos.logback:logback-core:jar` has **7** known CVEs need to be fixed:\n  - [CVE-2017-5929](https://github.com/advisories/GHSA-vmfg-rjjm-rjrj): QOS.ch Logback vulnerable to Deserialization of Untrusted Data\n    - **Severity**: **CRITICAL**\n    - **Details**: QOS.ch Logback before 1.2.0 has a serialization vulnerability affecting the SocketServer and ServerSocketReceiver components. The RemoteStreamAppenderClient class in logback-classic and the SocketNode classes in logback-classic and logback-access allow data to be deserialized over a Java Socket, via an ObjectInputStream, without validating the data beforehand. When data is received from the Socket, to be logged, it is deserialized into Java objects.An attacker can exploit this vulnerability by sending malicious, serialized Java objects over the connection to the Socket, which may result in execution of arbitrary code when those objects are deserialized. Note that although logback-core is implicated by the Logback project here, the Sonatype Security Research team discovered that the vulnerability is actually present in the logback-classic and logback-access components. Versions prior to 1.2.0 are vulnerable, as stated in the advisory.\n  - [CVE-2021-42550](https://github.com/advisories/GHSA-668q-qrv7-99fm): Deserialization of Untrusted Data in logback\n    - **Severity**: **MEDIUM**\n    - **Details**: In logback version 1.2.7 and prior versions, an attacker with the required privileges to edit configurations files could craft a malicious configuration allowing to execute arbitrary code loaded from LDAP servers.\n  - [CVE-2023-6378](https://github.com/advisories/GHSA-vmq6-5m68-f53m): logback serialization vulnerability\n    - **Severity**: **HIGH**\n    - **Details**: A serialization vulnerability in logback receiver component part of logback allows an attacker to mount a Denial-Of-Service attack by sending poisoned data.\n      \n      This is only exploitable if logback receiver component is deployed. See https://logback.qos.ch/manual/receivers.html\n  - [CVE-2024-12801](https://github.com/advisories/GHSA-6v67-2wr5-gvf4): QOS.CH logback-core Server-Side Request Forgery vulnerability\n    - **Severity**: **LOW**\n    - **Details**: Server-Side Request Forgery (SSRF) in SaxEventRecorder by QOS.CH logback version 1.5.12 on the Java platform, allows an attacker to forge requests by compromising logback configuration files in XML.\n       \n      The attacks involves the modification of DOCTYPE declaration in  XML configuration files.\n  - [CVE-2024-12798](https://github.com/advisories/GHSA-pr98-23f8-jwxv): QOS.CH logback-core Expression Language Injection vulnerability\n    - **Severity**: **MEDIUM**\n    - **Details**: ACE vulnerability in JaninoEventEvaluator by QOS.CH logback-core up to and including version 1.5.12 in Java applications allows attackers to execute arbitrary code by compromising an existing logback configuration file or by injecting an environment variable before program execution.\n      \n      Malicious logback configuration files can allow the attacker to execute arbitrary code using the JaninoEventEvaluator extension.\n      \n      A successful attack requires the user to have write access to a configuration file. Alternatively, the attacker could inject a malicious environment variable pointing to a malicious configuration file. In both cases, the attack requires existing privilege.\n  - [CVE-2025-11226](https://github.com/advisories/GHSA-25qh-j22f-pwp8): QOS.CH logback-core is vulnerable to Arbitrary Code Execution through file processing\n    - **Severity**: **MEDIUM**\n    - **Details**: QOS.CH logback-core versions up to 1.5.18 contain an ACE vulnerability in conditional configuration file processing in Java applications. This vulnerability allows an attacker to execute arbitrary code by compromising an existing logback configuration file or by injecting a malicious environment variable before program execution.\n      \n      A successful attack requires the Janino library and Spring Framework to be present on the user's class path. Additionally, the attacker must have write access to a configuration file. Alternatively, the attacker could inject a malicious environment variable pointing to a malicious configuration file. In both cases, the attack requires existing privileges.\n  - [CVE-2026-1225](https://github.com/advisories/GHSA-qqpg-mvqg-649v): Logback allows an attacker to instantiate classes already present on the class path\n    - **Severity**: **LOW**\n    - **Details**: ACE vulnerability in configuration file processing  by QOS.CH logback-core up to and including version 1.5.24 in Java applications, allows an attacker to instantiate classes already present on the class path by compromising an existing logback configuration file.\n      \n      The instantiation of a potentially malicious Java class requires that said class is present on the user's class-path. In addition, the attacker must  have write access to a configuration file. However, after successful instantiation, the instance is very likely to be discarded with no further ado.",
+  "result": [
+    {
+      "cves": [
+        {
+          "id": "CVE-2017-5929",
+          "ghsa_id": "GHSA-vmfg-rjjm-rjrj",
+          "severity": "critical",
+          "summary": "QOS.ch Logback vulnerable to Deserialization of Untrusted Data",
+          "description": "QOS.ch Logback before 1.2.0 has a serialization vulnerability affecting the SocketServer and ServerSocketReceiver components. The RemoteStreamAppenderClient class in logback-classic and the SocketNode classes in logback-classic and logback-access allow data to be deserialized over a Java Socket, via an ObjectInputStream, without validating the data beforehand. When data is received from the Socket, to be logged, it is deserialized into Java objects.An attacker can exploit this vulnerability by sending malicious, serialized Java objects over the connection to the Socket, which may result in execution of arbitrary code when those objects are deserialized. Note that although logback-core is implicated by the Logback project here, the Sonatype Security Research team discovered that the vulnerability is actually present in the logback-classic and logback-access components. Versions prior to 1.2.0 are vulnerable, as stated in the advisory.",
+          "html_url": "https://github.com/advisories/GHSA-vmfg-rjjm-rjrj",
+          "affectedDeps": [
+            {
+              "name": "ch.qos.logback:logback-classic",
+              "vulVersions": "< 1.2.0",
+              "patchedVersion": "1.2.0"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": "< 1.2.0",
+              "patchedVersion": "1.2.0"
+            }
+          ]
+        },
+        {
+          "id": "CVE-2023-6378",
+          "ghsa_id": "GHSA-vmq6-5m68-f53m",
+          "severity": "high",
+          "summary": "logback serialization vulnerability",
+          "description": "A serialization vulnerability in logback receiver component part of logback allows an attacker to mount a Denial-Of-Service attack by sending poisoned data.\n\nThis is only exploitable if logback receiver component is deployed. See https://logback.qos.ch/manual/receivers.html",
+          "html_url": "https://github.com/advisories/GHSA-vmq6-5m68-f53m",
+          "affectedDeps": [
+            {
+              "name": "ch.qos.logback:logback-classic",
+              "vulVersions": ">= 1.4.0, < 1.4.12",
+              "patchedVersion": "1.4.12"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": ">= 1.4.0, < 1.4.12",
+              "patchedVersion": "1.4.12"
+            },
+            {
+              "name": "ch.qos.logback:logback-classic",
+              "vulVersions": ">= 1.3.0, < 1.3.12",
+              "patchedVersion": "1.3.12"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": ">= 1.3.0, < 1.3.12",
+              "patchedVersion": "1.3.12"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": "< 1.2.13",
+              "patchedVersion": "1.2.13"
+            },
+            {
+              "name": "ch.qos.logback:logback-classic",
+              "vulVersions": "< 1.2.13",
+              "patchedVersion": "1.2.13"
+            }
+          ]
+        }
+      ],
+      "dep": "ch.qos.logback:logback-classic:jar",
+      "name": "ch.qos.logback:logback-classic",
+      "version": "jar",
+      "unfixableCves": []
+    },
+    {
+      "cves": [
+        {
+          "id": "CVE-2017-5929",
+          "ghsa_id": "GHSA-vmfg-rjjm-rjrj",
+          "severity": "critical",
+          "summary": "QOS.ch Logback vulnerable to Deserialization of Untrusted Data",
+          "description": "QOS.ch Logback before 1.2.0 has a serialization vulnerability affecting the SocketServer and ServerSocketReceiver components. The RemoteStreamAppenderClient class in logback-classic and the SocketNode classes in logback-classic and logback-access allow data to be deserialized over a Java Socket, via an ObjectInputStream, without validating the data beforehand. When data is received from the Socket, to be logged, it is deserialized into Java objects.An attacker can exploit this vulnerability by sending malicious, serialized Java objects over the connection to the Socket, which may result in execution of arbitrary code when those objects are deserialized. Note that although logback-core is implicated by the Logback project here, the Sonatype Security Research team discovered that the vulnerability is actually present in the logback-classic and logback-access components. Versions prior to 1.2.0 are vulnerable, as stated in the advisory.",
+          "html_url": "https://github.com/advisories/GHSA-vmfg-rjjm-rjrj",
+          "affectedDeps": [
+            {
+              "name": "ch.qos.logback:logback-classic",
+              "vulVersions": "< 1.2.0",
+              "patchedVersion": "1.2.0"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": "< 1.2.0",
+              "patchedVersion": "1.2.0"
+            }
+          ]
+        },
+        {
+          "id": "CVE-2021-42550",
+          "ghsa_id": "GHSA-668q-qrv7-99fm",
+          "severity": "medium",
+          "summary": "Deserialization of Untrusted Data in logback",
+          "description": "In logback version 1.2.7 and prior versions, an attacker with the required privileges to edit configurations files could craft a malicious configuration allowing to execute arbitrary code loaded from LDAP servers.",
+          "html_url": "https://github.com/advisories/GHSA-668q-qrv7-99fm",
+          "affectedDeps": [
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": "< 1.2.9",
+              "patchedVersion": "1.2.9"
+            }
+          ]
+        },
+        {
+          "id": "CVE-2023-6378",
+          "ghsa_id": "GHSA-vmq6-5m68-f53m",
+          "severity": "high",
+          "summary": "logback serialization vulnerability",
+          "description": "A serialization vulnerability in logback receiver component part of logback allows an attacker to mount a Denial-Of-Service attack by sending poisoned data.\n\nThis is only exploitable if logback receiver component is deployed. See https://logback.qos.ch/manual/receivers.html",
+          "html_url": "https://github.com/advisories/GHSA-vmq6-5m68-f53m",
+          "affectedDeps": [
+            {
+              "name": "ch.qos.logback:logback-classic",
+              "vulVersions": ">= 1.4.0, < 1.4.12",
+              "patchedVersion": "1.4.12"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": ">= 1.4.0, < 1.4.12",
+              "patchedVersion": "1.4.12"
+            },
+            {
+              "name": "ch.qos.logback:logback-classic",
+              "vulVersions": ">= 1.3.0, < 1.3.12",
+              "patchedVersion": "1.3.12"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": ">= 1.3.0, < 1.3.12",
+              "patchedVersion": "1.3.12"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": "< 1.2.13",
+              "patchedVersion": "1.2.13"
+            },
+            {
+              "name": "ch.qos.logback:logback-classic",
+              "vulVersions": "< 1.2.13",
+              "patchedVersion": "1.2.13"
+            }
+          ]
+        },
+        {
+          "id": "CVE-2024-12801",
+          "ghsa_id": "GHSA-6v67-2wr5-gvf4",
+          "severity": "low",
+          "summary": "QOS.CH logback-core Server-Side Request Forgery vulnerability",
+          "description": "Server-Side Request Forgery (SSRF) in SaxEventRecorder by QOS.CH logback version 1.5.12 on the Java platform, allows an attacker to forge requests by compromising logback configuration files in XML.\n \nThe attacks involves the modification of DOCTYPE declaration in  XML configuration files.",
+          "html_url": "https://github.com/advisories/GHSA-6v67-2wr5-gvf4",
+          "affectedDeps": [
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": ">= 1.4.0, < 1.5.13",
+              "patchedVersion": "1.5.13"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": "< 1.3.15",
+              "patchedVersion": "1.3.15"
+            }
+          ]
+        },
+        {
+          "id": "CVE-2024-12798",
+          "ghsa_id": "GHSA-pr98-23f8-jwxv",
+          "severity": "medium",
+          "summary": "QOS.CH logback-core Expression Language Injection vulnerability",
+          "description": "ACE vulnerability in JaninoEventEvaluator by QOS.CH logback-core up to and including version 1.5.12 in Java applications allows attackers to execute arbitrary code by compromising an existing logback configuration file or by injecting an environment variable before program execution.\n\nMalicious logback configuration files can allow the attacker to execute arbitrary code using the JaninoEventEvaluator extension.\n\nA successful attack requires the user to have write access to a configuration file. Alternatively, the attacker could inject a malicious environment variable pointing to a malicious configuration file. In both cases, the attack requires existing privilege.",
+          "html_url": "https://github.com/advisories/GHSA-pr98-23f8-jwxv",
+          "affectedDeps": [
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": ">= 1.4.0, < 1.5.13",
+              "patchedVersion": "1.5.13"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": "< 1.3.15",
+              "patchedVersion": "1.3.15"
+            }
+          ]
+        },
+        {
+          "id": "CVE-2025-11226",
+          "ghsa_id": "GHSA-25qh-j22f-pwp8",
+          "severity": "medium",
+          "summary": "QOS.CH logback-core is vulnerable to Arbitrary Code Execution through file processing",
+          "description": "QOS.CH logback-core versions up to 1.5.18 contain an ACE vulnerability in conditional configuration file processing in Java applications. This vulnerability allows an attacker to execute arbitrary code by compromising an existing logback configuration file or by injecting a malicious environment variable before program execution.\n\nA successful attack requires the Janino library and Spring Framework to be present on the user's class path. Additionally, the attacker must have write access to a configuration file. Alternatively, the attacker could inject a malicious environment variable pointing to a malicious configuration file. In both cases, the attack requires existing privileges.",
+          "html_url": "https://github.com/advisories/GHSA-25qh-j22f-pwp8",
+          "affectedDeps": [
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": ">= 1.4.0, < 1.5.19",
+              "patchedVersion": "1.5.19"
+            },
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": "< 1.3.16",
+              "patchedVersion": "1.3.16"
+            }
+          ]
+        },
+        {
+          "id": "CVE-2026-1225",
+          "ghsa_id": "GHSA-qqpg-mvqg-649v",
+          "severity": "low",
+          "summary": "Logback allows an attacker to instantiate classes already present on the class path",
+          "description": "ACE vulnerability in configuration file processing  by QOS.CH logback-core up to and including version 1.5.24 in Java applications, allows an attacker to instantiate classes already present on the class path by compromising an existing logback configuration file.\n\nThe instantiation of a potentially malicious Java class requires that said class is present on the user's class-path. In addition, the attacker must  have write access to a configuration file. However, after successful instantiation, the instance is very likely to be discarded with no further ado.",
+          "html_url": "https://github.com/advisories/GHSA-qqpg-mvqg-649v",
+          "affectedDeps": [
+            {
+              "name": "ch.qos.logback:logback-core",
+              "vulVersions": "< 1.5.25",
+              "patchedVersion": "1.5.25"
+            }
+          ]
+        }
+      ],
+      "dep": "ch.qos.logback:logback-core:jar",
+      "name": "ch.qos.logback:logback-core",
+      "version": "jar",
+      "unfixableCves": []
+    }
+  ],
+  "telemetry": {
+    "cve.critical": 2,
+    "cve.high": 2,
+    "cve.medium": 3,
+    "cve.low": 2,
+    "cves": "{\"CVE-2017-5929\":2,\"CVE-2023-6378\":2,\"CVE-2021-42550\":1,\"CVE-2024-12801\":1,\"CVE-2024-12798\":1,\"CVE-2025-11226\":1,\"CVE-2026-1225\":1}"
+  }
+}}).
+2026-03-12T11:45:56.937Z [INFO] ----------------------invoked validate_cves_for_java----------------------

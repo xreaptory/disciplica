@@ -1,16 +1,12 @@
-package com.disciplica;
+package com.disciplica.infrastructure.persistence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.disciplica.domain.exception.HabitNotFoundException;
+import com.disciplica.domain.exception.InvalidHabitException;
+import com.disciplica.domain.model.Reward;
+import com.disciplica.domain.repository.Repository;
+import org.slf4j.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-/**
- * In-memory, type-safe repository for {@link Reward} entities.
- * Implements {@link Repository Repository&lt;Reward&gt;}.
- */
 public class RewardRepository implements Repository<Reward> {
 
     private static final Logger logger = LoggerFactory.getLogger(RewardRepository.class);
@@ -19,25 +15,32 @@ public class RewardRepository implements Repository<Reward> {
     @Override
     public void save(Reward entity) throws InvalidHabitException {
         logger.debug("RewardRepository.save() called for '{}'", entity);
+        validateEntity(entity);
+        replaceExisting(entity);
+        rewards.add(entity);
+        logger.info("Reward '{}' saved to repository ({} total)", entity.getName(), rewards.size());
+    }
+
+    private void validateEntity(Reward entity) throws InvalidHabitException {
         if (entity == null) {
             logger.error("Cannot save a null Reward");
             throw new InvalidHabitException("Cannot save a null Reward");
         }
-        // Update if exists, otherwise add
-        Optional<Reward> existing = findByName(entity.getName());
-        if (existing.isPresent()) {
-            rewards.remove(existing.get());
+    }
+
+    private void replaceExisting(Reward entity) {
+        Optional<Reward> existingReward = findByName(entity.getName());
+        if (existingReward.isPresent()) {
+            rewards.remove(existingReward.get());
             logger.debug("Replacing existing Reward '{}'", entity.getName());
         }
-        rewards.add(entity);
-        logger.info("Reward '{}' saved to repository ({} total)", entity.getName(), rewards.size());
     }
 
     @Override
     public Optional<Reward> findByName(String name) {
         logger.debug("RewardRepository.findByName() called, name='{}'", name);
         return rewards.stream()
-                .filter(r -> r.getName().equals(name))
+            .filter(reward -> reward.getName().equals(name))
                 .findFirst();
     }
 
@@ -59,4 +62,6 @@ public class RewardRepository implements Repository<Reward> {
         logger.info("Reward '{}' deleted from repository ({} remaining)", name, rewards.size());
     }
 }
+
+
 
