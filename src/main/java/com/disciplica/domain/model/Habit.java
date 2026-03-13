@@ -1,5 +1,8 @@
-package com.disciplica;
+package com.disciplica.domain.model;
 
+import com.disciplica.domain.contract.Completable;
+import com.disciplica.domain.contract.Trackable;
+import com.disciplica.domain.exception.InvalidHabitException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,13 +16,24 @@ public class Habit implements Completable, Trackable {
     public Habit(String name, String description) {
         logger.debug("Creating Habit: name='{}', description='{}'", name, description);
         try {
-            setName(name);
-            setDescription(description);
-            logger.info("Habit created successfully: '{}'", name);
-        } catch (InvalidHabitException e) {
-            logger.error("Failed to create Habit with name='{}': {}", name, e.getMessage(), e);
-            throw new IllegalArgumentException("Invalid habit data: " + e.getMessage(), e);
+            initializeHabit(name, description);
+        } catch (InvalidHabitException invalidHabitException) {
+            throw toIllegalArgument(name, invalidHabitException);
         }
+    }
+
+    private void initializeHabit(String name, String description) throws InvalidHabitException {
+        setName(name);
+        setDescription(description);
+        logger.info("Habit created successfully: '{}'", name);
+    }
+
+    private IllegalArgumentException toIllegalArgument(String name,
+            InvalidHabitException invalidHabitException) {
+        logger.error("Failed to create Habit with name='{}': {}", name,
+                invalidHabitException.getMessage(), invalidHabitException);
+        return new IllegalArgumentException("Invalid habit data: " + invalidHabitException.getMessage(),
+                invalidHabitException);
     }
 
     public String getName() {
@@ -70,20 +84,27 @@ public class Habit implements Completable, Trackable {
     @Override
     public boolean complete() {
         logger.debug("Attempting to complete Habit '{}'", name);
-        if (isCompleted) {
-            logger.warn("Habit already completed: {}", name);
-            return false;
-        }
+        if (isCompleted) return reportAlreadyCompleted();
+        markCompleted();
+        return true;
+    }
+
+    private boolean reportAlreadyCompleted() {
+        logger.warn("Habit already completed: {}", name);
+        return false;
+    }
+
+    private void markCompleted() {
         isCompleted = true;
         streak++;
         logger.info("Habit completed: '{}', new streak={}", name, streak);
-        return true;
     }
 
     @Override
     public Reward getReward() {
         logger.debug("Getting reward for Habit '{}', streak={}", name, streak);
-        Reward reward = new Reward("Habit Streak", "Reward for completing " + name, 10 + (streak * 5));
+        int rewardThreshold = 10 + (streak * 5);
+        Reward reward = new Reward("Habit Streak", "Reward for completing " + name, rewardThreshold);
         logger.info("Reward generated for Habit '{}': {}", name, reward);
         return reward;
     }
@@ -104,5 +125,7 @@ public class Habit implements Completable, Trackable {
         return "Name: " + name + "; Description: " + description + "; isCompleted: " + isCompleted + "; Streak: " + streak;
     }
 }
+
+
 
 
