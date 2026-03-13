@@ -1,8 +1,21 @@
 package com.disciplica;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = DailyHabit.class, name = "DailyHabit"),
+    @JsonSubTypes.Type(value = WeeklyHabit.class, name = "WeeklyHabit"),
+    @JsonSubTypes.Type(value = OneTimeTask.class, name = "OneTimeTask")
+})
 public abstract class AbstractTask implements Trackable {
     private static final Logger logger = LoggerFactory.getLogger(AbstractTask.class);
     private final String name;
@@ -44,6 +57,11 @@ public abstract class AbstractTask implements Trackable {
         return isCompleted;
     }
 
+    // Jackson uses 'getCompleted' for serialization of boolean 'completed' property
+    public boolean getCompleted() {
+        return isCompleted;
+    }
+
     public int getPoints() {
         return points;
     }
@@ -61,6 +79,7 @@ public abstract class AbstractTask implements Trackable {
 
     public abstract int calculatePoints();
 
+    @JsonIgnore
     @Override
     public int getProgress() {
         return isCompleted ? 100 : 0;

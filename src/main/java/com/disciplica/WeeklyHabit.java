@@ -1,5 +1,7 @@
 package com.disciplica;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,10 +9,24 @@ public class WeeklyHabit extends AbstractTask {
     private static final Logger logger = LoggerFactory.getLogger(WeeklyHabit.class);
     private int streak;
 
-    public WeeklyHabit(String name, String description, int points) throws InvalidHabitException {
+    @JsonCreator
+    public WeeklyHabit(
+            @JsonProperty("name") String name,
+            @JsonProperty("description") String description,
+            @JsonProperty("points") int points,
+            @JsonProperty("streak") int streak,
+            @JsonProperty("completed") boolean completed) throws InvalidHabitException {
         super(name, description, points);
-        this.streak = 0;
-        logger.debug("WeeklyHabit created: name='{}', points={}", name, points);
+        this.streak = streak;
+        if (completed) {
+            super.complete(); // Restore completed state
+        }
+        logger.debug("WeeklyHabit created: name='{}', points={}, streak={}, completed={}", name, points, streak, completed);
+    }
+
+    // Convenience constructor for creating new habits
+    public WeeklyHabit(String name, String description, int points) throws InvalidHabitException {
+        this(name, description, points, 0, false);
     }
 
     @Override

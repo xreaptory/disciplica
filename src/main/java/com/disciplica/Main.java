@@ -1,12 +1,12 @@
 package com.disciplica;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
@@ -19,30 +19,7 @@ public class Main {
         } else {
             System.out.println("Item was already completed.");
             logger.info("Completable item was already completed");
-        }
-    }
-
-    private static List<AbstractTask> getCompletedHabits(User user) {
-        return user.getTasks().stream()
-            .filter(AbstractTask::isCompleted)
-            .collect(Collectors.toList());
-    }
-
-    private static List<String> getHabitNames(User user) {
-        return user.getTasks().stream()
-            .map(AbstractTask::getName)
-            .collect(Collectors.toList());
-    }
-
-    private static int getTotalExperienceFromTasks(User user) {
-        return user.getTasks().stream()
-            .reduce(0, (sum, task) -> sum + task.calculatePoints(), Integer::sum);
-    }
-
-    private static List<AbstractTask> getHabitsSortedByStreak(User user) {
-        return user.getTasks().stream()
-            .sorted(Comparator.<AbstractTask, Integer>comparing(AbstractTask::getStreak).reversed())
-            .collect(Collectors.toList());
+        }   
     }
 
     public static void main(String[] args) {
@@ -50,17 +27,55 @@ public class Main {
         System.out.println("Disciplica starting...");
         Scanner scanner = new Scanner(System.in);
 
+        // Initialize file-based task repository for persistence
+        FileTaskRepository taskRepository = new FileTaskRepository();
+        
         User user = new User("Simon");
 
-        // Create some initial tasks
+        // Load existing tasks from file or create default tasks if first run
         try {
-            user.addTask(new DailyHabit("Exercise", "Go to the gym for 30 minutes", 10));
-            user.addTask(new DailyHabit("Read", "Read a book for 20 minutes", 5));
-            user.addTask(new WeeklyHabit("Clean Room", "Tidy up the room", 20));
-            user.addTask(new OneTimeTask("Buy Groceries", "Get milk and eggs", 5));
-            user.addTask(new DailyHabit("Study", "Study for 1 hour", 15));
+            List<AbstractTask> savedTasks = taskRepository.load();
+            if (!savedTasks.isEmpty()) {
+                logger.info("Loading {} saved task(s) from previous session", savedTasks.size());
+                System.out.println("Welcome back! Loading " + savedTasks.size() + " saved task(s)...");
+                savedTasks.forEach(task -> {
+                    try {
+                        user.addTask(task);
+                    } catch (InvalidHabitException ex) {
+                        logger.warn("Skipping invalid saved task: {}", task.getName(), ex);
+                    }
+                });
+            } else {
+                // First run - create some initial tasks
+                logger.info("First run detected - creating default tasks");
+                System.out.println("Welcome! Setting up your initial tasks...");
+                user.addTask(new DailyHabit("Exercise", "Go to the gym for 30 minutes", 10));
+                user.addTask(new DailyHabit("Read", "Read a book for 20 minutes", 5));
+                user.addTask(new WeeklyHabit("Clean Room", "Tidy up the room", 20));
+                user.addTask(new OneTimeTask("Buy Groceries", "Get milk and eggs", 5));
+                user.addTask(new DailyHabit("Study", "Study for 1 hour", 15));
+                
+                // Save the initial tasks
+                taskRepository.saveAll(user.getTasks());
+                logger.info("Initial tasks created and saved");
+            }
+        } catch (IOException e) {
+            logger.error("Failed to load tasks from file", e);
+            System.out.println("Warning: Could not load saved tasks. Starting fresh.");
+            // Create default tasks if loading failed
+            try {
+                user.addTask(new DailyHabit("Exercise", "Go to the gym for 30 minutes", 10));
+                user.addTask(new DailyHabit("Read", "Read a book for 20 minutes", 5));
+                user.addTask(new WeeklyHabit("Clean Room", "Tidy up the room", 20));
+                user.addTask(new OneTimeTask("Buy Groceries", "Get milk and eggs", 5));
+                user.addTask(new DailyHabit("Study", "Study for 1 hour", 15));
+                taskRepository.saveAll(user.getTasks());
+                logger.info("Default tasks created after load failure");
+            } catch (InvalidHabitException | IOException ex) {
+                logger.error("Failed to create default tasks", ex);
+            }
         } catch (InvalidHabitException e) {
-            logger.error("Failed to initialize default tasks", e);
+            logger.error("Failed to initialize tasks", e);
             System.out.println("Error initializing tasks: " + e.getMessage());
         }
 
@@ -90,12 +105,11 @@ public class Main {
                     if (tasks.isEmpty()) {
                         System.out.println("No tasks found.");
                     } else {
-                        for (int i = 0; i < tasks.size(); i++) {
-                            final int index = i;
+                        IntStream.range(0, tasks.size()).forEach(i -> {
                             AbstractTask t = tasks.get(i);
                             String status = t.isCompleted() ? "[DONE]" : "[ ]";
-                            System.out.println((index + 1) + ". " + status + " " + t.getName() + " (" + t.getClass().getSimpleName() + ")");
-                        }
+                            System.out.println((i + 1) + ". " + status + " " + t.getName() + " (" + t.getClass().getSimpleName() + ")");
+                        });
                         System.out.print("Enter task number to complete: ");
                         try {
                             int choice = Integer.parseInt(scanner.nextLine());
@@ -105,6 +119,14 @@ public class Main {
                                     if (user.completeTask(selectedTask)) {
                                         System.out.println("Completed task: " + selectedTask.getName());
                                         System.out.println("You gained " + selectedTask.calculatePoints() + " experience points!");
+                                        
+                                        // Auto-save after task completion
+                                        try {
+                                            taskRepository.saveAll(user.getTasks());
+                                            logger.debug("Tasks auto-saved after completion");
+                                        } catch (IOException ioEx) {
+                                            logger.warn("Failed to auto-save tasks after completion", ioEx);
+                                        }
                                     } else {
                                         System.out.println("Could not complete task. It might be already completed.");
                                     }
@@ -126,10 +148,10 @@ public class Main {
                     System.out.println("\n--- User Stats ---");
                     user.printUser();
 
-                    List<AbstractTask> completedHabits = getCompletedHabits(user);
-                    List<String> habitNames = getHabitNames(user);
-                    int totalPotentialExperience = getTotalExperienceFromTasks(user);
-                    List<AbstractTask> sortedByStreak = getHabitsSortedByStreak(user);
+                    List<AbstractTask> completedHabits = user.getCompletedTasks();
+                    List<String> habitNames = user.getTaskNames();
+                    int totalPotentialExperience = user.getTotalExperienceFromTasks();
+                    List<AbstractTask> sortedByStreak = user.getTasksSortedByStreak();
 
                     System.out.println("Completed habits: " + completedHabits.size());
                     completedHabits.forEach(task ->
@@ -145,6 +167,16 @@ public class Main {
                     );
                     break;
                 case "4":
+                    System.out.println("Saving tasks...");
+                    logger.info("Saving tasks before exit");
+                    try {
+                        taskRepository.saveAll(user.getTasks());
+                        System.out.println("Tasks saved successfully!");
+                        logger.info("Tasks saved: {} total", user.getTasks().size());
+                    } catch (IOException e) {
+                        System.out.println("Warning: Failed to save tasks: " + e.getMessage());
+                        logger.error("Failed to save tasks on exit", e);
+                    }
                     System.out.println("Exiting...");
                     logger.info("Application exiting");
                     running = false;
