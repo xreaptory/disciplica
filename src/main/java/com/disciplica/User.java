@@ -2,6 +2,8 @@ package com.disciplica;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,9 +133,31 @@ public class User implements Trackable {
     }
 
     public void printTasks() {
-        for (AbstractTask task : tasks) {
-            System.out.println(task);
-        }
+        tasks.forEach(System.out::println);
+    }
+
+    public List<AbstractTask> getCompletedTasks() {
+        return tasks.stream()
+                .filter(AbstractTask::isCompleted)
+                .toList();
+    }
+
+    public List<String> getTaskNames() {
+        return tasks.stream()
+                .map(AbstractTask::getName)
+                .toList();
+    }
+
+    public int getTotalExperienceFromTasks() {
+        return tasks.stream()
+                .map(AbstractTask::calculatePoints)
+                .reduce(0, Integer::sum);
+    }
+
+    public List<AbstractTask> getTasksSortedByStreak() {
+        return tasks.stream()
+                .sorted(Comparator.comparingInt(AbstractTask::getStreak).reversed())
+                .toList();
     }
 
     @Override
