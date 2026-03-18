@@ -101,6 +101,7 @@ public abstract class AbstractTask implements Trackable {
     }
 
     @Override
+    @JsonIgnore
     public int getStreak() {
         return 0;
     }

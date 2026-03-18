@@ -157,3 +157,688 @@
 2026-03-12 11:01:21.895 [main] DEBUG com.disciplica.Reward - Reward created: name='Habit Streak', pointsRequired=15
 2026-03-12 11:01:21.895 [main] INFO  com.disciplica.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
 2026-03-12 11:01:21.899 [main] INFO  com.disciplica.Main - Completable item completed successfully
+2026-03-18 14:45:47.680 [main] INFO  com.disciplica.bootstrap.Main - Disciplica starting...
+2026-03-18 14:45:48.119 [main] INFO  c.d.i.persistence.FileTaskRepository - Initializing FileTaskRepository with file: data/tasks.json
+2026-03-18 14:45:48.347 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 14:45:48.347 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=false
+2026-03-18 14:45:48.347 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 14:45:48.347 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=false
+2026-03-18 14:45:48.354 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 14:45:48.354 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Clean Room' (WeeklyHabit)
+2026-03-18 14:45:48.354 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Clean Room' (WeeklyHabit)
+2026-03-18 14:45:48.354 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=1, completed=true
+2026-03-18 14:45:48.366 [main] ERROR c.d.i.persistence.FileTaskRepository - Error loading tasks from file: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+	at com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:61)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnknownProperty(DeserializationContext.java:1153)
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer.handleUnknownProperty(StdDeserializer.java:2241)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperty(BeanDeserializerBase.java:1821)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownVanilla(BeanDeserializerBase.java:1799)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:279)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeUsingPropertyBased(BeanDeserializer.java:472)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1497)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1490)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer._deserializeTypedForId(AsPropertyTypeDeserializer.java:170)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer.deserializeTypedFromObject(AsPropertyTypeDeserializer.java:136)
+	at com.fasterxml.jackson.databind.deser.AbstractDeserializer.deserializeWithType(AbstractDeserializer.java:263)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer._deserializeFromArray(CollectionDeserializer.java:363)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:246)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:30)
+	at com.fasterxml.jackson.databind.deser.impl.FieldProperty.deserializeAndSet(FieldProperty.java:138)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:310)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4917)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3725)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.readTasks(FileTaskRepository.java:121)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.load(FileTaskRepository.java:61)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.loadExistingTasks(FileTaskRepository.java:99)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.<init>(FileTaskRepository.java:31)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.<init>(FileTaskRepository.java:23)
+	at com.disciplica.bootstrap.Main.createContext(Main.java:48)
+	at com.disciplica.bootstrap.Main.main(Main.java:39)
+2026-03-18 14:45:48.370 [main] INFO  c.d.i.persistence.FileTaskRepository - No existing tasks file found or error loading: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"]) - Starting fresh
+2026-03-18 14:45:48.371 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 14:45:48.372 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=false
+2026-03-18 14:45:48.372 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 14:45:48.372 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=false
+2026-03-18 14:45:48.372 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 14:45:48.372 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Clean Room' (WeeklyHabit)
+2026-03-18 14:45:48.372 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Clean Room' (WeeklyHabit)
+2026-03-18 14:45:48.372 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=1, completed=true
+2026-03-18 14:45:48.373 [main] ERROR c.d.i.persistence.FileTaskRepository - Error loading tasks from file: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+	at com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:61)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnknownProperty(DeserializationContext.java:1153)
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer.handleUnknownProperty(StdDeserializer.java:2241)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperty(BeanDeserializerBase.java:1821)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownVanilla(BeanDeserializerBase.java:1799)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:279)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeUsingPropertyBased(BeanDeserializer.java:472)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1497)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1490)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer._deserializeTypedForId(AsPropertyTypeDeserializer.java:170)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer.deserializeTypedFromObject(AsPropertyTypeDeserializer.java:136)
+	at com.fasterxml.jackson.databind.deser.AbstractDeserializer.deserializeWithType(AbstractDeserializer.java:263)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer._deserializeFromArray(CollectionDeserializer.java:363)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:246)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:30)
+	at com.fasterxml.jackson.databind.deser.impl.FieldProperty.deserializeAndSet(FieldProperty.java:138)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:310)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4917)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3725)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.readTasks(FileTaskRepository.java:121)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.load(FileTaskRepository.java:61)
+	at com.disciplica.bootstrap.Main.initializeUserTasks(Main.java:75)
+	at com.disciplica.bootstrap.Main.main(Main.java:40)
+2026-03-18 14:45:48.374 [main] ERROR com.disciplica.bootstrap.Main - Failed to load tasks from file
+com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+	at com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:61)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnknownProperty(DeserializationContext.java:1153)
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer.handleUnknownProperty(StdDeserializer.java:2241)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperty(BeanDeserializerBase.java:1821)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownVanilla(BeanDeserializerBase.java:1799)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:279)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeUsingPropertyBased(BeanDeserializer.java:472)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1497)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1490)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer._deserializeTypedForId(AsPropertyTypeDeserializer.java:170)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer.deserializeTypedFromObject(AsPropertyTypeDeserializer.java:136)
+	at com.fasterxml.jackson.databind.deser.AbstractDeserializer.deserializeWithType(AbstractDeserializer.java:263)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer._deserializeFromArray(CollectionDeserializer.java:363)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:246)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:30)
+	at com.fasterxml.jackson.databind.deser.impl.FieldProperty.deserializeAndSet(FieldProperty.java:138)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:310)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4917)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3725)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.readTasks(FileTaskRepository.java:121)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.load(FileTaskRepository.java:61)
+	at com.disciplica.bootstrap.Main.initializeUserTasks(Main.java:75)
+	at com.disciplica.bootstrap.Main.main(Main.java:40)
+2026-03-18 14:45:48.375 [main] INFO  com.disciplica.bootstrap.Main - Creating default tasks
+2026-03-18 14:45:48.375 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 14:45:48.375 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=false
+2026-03-18 14:45:48.375 [main] INFO  com.disciplica.domain.model.User - Task added: Exercise
+2026-03-18 14:45:48.375 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 14:45:48.375 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=false
+2026-03-18 14:45:48.376 [main] INFO  com.disciplica.domain.model.User - Task added: Read
+2026-03-18 14:45:48.376 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 14:45:48.376 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-18 14:45:48.376 [main] INFO  com.disciplica.domain.model.User - Task added: Clean Room
+2026-03-18 14:45:48.376 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-18 14:45:48.377 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-18 14:45:48.377 [main] INFO  com.disciplica.domain.model.User - Task added: Buy Groceries
+2026-03-18 14:45:48.377 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-18 14:45:48.377 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-18 14:45:48.377 [main] INFO  com.disciplica.domain.model.User - Task added: Study
+2026-03-18 14:45:48.408 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:45:48.409 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:45:48.409 [main] INFO  com.disciplica.bootstrap.Main - Default tasks created and saved
+2026-03-18 14:45:48.409 [main] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-18 14:45:48.409 [main] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-18 14:45:48.409 [main] DEBUG com.disciplica.domain.model.Habit - Habit name set to 'Drink Water'
+2026-03-18 14:45:48.409 [main] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-18 14:45:48.410 [main] DEBUG com.disciplica.domain.model.Habit - Habit 'Drink Water' description set successfully
+2026-03-18 14:45:48.410 [main] INFO  com.disciplica.domain.model.Habit - Habit created successfully: 'Drink Water'
+2026-03-18 14:45:48.410 [main] INFO  com.disciplica.bootstrap.Main - Processing completable item: Habit
+2026-03-18 14:45:48.410 [main] DEBUG com.disciplica.domain.model.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-18 14:45:48.410 [main] INFO  com.disciplica.domain.model.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-18 14:45:48.410 [main] DEBUG com.disciplica.domain.model.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-18 14:45:48.411 [main] DEBUG com.disciplica.domain.model.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-18 14:45:48.411 [main] INFO  com.disciplica.domain.model.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-18 14:45:48.413 [main] INFO  com.disciplica.bootstrap.Main - Completable item completed successfully
+2026-03-18 14:45:54.923 [main] DEBUG com.disciplica.bootstrap.Main - User input: 1
+2026-03-18 14:45:59.200 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:46:00.494 [main] DEBUG c.disciplica.domain.model.DailyHabit - Attempting to complete DailyHabit 'Exercise'
+2026-03-18 14:46:00.494 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 14:46:00.494 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-18 14:46:00.494 [main] INFO  c.disciplica.domain.model.DailyHabit - DailyHabit 'Exercise' completed. New streak: 1
+2026-03-18 14:46:00.494 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-18 14:46:00.494 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Exercise
+2026-03-18 14:46:00.495 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-18 14:46:00.498 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:46:00.499 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:46:00.499 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 14:46:01.504 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:46:02.258 [main] DEBUG c.disciplica.domain.model.DailyHabit - Attempting to complete DailyHabit 'Read'
+2026-03-18 14:46:02.258 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 14:46:02.258 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-18 14:46:02.258 [main] INFO  c.disciplica.domain.model.DailyHabit - DailyHabit 'Read' completed. New streak: 1
+2026-03-18 14:46:02.258 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-18 14:46:02.258 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Read
+2026-03-18 14:46:02.259 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-18 14:46:02.260 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:46:02.261 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:46:02.261 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 14:46:04.515 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:46:05.079 [main] DEBUG c.d.domain.model.WeeklyHabit - Attempting to complete WeeklyHabit 'Clean Room'
+2026-03-18 14:46:05.080 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Clean Room' (WeeklyHabit)
+2026-03-18 14:46:05.080 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Clean Room' (WeeklyHabit)
+2026-03-18 14:46:05.080 [main] INFO  c.d.domain.model.WeeklyHabit - WeeklyHabit 'Clean Room' completed. New streak: 1
+2026-03-18 14:46:05.080 [main] DEBUG c.d.domain.model.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=15 = 35
+2026-03-18 14:46:05.080 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Clean Room
+2026-03-18 14:46:05.080 [main] DEBUG c.d.domain.model.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=15 = 35
+2026-03-18 14:46:05.082 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:46:05.082 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:46:05.082 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 14:46:05.921 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:46:07.633 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Buy Groceries' (OneTimeTask)
+2026-03-18 14:46:07.633 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Buy Groceries' (OneTimeTask)
+2026-03-18 14:46:07.633 [main] DEBUG c.d.domain.model.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-18 14:46:07.634 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Buy Groceries
+2026-03-18 14:46:07.634 [main] DEBUG c.d.domain.model.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-18 14:46:07.635 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:46:07.636 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:46:07.636 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 14:46:10.406 [main] DEBUG com.disciplica.bootstrap.Main - User input: 3
+2026-03-18 14:46:10.413 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-18 14:46:10.414 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-18 14:46:10.414 [main] DEBUG c.d.domain.model.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=15 = 35
+2026-03-18 14:46:10.414 [main] DEBUG c.d.domain.model.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-18 14:46:10.414 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Study': base=15 + streakBonus=0 = 15
+2026-03-18 14:46:43.984 [main] DEBUG com.disciplica.bootstrap.Main - User input: 4
+2026-03-18 14:46:43.984 [main] INFO  com.disciplica.bootstrap.Main - Saving tasks before exit
+2026-03-18 14:46:43.986 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:46:43.986 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:46:43.986 [main] INFO  com.disciplica.bootstrap.Main - Tasks saved: 5 total
+2026-03-18 14:46:43.986 [main] INFO  com.disciplica.bootstrap.Main - Application exiting
+2026-03-18 14:46:48.723 [main] INFO  com.disciplica.bootstrap.Main - Disciplica starting...
+2026-03-18 14:46:48.889 [main] INFO  c.d.i.persistence.FileTaskRepository - Initializing FileTaskRepository with file: data/tasks.json
+2026-03-18 14:46:49.042 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 14:46:49.043 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 14:46:49.043 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-18 14:46:49.043 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=1, completed=true
+2026-03-18 14:46:49.043 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 14:46:49.043 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 14:46:49.044 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-18 14:46:49.044 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=1, completed=true
+2026-03-18 14:46:49.050 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 14:46:49.051 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Clean Room' (WeeklyHabit)
+2026-03-18 14:46:49.051 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Clean Room' (WeeklyHabit)
+2026-03-18 14:46:49.051 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=1, completed=true
+2026-03-18 14:46:49.060 [main] ERROR c.d.i.persistence.FileTaskRepository - Error loading tasks from file: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+	at com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:61)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnknownProperty(DeserializationContext.java:1153)
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer.handleUnknownProperty(StdDeserializer.java:2241)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperty(BeanDeserializerBase.java:1821)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownVanilla(BeanDeserializerBase.java:1799)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:279)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeUsingPropertyBased(BeanDeserializer.java:472)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1497)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1490)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer._deserializeTypedForId(AsPropertyTypeDeserializer.java:170)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer.deserializeTypedFromObject(AsPropertyTypeDeserializer.java:136)
+	at com.fasterxml.jackson.databind.deser.AbstractDeserializer.deserializeWithType(AbstractDeserializer.java:263)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer._deserializeFromArray(CollectionDeserializer.java:363)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:246)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:30)
+	at com.fasterxml.jackson.databind.deser.impl.FieldProperty.deserializeAndSet(FieldProperty.java:138)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:310)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4917)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3725)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.readTasks(FileTaskRepository.java:121)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.load(FileTaskRepository.java:61)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.loadExistingTasks(FileTaskRepository.java:99)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.<init>(FileTaskRepository.java:31)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.<init>(FileTaskRepository.java:23)
+	at com.disciplica.bootstrap.Main.createContext(Main.java:48)
+	at com.disciplica.bootstrap.Main.main(Main.java:39)
+2026-03-18 14:46:49.063 [main] INFO  c.d.i.persistence.FileTaskRepository - No existing tasks file found or error loading: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"]) - Starting fresh
+2026-03-18 14:46:49.065 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 14:46:49.066 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 14:46:49.066 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-18 14:46:49.066 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=1, completed=true
+2026-03-18 14:46:49.066 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 14:46:49.066 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 14:46:49.066 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-18 14:46:49.066 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=1, completed=true
+2026-03-18 14:46:49.067 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 14:46:49.067 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Clean Room' (WeeklyHabit)
+2026-03-18 14:46:49.067 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Clean Room' (WeeklyHabit)
+2026-03-18 14:46:49.067 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=1, completed=true
+2026-03-18 14:46:49.067 [main] ERROR c.d.i.persistence.FileTaskRepository - Error loading tasks from file: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+	at com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:61)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnknownProperty(DeserializationContext.java:1153)
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer.handleUnknownProperty(StdDeserializer.java:2241)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperty(BeanDeserializerBase.java:1821)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownVanilla(BeanDeserializerBase.java:1799)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:279)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeUsingPropertyBased(BeanDeserializer.java:472)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1497)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1490)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer._deserializeTypedForId(AsPropertyTypeDeserializer.java:170)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer.deserializeTypedFromObject(AsPropertyTypeDeserializer.java:136)
+	at com.fasterxml.jackson.databind.deser.AbstractDeserializer.deserializeWithType(AbstractDeserializer.java:263)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer._deserializeFromArray(CollectionDeserializer.java:363)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:246)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:30)
+	at com.fasterxml.jackson.databind.deser.impl.FieldProperty.deserializeAndSet(FieldProperty.java:138)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:310)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4917)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3725)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.readTasks(FileTaskRepository.java:121)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.load(FileTaskRepository.java:61)
+	at com.disciplica.bootstrap.Main.initializeUserTasks(Main.java:75)
+	at com.disciplica.bootstrap.Main.main(Main.java:40)
+2026-03-18 14:46:49.068 [main] ERROR com.disciplica.bootstrap.Main - Failed to load tasks from file
+com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException: Unrecognized field "streak" (class com.disciplica.domain.model.OneTimeTask$OneTimeTaskState), not marked as ignorable (4 known properties: "name", "description", "points", "completed"])
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 29, column: 17] (through reference chain: com.disciplica.infrastructure.persistence.FileTaskRepository$TaskList["tasks"]->java.util.ArrayList[3]->com.disciplica.domain.model.OneTimeTask$OneTimeTaskState["streak"])
+	at com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException.from(UnrecognizedPropertyException.java:61)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleUnknownProperty(DeserializationContext.java:1153)
+	at com.fasterxml.jackson.databind.deser.std.StdDeserializer.handleUnknownProperty(StdDeserializer.java:2241)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownProperty(BeanDeserializerBase.java:1821)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.handleUnknownVanilla(BeanDeserializerBase.java:1799)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:279)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeUsingPropertyBased(BeanDeserializer.java:472)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1497)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1490)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeOther(BeanDeserializer.java:220)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:187)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer._deserializeTypedForId(AsPropertyTypeDeserializer.java:170)
+	at com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer.deserializeTypedFromObject(AsPropertyTypeDeserializer.java:136)
+	at com.fasterxml.jackson.databind.deser.AbstractDeserializer.deserializeWithType(AbstractDeserializer.java:263)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer._deserializeFromArray(CollectionDeserializer.java:363)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:246)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.deserialize(CollectionDeserializer.java:30)
+	at com.fasterxml.jackson.databind.deser.impl.FieldProperty.deserializeAndSet(FieldProperty.java:138)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.vanillaDeserialize(BeanDeserializer.java:310)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:177)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342)
+	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4917)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3725)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.readTasks(FileTaskRepository.java:121)
+	at com.disciplica.infrastructure.persistence.FileTaskRepository.load(FileTaskRepository.java:61)
+	at com.disciplica.bootstrap.Main.initializeUserTasks(Main.java:75)
+	at com.disciplica.bootstrap.Main.main(Main.java:40)
+2026-03-18 14:46:49.068 [main] INFO  com.disciplica.bootstrap.Main - Creating default tasks
+2026-03-18 14:46:49.069 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 14:46:49.069 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=false
+2026-03-18 14:46:49.069 [main] INFO  com.disciplica.domain.model.User - Task added: Exercise
+2026-03-18 14:46:49.069 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 14:46:49.069 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=false
+2026-03-18 14:46:49.070 [main] INFO  com.disciplica.domain.model.User - Task added: Read
+2026-03-18 14:46:49.070 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 14:46:49.070 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-18 14:46:49.070 [main] INFO  com.disciplica.domain.model.User - Task added: Clean Room
+2026-03-18 14:46:49.070 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-18 14:46:49.070 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-18 14:46:49.070 [main] INFO  com.disciplica.domain.model.User - Task added: Buy Groceries
+2026-03-18 14:46:49.070 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-18 14:46:49.070 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-18 14:46:49.070 [main] INFO  com.disciplica.domain.model.User - Task added: Study
+2026-03-18 14:46:49.102 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:46:49.103 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:46:49.103 [main] INFO  com.disciplica.bootstrap.Main - Default tasks created and saved
+2026-03-18 14:46:49.103 [main] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-18 14:46:49.104 [main] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-18 14:46:49.104 [main] DEBUG com.disciplica.domain.model.Habit - Habit name set to 'Drink Water'
+2026-03-18 14:46:49.104 [main] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-18 14:46:49.104 [main] DEBUG com.disciplica.domain.model.Habit - Habit 'Drink Water' description set successfully
+2026-03-18 14:46:49.104 [main] INFO  com.disciplica.domain.model.Habit - Habit created successfully: 'Drink Water'
+2026-03-18 14:46:49.104 [main] INFO  com.disciplica.bootstrap.Main - Processing completable item: Habit
+2026-03-18 14:46:49.105 [main] DEBUG com.disciplica.domain.model.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-18 14:46:49.105 [main] INFO  com.disciplica.domain.model.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-18 14:46:49.105 [main] DEBUG com.disciplica.domain.model.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-18 14:46:49.106 [main] DEBUG com.disciplica.domain.model.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-18 14:46:49.107 [main] INFO  com.disciplica.domain.model.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-18 14:46:49.109 [main] INFO  com.disciplica.bootstrap.Main - Completable item completed successfully
+2026-03-18 14:46:51.200 [main] DEBUG com.disciplica.bootstrap.Main - User input: 1
+2026-03-18 14:46:53.765 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:46:55.794 [main] DEBUG c.disciplica.domain.model.DailyHabit - Attempting to complete DailyHabit 'Exercise'
+2026-03-18 14:46:55.794 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 14:46:55.794 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-18 14:46:55.794 [main] INFO  c.disciplica.domain.model.DailyHabit - DailyHabit 'Exercise' completed. New streak: 1
+2026-03-18 14:46:55.794 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-18 14:46:55.794 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Exercise
+2026-03-18 14:46:55.795 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-18 14:46:55.797 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:46:55.797 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:46:55.797 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 14:46:57.202 [main] DEBUG com.disciplica.bootstrap.Main - User input: 1
+2026-03-18 14:46:58.360 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:46:59.878 [main] DEBUG c.disciplica.domain.model.DailyHabit - Attempting to complete DailyHabit 'Exercise'
+2026-03-18 14:46:59.878 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 14:46:59.878 [main] WARN  c.d.domain.model.AbstractTask - Attempted to complete already-completed task: 'Exercise' (DailyHabit)
+2026-03-18 14:46:59.878 [main] WARN  c.disciplica.domain.model.DailyHabit - DailyHabit 'Exercise' was already completed, streak unchanged
+2026-03-18 14:47:00.834 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:47:01.518 [main] DEBUG c.disciplica.domain.model.DailyHabit - Attempting to complete DailyHabit 'Read'
+2026-03-18 14:47:01.519 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 14:47:01.519 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-18 14:47:01.519 [main] INFO  c.disciplica.domain.model.DailyHabit - DailyHabit 'Read' completed. New streak: 1
+2026-03-18 14:47:01.519 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-18 14:47:01.519 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Read
+2026-03-18 14:47:01.519 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-18 14:47:01.520 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:47:01.521 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:47:01.521 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 14:47:02.210 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:47:02.727 [main] DEBUG c.disciplica.domain.model.DailyHabit - Attempting to complete DailyHabit 'Read'
+2026-03-18 14:47:02.727 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 14:47:02.727 [main] WARN  c.d.domain.model.AbstractTask - Attempted to complete already-completed task: 'Read' (DailyHabit)
+2026-03-18 14:47:02.727 [main] WARN  c.disciplica.domain.model.DailyHabit - DailyHabit 'Read' was already completed, streak unchanged
+2026-03-18 14:47:03.511 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:47:03.944 [main] DEBUG c.d.domain.model.WeeklyHabit - Attempting to complete WeeklyHabit 'Clean Room'
+2026-03-18 14:47:03.944 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Clean Room' (WeeklyHabit)
+2026-03-18 14:47:03.944 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Clean Room' (WeeklyHabit)
+2026-03-18 14:47:03.944 [main] INFO  c.d.domain.model.WeeklyHabit - WeeklyHabit 'Clean Room' completed. New streak: 1
+2026-03-18 14:47:03.944 [main] DEBUG c.d.domain.model.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=15 = 35
+2026-03-18 14:47:03.944 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Clean Room
+2026-03-18 14:47:03.944 [main] DEBUG c.d.domain.model.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=15 = 35
+2026-03-18 14:47:03.945 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:47:03.946 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:47:03.946 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 14:47:04.859 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 14:47:05.411 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Buy Groceries' (OneTimeTask)
+2026-03-18 14:47:05.411 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Buy Groceries' (OneTimeTask)
+2026-03-18 14:47:05.411 [main] DEBUG c.d.domain.model.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-18 14:47:05.411 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Buy Groceries
+2026-03-18 14:47:05.411 [main] DEBUG c.d.domain.model.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-18 14:47:05.413 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:47:05.413 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:47:05.413 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 14:47:07.016 [main] DEBUG com.disciplica.bootstrap.Main - User input: 1
+2026-03-18 14:47:08.353 [main] DEBUG com.disciplica.bootstrap.Main - User input: 5
+2026-03-18 14:47:08.353 [main] WARN  com.disciplica.bootstrap.Main - Invalid menu option selected: 5
+2026-03-18 14:47:09.365 [main] DEBUG com.disciplica.bootstrap.Main - User input: 4
+2026-03-18 14:47:09.366 [main] INFO  com.disciplica.bootstrap.Main - Saving tasks before exit
+2026-03-18 14:47:09.368 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 14:47:09.368 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 14:47:09.368 [main] INFO  com.disciplica.bootstrap.Main - Tasks saved: 5 total
+2026-03-18 14:47:09.368 [main] INFO  com.disciplica.bootstrap.Main - Application exiting
+2026-03-18 21:03:08.354 [main] INFO  com.disciplica.bootstrap.Main - Disciplica starting...
+2026-03-18 21:03:08.540 [main] INFO  c.d.i.persistence.FileTaskRepository - Initializing FileTaskRepository with file: data/tasks.json
+2026-03-18 21:03:08.541 [main] DEBUG c.d.i.persistence.FileTaskRepository - File does not exist: data\tasks.json - First run
+2026-03-18 21:03:08.541 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 0 task(s) from file
+2026-03-18 21:03:08.543 [main] DEBUG c.d.i.persistence.FileTaskRepository - File does not exist: data\tasks.json - First run
+2026-03-18 21:03:08.544 [main] INFO  com.disciplica.bootstrap.Main - Creating default tasks
+2026-03-18 21:03:08.545 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 21:03:08.545 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=false
+2026-03-18 21:03:08.545 [main] INFO  com.disciplica.domain.model.User - Task added: Exercise
+2026-03-18 21:03:08.545 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 21:03:08.545 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=false
+2026-03-18 21:03:08.545 [main] INFO  com.disciplica.domain.model.User - Task added: Read
+2026-03-18 21:03:08.546 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 21:03:08.546 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-18 21:03:08.546 [main] INFO  com.disciplica.domain.model.User - Task added: Clean Room
+2026-03-18 21:03:08.547 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-18 21:03:08.547 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-18 21:03:08.547 [main] INFO  com.disciplica.domain.model.User - Task added: Buy Groceries
+2026-03-18 21:03:08.547 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-18 21:03:08.548 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-18 21:03:08.548 [main] INFO  com.disciplica.domain.model.User - Task added: Study
+2026-03-18 21:03:08.653 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 21:03:08.654 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 21:03:08.654 [main] INFO  com.disciplica.bootstrap.Main - Default tasks created and saved
+2026-03-18 21:03:08.655 [main] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-18 21:03:08.655 [main] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-18 21:03:08.656 [main] DEBUG com.disciplica.domain.model.Habit - Habit name set to 'Drink Water'
+2026-03-18 21:03:08.656 [main] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-18 21:03:08.656 [main] DEBUG com.disciplica.domain.model.Habit - Habit 'Drink Water' description set successfully
+2026-03-18 21:03:08.656 [main] INFO  com.disciplica.domain.model.Habit - Habit created successfully: 'Drink Water'
+2026-03-18 21:03:08.656 [main] INFO  com.disciplica.bootstrap.Main - Processing completable item: Habit
+2026-03-18 21:03:08.656 [main] DEBUG com.disciplica.domain.model.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-18 21:03:08.656 [main] INFO  com.disciplica.domain.model.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-18 21:03:08.657 [main] DEBUG com.disciplica.domain.model.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-18 21:03:08.658 [main] DEBUG com.disciplica.domain.model.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-18 21:03:08.658 [main] INFO  com.disciplica.domain.model.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-18 21:03:08.661 [main] INFO  com.disciplica.bootstrap.Main - Completable item completed successfully
+2026-03-18 21:03:11.519 [main] DEBUG com.disciplica.bootstrap.Main - User input: 1
+2026-03-18 21:03:12.797 [main] DEBUG com.disciplica.bootstrap.Main - User input: 1
+2026-03-18 21:03:14.329 [main] DEBUG com.disciplica.bootstrap.Main - User input: 4
+2026-03-18 21:03:14.329 [main] INFO  com.disciplica.bootstrap.Main - Saving tasks before exit
+2026-03-18 21:03:14.333 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 21:03:14.333 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 21:03:14.333 [main] INFO  com.disciplica.bootstrap.Main - Tasks saved: 5 total
+2026-03-18 21:03:14.333 [main] INFO  com.disciplica.bootstrap.Main - Application exiting
+2026-03-18 21:03:17.143 [main] INFO  com.disciplica.bootstrap.Main - Disciplica starting...
+2026-03-18 21:03:17.287 [main] INFO  c.d.i.persistence.FileTaskRepository - Initializing FileTaskRepository with file: data/tasks.json
+2026-03-18 21:03:17.442 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 21:03:17.442 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=false
+2026-03-18 21:03:17.442 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 21:03:17.443 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=false
+2026-03-18 21:03:17.448 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 21:03:17.448 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-18 21:03:17.454 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-18 21:03:17.454 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-18 21:03:17.455 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-18 21:03:17.455 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-18 21:03:17.456 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-18 21:03:17.456 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-18 21:03:17.457 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 21:03:17.457 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=false
+2026-03-18 21:03:17.458 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 21:03:17.458 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=false
+2026-03-18 21:03:17.458 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 21:03:17.458 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-18 21:03:17.458 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-18 21:03:17.458 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-18 21:03:17.458 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-18 21:03:17.458 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-18 21:03:17.458 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-18 21:03:17.458 [main] INFO  com.disciplica.bootstrap.Main - Loading 5 saved task(s) from previous session
+2026-03-18 21:03:17.459 [main] INFO  com.disciplica.domain.model.User - Task added: Exercise
+2026-03-18 21:03:17.459 [main] INFO  com.disciplica.domain.model.User - Task added: Read
+2026-03-18 21:03:17.459 [main] INFO  com.disciplica.domain.model.User - Task added: Clean Room
+2026-03-18 21:03:17.459 [main] INFO  com.disciplica.domain.model.User - Task added: Buy Groceries
+2026-03-18 21:03:17.459 [main] INFO  com.disciplica.domain.model.User - Task added: Study
+2026-03-18 21:03:17.460 [main] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-18 21:03:17.460 [main] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-18 21:03:17.460 [main] DEBUG com.disciplica.domain.model.Habit - Habit name set to 'Drink Water'
+2026-03-18 21:03:17.460 [main] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-18 21:03:17.460 [main] DEBUG com.disciplica.domain.model.Habit - Habit 'Drink Water' description set successfully
+2026-03-18 21:03:17.460 [main] INFO  com.disciplica.domain.model.Habit - Habit created successfully: 'Drink Water'
+2026-03-18 21:03:17.460 [main] INFO  com.disciplica.bootstrap.Main - Processing completable item: Habit
+2026-03-18 21:03:17.461 [main] DEBUG com.disciplica.domain.model.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-18 21:03:17.461 [main] INFO  com.disciplica.domain.model.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-18 21:03:17.461 [main] DEBUG com.disciplica.domain.model.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-18 21:03:17.461 [main] DEBUG com.disciplica.domain.model.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-18 21:03:17.461 [main] INFO  com.disciplica.domain.model.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-18 21:03:17.463 [main] INFO  com.disciplica.bootstrap.Main - Completable item completed successfully
+2026-03-18 21:03:18.412 [main] DEBUG com.disciplica.bootstrap.Main - User input: 1
+2026-03-18 21:03:23.567 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 21:03:27.100 [main] DEBUG c.disciplica.domain.model.DailyHabit - Attempting to complete DailyHabit 'Exercise'
+2026-03-18 21:03:27.100 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 21:03:27.100 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-18 21:03:27.100 [main] INFO  c.disciplica.domain.model.DailyHabit - DailyHabit 'Exercise' completed. New streak: 1
+2026-03-18 21:03:27.100 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-18 21:03:27.100 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Exercise
+2026-03-18 21:03:27.101 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-18 21:03:27.140 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 21:03:27.140 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 21:03:27.140 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 21:03:29.028 [main] DEBUG com.disciplica.bootstrap.Main - User input: 2
+2026-03-18 21:03:30.733 [main] DEBUG c.disciplica.domain.model.DailyHabit - Attempting to complete DailyHabit 'Read'
+2026-03-18 21:03:30.733 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 21:03:30.733 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-18 21:03:30.733 [main] INFO  c.disciplica.domain.model.DailyHabit - DailyHabit 'Read' completed. New streak: 1
+2026-03-18 21:03:30.733 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-18 21:03:30.733 [main] INFO  com.disciplica.domain.model.User - Task completed and XP granted: Read
+2026-03-18 21:03:30.733 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-18 21:03:30.737 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 21:03:30.737 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 21:03:30.737 [main] DEBUG com.disciplica.bootstrap.Main - Tasks auto-saved after completion
+2026-03-18 21:03:32.875 [main] DEBUG com.disciplica.bootstrap.Main - User input: 3
+2026-03-18 21:03:32.882 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=5 = 15
+2026-03-18 21:03:32.883 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=5 = 10
+2026-03-18 21:03:32.883 [main] DEBUG c.d.domain.model.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=0 = 20
+2026-03-18 21:03:32.883 [main] DEBUG c.d.domain.model.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-18 21:03:32.883 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Study': base=15 + streakBonus=0 = 15
+2026-03-18 21:03:33.797 [main] DEBUG com.disciplica.bootstrap.Main - User input: 4
+2026-03-18 21:03:33.799 [main] INFO  com.disciplica.bootstrap.Main - Saving tasks before exit
+2026-03-18 21:03:33.801 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 21:03:33.801 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 21:03:33.801 [main] INFO  com.disciplica.bootstrap.Main - Tasks saved: 5 total
+2026-03-18 21:03:33.801 [main] INFO  com.disciplica.bootstrap.Main - Application exiting
+2026-03-18 21:03:38.714 [main] INFO  com.disciplica.bootstrap.Main - Disciplica starting...
+2026-03-18 21:03:38.822 [main] INFO  com.disciplica.bootstrap.Main - Disciplica starting...
+2026-03-18 21:03:38.902 [main] INFO  c.d.i.persistence.FileTaskRepository - Initializing FileTaskRepository with file: data/tasks.json
+2026-03-18 21:03:39.023 [main] INFO  c.d.i.persistence.FileTaskRepository - Initializing FileTaskRepository with file: data/tasks.json
+2026-03-18 21:03:39.055 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 21:03:39.057 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 21:03:39.057 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-18 21:03:39.057 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=true
+2026-03-18 21:03:39.057 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 21:03:39.057 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 21:03:39.057 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-18 21:03:39.057 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=true
+2026-03-18 21:03:39.061 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 21:03:39.061 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-18 21:03:39.068 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-18 21:03:39.068 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-18 21:03:39.068 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-18 21:03:39.069 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-18 21:03:39.070 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-18 21:03:39.070 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-18 21:03:39.072 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 21:03:39.073 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 21:03:39.073 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-18 21:03:39.073 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=true
+2026-03-18 21:03:39.073 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 21:03:39.073 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 21:03:39.073 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-18 21:03:39.073 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=true
+2026-03-18 21:03:39.073 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 21:03:39.073 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-18 21:03:39.074 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-18 21:03:39.074 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-18 21:03:39.074 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-18 21:03:39.074 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-18 21:03:39.074 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-18 21:03:39.074 [main] INFO  com.disciplica.bootstrap.Main - Loading 5 saved task(s) from previous session
+2026-03-18 21:03:39.076 [main] INFO  com.disciplica.domain.model.User - Task added: Exercise
+2026-03-18 21:03:39.076 [main] INFO  com.disciplica.domain.model.User - Task added: Read
+2026-03-18 21:03:39.076 [main] INFO  com.disciplica.domain.model.User - Task added: Clean Room
+2026-03-18 21:03:39.076 [main] INFO  com.disciplica.domain.model.User - Task added: Buy Groceries
+2026-03-18 21:03:39.076 [main] INFO  com.disciplica.domain.model.User - Task added: Study
+2026-03-18 21:03:39.077 [main] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-18 21:03:39.077 [main] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-18 21:03:39.077 [main] DEBUG com.disciplica.domain.model.Habit - Habit name set to 'Drink Water'
+2026-03-18 21:03:39.077 [main] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-18 21:03:39.077 [main] DEBUG com.disciplica.domain.model.Habit - Habit 'Drink Water' description set successfully
+2026-03-18 21:03:39.077 [main] INFO  com.disciplica.domain.model.Habit - Habit created successfully: 'Drink Water'
+2026-03-18 21:03:39.077 [main] INFO  com.disciplica.bootstrap.Main - Processing completable item: Habit
+2026-03-18 21:03:39.077 [main] DEBUG com.disciplica.domain.model.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-18 21:03:39.077 [main] INFO  com.disciplica.domain.model.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-18 21:03:39.077 [main] DEBUG com.disciplica.domain.model.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-18 21:03:39.079 [main] DEBUG com.disciplica.domain.model.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-18 21:03:39.080 [main] INFO  com.disciplica.domain.model.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-18 21:03:39.082 [main] INFO  com.disciplica.bootstrap.Main - Completable item completed successfully
+2026-03-18 21:03:39.263 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 21:03:39.264 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 21:03:39.264 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-18 21:03:39.264 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=true
+2026-03-18 21:03:39.264 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 21:03:39.264 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 21:03:39.264 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-18 21:03:39.264 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=true
+2026-03-18 21:03:39.269 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 21:03:39.270 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-18 21:03:39.280 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-18 21:03:39.280 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-18 21:03:39.281 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-18 21:03:39.281 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-18 21:03:39.284 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-18 21:03:39.285 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-18 21:03:39.288 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-18 21:03:39.288 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-18 21:03:39.288 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-18 21:03:39.288 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=0, completed=true
+2026-03-18 21:03:39.289 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-18 21:03:39.289 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Read' (DailyHabit)
+2026-03-18 21:03:39.289 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Read' (DailyHabit)
+2026-03-18 21:03:39.289 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=true
+2026-03-18 21:03:39.289 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-18 21:03:39.289 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-18 21:03:39.290 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-18 21:03:39.290 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-18 21:03:39.290 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-18 21:03:39.290 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-18 21:03:39.290 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-18 21:03:39.290 [main] INFO  com.disciplica.bootstrap.Main - Loading 5 saved task(s) from previous session
+2026-03-18 21:03:39.292 [main] INFO  com.disciplica.domain.model.User - Task added: Exercise
+2026-03-18 21:03:39.292 [main] INFO  com.disciplica.domain.model.User - Task added: Read
+2026-03-18 21:03:39.292 [main] INFO  com.disciplica.domain.model.User - Task added: Clean Room
+2026-03-18 21:03:39.292 [main] INFO  com.disciplica.domain.model.User - Task added: Buy Groceries
+2026-03-18 21:03:39.292 [main] INFO  com.disciplica.domain.model.User - Task added: Study
+2026-03-18 21:03:39.293 [main] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-18 21:03:39.293 [main] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-18 21:03:39.293 [main] DEBUG com.disciplica.domain.model.Habit - Habit name set to 'Drink Water'
+2026-03-18 21:03:39.294 [main] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-18 21:03:39.294 [main] DEBUG com.disciplica.domain.model.Habit - Habit 'Drink Water' description set successfully
+2026-03-18 21:03:39.294 [main] INFO  com.disciplica.domain.model.Habit - Habit created successfully: 'Drink Water'
+2026-03-18 21:03:39.294 [main] INFO  com.disciplica.bootstrap.Main - Processing completable item: Habit
+2026-03-18 21:03:39.294 [main] DEBUG com.disciplica.domain.model.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-18 21:03:39.294 [main] INFO  com.disciplica.domain.model.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-18 21:03:39.294 [main] DEBUG com.disciplica.domain.model.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-18 21:03:39.295 [main] DEBUG com.disciplica.domain.model.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-18 21:03:39.296 [main] INFO  com.disciplica.domain.model.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-18 21:03:39.298 [main] INFO  com.disciplica.bootstrap.Main - Completable item completed successfully
+2026-03-18 21:03:42.311 [main] DEBUG com.disciplica.bootstrap.Main - User input: 1
+2026-03-18 21:03:45.320 [main] DEBUG com.disciplica.bootstrap.Main - User input: 3
+2026-03-18 21:03:45.328 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Exercise': base=10 + streakBonus=0 = 10
+2026-03-18 21:03:45.328 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Read': base=5 + streakBonus=0 = 5
+2026-03-18 21:03:45.328 [main] DEBUG c.d.domain.model.WeeklyHabit - Calculated points for WeeklyHabit 'Clean Room': base=20 + streakBonus=0 = 20
+2026-03-18 21:03:45.328 [main] DEBUG c.d.domain.model.OneTimeTask - Calculated points for OneTimeTask 'Buy Groceries': 5
+2026-03-18 21:03:45.328 [main] DEBUG c.disciplica.domain.model.DailyHabit - Calculated points for DailyHabit 'Study': base=15 + streakBonus=0 = 15
+2026-03-18 21:03:46.053 [main] DEBUG com.disciplica.bootstrap.Main - User input: 4
+2026-03-18 21:03:46.053 [main] INFO  com.disciplica.bootstrap.Main - Saving tasks before exit
+2026-03-18 21:03:46.085 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-18 21:03:46.086 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-18 21:03:46.086 [main] INFO  com.disciplica.bootstrap.Main - Tasks saved: 5 total
+2026-03-18 21:03:46.086 [main] INFO  com.disciplica.bootstrap.Main - Application exiting

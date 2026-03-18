@@ -36,6 +36,7 @@ public class OneTimeTask extends AbstractTask {
         return awardedPoints;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public record OneTimeTaskState(
             @JsonProperty("name") String name,
             @JsonProperty("description") String description,
