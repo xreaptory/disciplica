@@ -319,3 +319,58 @@ com.disciplica.domain.exception.InvalidHabitException: Habit name must not be nu
 2026-03-25 13:46:16.152 [main] DEBUG com.disciplica.domain.model.Reward - Reward created: name='Habit Streak', pointsRequired=15
 2026-03-25 13:46:16.153 [main] INFO  com.disciplica.domain.model.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
 2026-03-25 13:46:16.155 [main] INFO  com.disciplica.bootstrap.Main - Completable item completed successfully
+2026-03-25 14:08:45.512 [main] INFO  com.disciplica.bootstrap.Main - Disciplica starting...
+2026-03-25 14:08:45.699 [main] INFO  c.d.i.persistence.FileTaskRepository - Initializing FileTaskRepository with file: data/tasks.json
+2026-03-25 14:08:45.857 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-25 14:08:45.857 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-25 14:08:45.857 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-25 14:08:45.857 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=1, completed=true
+2026-03-25 14:08:45.857 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-25 14:08:45.857 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=false
+2026-03-25 14:08:45.864 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-25 14:08:45.864 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-25 14:08:45.873 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-25 14:08:45.873 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-25 14:08:45.873 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-25 14:08:45.873 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-25 14:08:45.874 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-25 14:08:45.874 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-25 14:08:45.876 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Exercise' (DailyHabit), points=10
+2026-03-25 14:08:45.876 [main] DEBUG c.d.domain.model.AbstractTask - complete() called on 'Exercise' (DailyHabit)
+2026-03-25 14:08:45.876 [main] INFO  c.d.domain.model.AbstractTask - Task completed: 'Exercise' (DailyHabit)
+2026-03-25 14:08:45.876 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Exercise', points=10, streak=1, completed=true
+2026-03-25 14:08:45.876 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Read' (DailyHabit), points=5
+2026-03-25 14:08:45.877 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Read', points=5, streak=0, completed=false
+2026-03-25 14:08:45.877 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Clean Room' (WeeklyHabit), points=20
+2026-03-25 14:08:45.877 [main] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Clean Room', points=20, streak=0, completed=false
+2026-03-25 14:08:45.877 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Buy Groceries' (OneTimeTask), points=5
+2026-03-25 14:08:45.877 [main] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Buy Groceries', points=5, completed=false
+2026-03-25 14:08:45.877 [main] INFO  c.d.domain.model.AbstractTask - Task created: 'Study' (DailyHabit), points=15
+2026-03-25 14:08:45.878 [main] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Study', points=15, streak=0, completed=false
+2026-03-25 14:08:45.878 [main] INFO  c.d.i.persistence.FileTaskRepository - Loaded 5 task(s) from file
+2026-03-25 14:08:45.878 [main] INFO  com.disciplica.bootstrap.Main - Loading 5 saved task(s) from previous session
+2026-03-25 14:08:45.879 [main] INFO  com.disciplica.domain.model.User - Task added: Exercise
+2026-03-25 14:08:45.880 [main] INFO  com.disciplica.domain.model.User - Task added: Read
+2026-03-25 14:08:45.880 [main] INFO  com.disciplica.domain.model.User - Task added: Clean Room
+2026-03-25 14:08:45.880 [main] INFO  com.disciplica.domain.model.User - Task added: Buy Groceries
+2026-03-25 14:08:45.880 [main] INFO  com.disciplica.domain.model.User - Task added: Study
+2026-03-25 14:08:45.880 [main] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='Drink Water', description='Drink 2L of water'
+2026-03-25 14:08:45.880 [main] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='Drink Water'
+2026-03-25 14:08:45.880 [main] DEBUG com.disciplica.domain.model.Habit - Habit name set to 'Drink Water'
+2026-03-25 14:08:45.882 [main] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit 'Drink Water', new value='Drink 2L of water'
+2026-03-25 14:08:45.882 [main] DEBUG com.disciplica.domain.model.Habit - Habit 'Drink Water' description set successfully
+2026-03-25 14:08:45.882 [main] INFO  com.disciplica.domain.model.Habit - Habit created successfully: 'Drink Water'
+2026-03-25 14:08:45.882 [main] INFO  com.disciplica.bootstrap.Main - Processing completable item: Habit
+2026-03-25 14:08:45.882 [main] DEBUG com.disciplica.domain.model.Habit - Attempting to complete Habit 'Drink Water'
+2026-03-25 14:08:45.882 [main] INFO  com.disciplica.domain.model.Habit - Habit completed: 'Drink Water', new streak=1
+2026-03-25 14:08:45.882 [main] DEBUG com.disciplica.domain.model.Habit - Getting reward for Habit 'Drink Water', streak=1
+2026-03-25 14:08:45.883 [main] DEBUG com.disciplica.domain.model.Reward - Reward created: name='Habit Streak', pointsRequired=15
+2026-03-25 14:08:45.883 [main] INFO  com.disciplica.domain.model.Habit - Reward generated for Habit 'Drink Water': Habit Streak (15 pts) - Reward for completing Drink Water
+2026-03-25 14:08:45.886 [main] INFO  com.disciplica.bootstrap.Main - Completable item completed successfully
+2026-03-25 14:08:58.774 [main] DEBUG com.disciplica.bootstrap.Main - User input: 1
+2026-03-25 14:09:03.173 [main] DEBUG com.disciplica.bootstrap.Main - User input: 4
+2026-03-25 14:09:03.174 [main] INFO  com.disciplica.bootstrap.Main - Saving tasks before exit
+2026-03-25 14:09:03.195 [main] DEBUG c.d.i.persistence.FileTaskRepository - Successfully wrote 5 task(s) to data\tasks.json
+2026-03-25 14:09:03.196 [main] INFO  c.d.i.persistence.FileTaskRepository - Saved 5 task(s) successfully
+2026-03-25 14:09:03.196 [main] INFO  com.disciplica.bootstrap.Main - Tasks saved: 5 total
+2026-03-25 14:09:03.196 [main] INFO  com.disciplica.bootstrap.Main - Application exiting
