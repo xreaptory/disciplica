@@ -108,7 +108,7 @@ public class    Main {
             IOException ioException) {
         logger.error("Failed to load tasks from file", ioException);
         System.out.println("Warning: Could not load saved tasks. Starting fresh.");
-        try {
+        try {   
             createAndPersistDefaultTasks(user, repository);
         } catch (InvalidHabitException | IOException defaultTaskException) {
             logger.error("Failed to create default tasks", defaultTaskException);
