@@ -4,19 +4,22 @@
     "name" : "Exercise",
     "description" : "Go to the gym for 30 minutes",
     "points" : 10,
-    "completed" : true
+    "completed" : true,
+    "streak" : 1
   }, {
     "type" : "DailyHabit",
     "name" : "Read",
     "description" : "Read a book for 20 minutes",
     "points" : 5,
-    "completed" : true
+    "completed" : false,
+    "streak" : 0
   }, {
     "type" : "WeeklyHabit",
     "name" : "Clean Room",
     "description" : "Tidy up the room",
     "points" : 20,
-    "completed" : false
+    "completed" : false,
+    "streak" : 0
   }, {
     "type" : "OneTimeTask",
     "name" : "Buy Groceries",
@@ -28,6 +31,7 @@
     "name" : "Study",
     "description" : "Study for 1 hour",
     "points" : 15,
-    "completed" : false
+    "completed" : false,
+    "streak" : 0
   } ]
 }

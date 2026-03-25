@@ -4,6 +4,7 @@ import com.disciplica.domain.exception.InvalidHabitException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,12 @@ public class OneTimeTask extends AbstractTask {
         int awardedPoints = super.getPoints();
         logger.debug("Calculated points for OneTimeTask '{}': {}", getName(), awardedPoints);
         return awardedPoints;
+    }
+
+    @Override
+    @JsonIgnore
+    public int getStreak() {
+        return 0;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
