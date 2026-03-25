@@ -4,8 +4,8 @@
     "name" : "Exercise",
     "description" : "Go to the gym for 30 minutes",
     "points" : 10,
-    "completed" : true,
-    "streak" : 1
+    "completed" : false,
+    "streak" : 2
   }, {
     "type" : "DailyHabit",
     "name" : "Read",
