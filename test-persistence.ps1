@@ -18,7 +18,7 @@ if (Test-Path $dataFile) {
 # First run - create and complete a task
 Write-Host "`n--- First Run: Creating and completing tasks ---" -ForegroundColor Green
 $input1 = "2`n1`n4`n"  # Complete task 1, exit
-$input1 | .\mvnw -q exec:java -Dexec.mainClass="com.disciplica.bootstrap.Main"
+$input1 | .\mvnw -q exec:java "-Dexec.mainClass=com.disciplica.bootstrap.Main"
 
 # Check if data file was created
 if (Test-Path $dataFile) {
@@ -36,7 +36,7 @@ Start-Sleep -Seconds 1
 # Second run - verify tasks were loaded
 Write-Host "`n`n--- Second Run: Verifying persistence ---" -ForegroundColor Green
 $input2 = "1`n4`n"  # View tasks, exit
-$output = $input2 | .\mvnw -q exec:java -Dexec.mainClass="com.disciplica.bootstrap.Main" 2>&1 | Out-String
+$output = $input2 | .\mvnw -q exec:java "-Dexec.mainClass=com.disciplica.bootstrap.Main" 2>&1 | Out-String
 
 # Check if the output indicates tasks were loaded
 if ($output -match "Welcome back! Loading") {

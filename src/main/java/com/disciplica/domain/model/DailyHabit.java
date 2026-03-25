@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class DailyHabit extends AbstractTask {
     private static final Logger logger = LoggerFactory.getLogger(DailyHabit.class);
+    @JsonProperty("streak")
     private int streak;
 
     @JsonCreator
@@ -30,6 +31,7 @@ public class DailyHabit extends AbstractTask {
     }
 
     @Override
+    @JsonProperty("streak")
     public int getStreak() {
         return streak;
     }
