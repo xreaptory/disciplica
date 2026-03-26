@@ -35,12 +35,7 @@ public class    Main {
     }
 
     public static void main(String[] args) {
-        announceStartup();
-        AppContext context = createContext();
-        initializeUserTasks(context.user(), context.repository());
-        processCompletable(new Habit("Drink Water", "Drink 2L of water"));
-        runMenuLoop(context);
-        context.input().close();
+        HabitTrackerApp.main(args);
     }
 
     private static AppContext createContext() {

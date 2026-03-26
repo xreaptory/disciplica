@@ -10,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
+import model.Model;
 import model.Properties;
 
 public class View extends Stage{
@@ -34,7 +35,7 @@ public class View extends Stage{
 
         // instanciate controller for action, mouse and key events
         // the controller will be added to the components
-        simpleController =new Controller(this);
+        simpleController = new Controller(this, new Model());
 
         // top level pane: includes menubar + borderpane
         VBox vBox=new VBox();
@@ -114,9 +115,11 @@ public class View extends Stage{
         vBox.getChildren().addAll(menuBar,borderPane);
 
         // set properties of the frame
-        setTitle("View");
+        setTitle("Habit Tracker - MVC");
         // set application icon
-        getIcons().add(Properties.applicationImageIconAsICO);
+        if (Properties.applicationImageIconAsICO != null) {
+            getIcons().add(Properties.applicationImageIconAsICO);
+        }
 
         // set the scene and add vertical box to the scene
         Scene scene=new Scene(vBox);
