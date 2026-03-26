@@ -1,10 +1,9 @@
 package View;
 
-import javafx.application.Application;
 import javafx.stage.Stage;
 
 
-public class Application extends Application{
+public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {

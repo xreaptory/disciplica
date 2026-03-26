@@ -1,7 +1,5 @@
 package View;
 
-
-import at.spengergasse.mvc_muster.model.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -10,26 +8,24 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.*;
+import model.Model;
+import model.Properties;
 import model.SCTools;
-
-import java.util.Optional;
-import java.util.Properties;
 
 public class Controller implements EventHandler<Event>{
 
     // reference to view
     final private View simpleView;
-
-    final private Properties properties;
+    final private Model model;
     /**
      * @param simpleView
      */
-    public Controller(View simpleView) {
+    public Controller(View simpleView, Model model) {
         this.simpleView = simpleView;
-        // Liste der
-        this.properties = properties;
+        this.model = model;
     }
 
 
@@ -51,32 +47,54 @@ public class Controller implements EventHandler<Event>{
         //**********************************************************************
         // close
         if (source == simpleView.menuCloseMI) {
-            MyAlertFX  alert=new MyAlertFX(simpleView,
+            Alert alert = new Alert(
                     Alert.AlertType.CONFIRMATION,
-                    "Close Window",
-                    "",
-                    "Do you really want to close",
-                    true,
-                    Properties.applicationImageIconAsICO,
-                    "OK",
-                    "ESC->Cancel",
-                    Properties.ButtonBackgroundColor,
-                    Properties.MouseSelectedColor,
-                    Properties.FocusOnComponentColor);
-            // wait for selection
-            Optional<ButtonType> result = alert.getResult();
-
-            // if cancel return
-            if (result.isPresent() && result.get() == ButtonType.OK){
+                    "Do you really want to close?",
+                    new ButtonType("OK", ButtonBar.ButtonData.OK_DONE),
+                    new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE)
+            );
+            alert.initOwner(simpleView);
+            ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+            if (result.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
                 Platform.exit();
-            }
-            else{
+            } else {
                 event.consume();
             }
+        }
 
+        if (source == simpleView.checkBTN) {
+            handlePrimeCheck();
         }
 
     }// handle
+
+    private void handlePrimeCheck() {
+        String input = simpleView.numberTF.getText();
+        if (input == null || input.isBlank()) {
+            showInfo("Input required", "Please enter a number.");
+            return;
+        }
+
+        Integer value = model.parseInteger(input.trim());
+        if (value == null) {
+            showInfo("Invalid number", "Only whole numbers are allowed.");
+            return;
+        }
+
+        boolean isPrime = model.isPrime(value);
+        String message = isPrime
+                ? value + " is a prime number."
+                : value + " is not a prime number.";
+        showInfo("Prime Check Result", message);
+    }
+
+    private void showInfo(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
+        alert.initOwner(simpleView);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.showAndWait();
+    }
 
     /**
      * Handles mouse events
@@ -90,7 +108,7 @@ public class Controller implements EventHandler<Event>{
         if (source instanceof Node) {
             Node node = (Node) source;
             if (event.getEventType()==MouseEvent.MOUSE_ENTERED){
-                SCTools.BorderToNode(node, Properties.FocusOnComponentColor(), 10);
+                SCTools.BorderToNode(node, Properties.FocusOnComponentColor, 10);
                 node.requestFocus();
                 if (node instanceof Button)
                     simpleView.getScene().getRoot().setCursor(Cursor.HAND);
@@ -115,20 +133,9 @@ public class Controller implements EventHandler<Event>{
         if (source==simpleView.numberTF&&event.getEventType()==KeyEvent.KEY_TYPED) {
             char c = event.getCharacter().charAt(0);
             // backspace or delete are allowed
-            if (Character.isLetterOrDigit(c)&&(c!=8||c==127)) {
+            if (Character.isLetterOrDigit(c) && c != 8 && c != 127) {
                 if (!Character.isDigit(c)) { // Allow digits
-                    new MyAlertFX(simpleView,
-                            Alert.AlertType.INFORMATION,
-                            "Enter a number to check prim",
-                            "",
-                            "Only numbers allowed " + event.getCode(),
-                            true,
-                            Properties.applicationImageIconAsICO,
-                            "OK",
-                            "",
-                            Properties.ButtonBackgroundColor,
-                            Properties.MouseSelectedColor,
-                            Properties.FocusOnComponentColor);
+                    showInfo("Enter a number", "Only numbers are allowed.");
                     event.consume(); // Ignore the event
                 }
             }

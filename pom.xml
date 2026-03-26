@@ -108,7 +108,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.disciplica.bootstrap.Main</mainClass>
+                            <mainClass>com.disciplica.bootstrap.HabitTrackerApp</mainClass>
                         </configuration>
                     </execution>
                 </executions>
@@ -125,7 +125,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <mainClass>com.disciplica.bootstrap.Main</mainClass>
+                    <mainClass>com.disciplica.bootstrap.HabitTrackerApp</mainClass>
                 </configuration>
             </plugin>
 
@@ -143,7 +143,7 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.disciplica.bootstrap.Main</mainClass>
+                                    <mainClass>com.disciplica.bootstrap.HabitTrackerApp</mainClass>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
