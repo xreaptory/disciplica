@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.IntStream;
+import javafx.application.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ public class    Main {
     }
 
     public static void main(String[] args) {
-        HabitTrackerApp.main(args);
+        Application.launch(HabitTrackerApp.class, args);
     }
 
     private static AppContext createContext() {
@@ -112,7 +113,7 @@ public class    Main {
 
     private static void reportInitializationError(InvalidHabitException invalidHabitException) {
         logger.error("Failed to initialize tasks", invalidHabitException);
-        System.out.println("Error initializing tasks: " + invalidHabitException.getMessage());
+               System.out.println("Error initializing tasks: " + invalidHabitException.getMessage());
     }
 
     private static void createAndPersistDefaultTasks(User user, FileTaskRepository repository)
