@@ -16,13 +16,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import model.Properties;
-import model.SCTools;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -62,7 +58,6 @@ public class MainController {
         lastSavedLabel.setText("Last saved: " + formattedNow);
         habitListView.setItems(habits);
         habitListView.setPlaceholder(new Label("No habits yet."));
-        registerHoverStyles(dashboardBTN, habitsBTN, statsBTN);
         habitListView.setCellFactory(list -> new ListCell<>() {
             @Override
             protected void updateItem(Habit habit, boolean empty) {
@@ -74,20 +69,6 @@ public class MainController {
                 setText(habit.getName() + " - " + habit.getDescription());
             }
         });
-    }
-
-    private void registerHoverStyles(Button... buttons) {
-        for (Button button : buttons) {
-            button.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-                button.getScene().getRoot().setCursor(javafx.scene.Cursor.HAND);
-                SCTools.BorderToNode(button, Properties.FocusOnComponentColor, 10);
-            });
-
-            button.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
-                button.getScene().getRoot().setCursor(javafx.scene.Cursor.DEFAULT);
-                button.setEffect(null);
-            });
-        }
     }
 
     @FXML
@@ -144,22 +125,14 @@ public class MainController {
 
     @FXML
     private void handleClose() {
-        MyAlertFX alert = new MyAlertFX(
-                dashboardBTN.getScene().getWindow(),
+        Alert alert = new Alert(
                 Alert.AlertType.CONFIRMATION,
-                "Close application",
-                "Exit Disciplica",
                 "Do you really want to close?",
-                true,
-                Properties.applicationImageIconAsICO,
-                "OK",
-                "Cancel",
-                Properties.ButtonBackgroundColor,
-                Color.DARKRED,
-                Properties.FocusOnComponentColor
+                new ButtonType("OK", ButtonBar.ButtonData.OK_DONE),
+                new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE)
         );
 
-        ButtonType result = alert.getResult().orElse(ButtonType.CANCEL);
+        ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
         if (result.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
             Platform.exit();
         }
