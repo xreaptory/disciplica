@@ -19,7 +19,7 @@ import javafx.application.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class    Main {
+public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static final String MENU_OPTION_SHOW_TASKS = "1";
     private static final String MENU_OPTION_COMPLETE_TASK = "2";

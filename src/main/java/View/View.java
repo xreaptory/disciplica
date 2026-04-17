@@ -10,8 +10,8 @@ import java.io.IOException;
 public class View extends Stage {
 
     public View() {
-        Scene scene = loadSceneFromFxml();
-        setTitle("Habit Tracker - MVC");
+            Scene scene = loadSceneFromFxml();
+        setTitle("Disciplica");
         if (Properties.applicationImageIconAsICO != null) {
             getIcons().add(Properties.applicationImageIconAsICO);
         }
