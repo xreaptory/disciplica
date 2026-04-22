@@ -30,6 +30,10 @@ public class OneTimeTask extends AbstractTask {
         }
     }
 
+    public String toString(){
+        return getName()+";"+getDescription()+";"+getPoints();
+    }
+
     @Override
     public int calculatePoints() {
         int awardedPoints = super.getPoints();
@@ -50,6 +54,7 @@ public class OneTimeTask extends AbstractTask {
             @JsonProperty("points") int points,
             @JsonProperty("completed") boolean completed) {
     }
+
 }
 
 
