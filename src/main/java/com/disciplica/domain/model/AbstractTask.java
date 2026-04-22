@@ -33,7 +33,6 @@ public abstract class AbstractTask implements Trackable {
         this.description = description;
         this.points = points;
         isCompleted = false;
-        logger.info("Task created: '{}' ({}), points={}", name, this.getClass().getSimpleName(), points);
     }
 
     private void validateName(String candidateName) throws InvalidHabitException {
@@ -53,8 +52,6 @@ public abstract class AbstractTask implements Trackable {
 
     private void validatePoints(int candidatePoints, String taskName) throws InvalidHabitException {
         if (candidatePoints < 0) {
-            logger.error("Task points must be non-negative, got {} for task '{}'", candidatePoints,
-                    taskName);
             throw new InvalidHabitException("Task points must be non-negative, got: " + candidatePoints);
         }
     }
@@ -107,7 +104,7 @@ public abstract class AbstractTask implements Trackable {
 
     @Override
     public String toString() {
-        return "Name: " + name + " (" + this.getClass().getSimpleName() + ") - " + (isCompleted ? "[DONE]" : "[ ]");
+        return name+";"+description+";"+points+";"+isCompleted;
     }
 }
 

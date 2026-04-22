@@ -61,6 +61,15 @@ public class User implements Trackable {
         return true;
     }
 
+    public String[] getAllHabits() {
+        String[] habits = new String[tasks.size()];
+        int i = 0;
+        for (AbstractTask task : tasks) {
+            habits[i++] = task.toString();
+        }
+        return habits;
+    }
+
     public AbstractTask removeTask(AbstractTask task) throws HabitNotFoundException {
         if (task == null) return handleNullRemoval();
         ensureTaskExists(task);

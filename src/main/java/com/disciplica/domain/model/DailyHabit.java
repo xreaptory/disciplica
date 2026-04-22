@@ -69,7 +69,7 @@ public class DailyHabit extends AbstractTask {
 
     @Override
     public String toString() {
-        return super.toString() + " [Streak: " + streak + "]";
+        return super.toString() +";"+streak;
     }
 
     public record DailyHabitState(
