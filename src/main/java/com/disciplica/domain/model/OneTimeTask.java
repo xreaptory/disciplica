@@ -21,7 +21,7 @@ public class OneTimeTask extends AbstractTask {
     }
 
     public OneTimeTask(String name, String description, int points) throws InvalidHabitException {
-        this(new OneTimeTaskState(name, description, points, false));
+        super(name, description, points);
     }
 
     private void restoreCompletedState(boolean completed) {

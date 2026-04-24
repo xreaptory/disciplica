@@ -1,58 +1,14 @@
-2026-04-17 13:17:37.884 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='111', description='11fawf'
-2026-04-17 13:17:37.895 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='111'
-2026-04-17 13:17:37.895 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit name set to '111'
-2026-04-17 13:17:37.895 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit '111', new value='11fawf'
-2026-04-17 13:17:37.895 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit '111' description set successfully
-2026-04-17 13:17:37.896 [JavaFX Application Thread] INFO  com.disciplica.domain.model.Habit - Habit created successfully: '111'
-2026-04-17 13:17:55.119 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='fffff', description='afasfasf'
-2026-04-17 13:17:55.119 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='fffff'
-2026-04-17 13:17:55.120 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit name set to 'fffff'
-2026-04-17 13:17:55.120 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit 'fffff', new value='afasfasf'
-2026-04-17 13:17:55.120 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit 'fffff' description set successfully
-2026-04-17 13:17:55.120 [JavaFX Application Thread] INFO  com.disciplica.domain.model.Habit - Habit created successfully: 'fffff'
-2026-04-17 13:20:17.355 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='fff', description='ffff'
-2026-04-17 13:20:17.357 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='fff'
-2026-04-17 13:20:17.357 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit name set to 'fff'
-2026-04-17 13:20:17.357 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit 'fff', new value='ffff'
-2026-04-17 13:20:17.357 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit 'fff' description set successfully
-2026-04-17 13:20:17.357 [JavaFX Application Thread] INFO  com.disciplica.domain.model.Habit - Habit created successfully: 'fff'
-2026-04-17 13:34:17.455 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='11124', description='124124124412'
-2026-04-17 13:34:17.458 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='11124'
-2026-04-17 13:34:17.458 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit name set to '11124'
-2026-04-17 13:34:17.459 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit '11124', new value='124124124412'
-2026-04-17 13:34:17.459 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit '11124' description set successfully
-2026-04-17 13:34:17.459 [JavaFX Application Thread] INFO  com.disciplica.domain.model.Habit - Habit created successfully: '11124'
-2026-04-17 13:34:25.429 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='441421', description='412124124'
-2026-04-17 13:34:25.429 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='441421'
-2026-04-17 13:34:25.429 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit name set to '441421'
-2026-04-17 13:34:25.429 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit '441421', new value='412124124'
-2026-04-17 13:34:25.430 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit '441421' description set successfully
-2026-04-17 13:34:25.430 [JavaFX Application Thread] INFO  com.disciplica.domain.model.Habit - Habit created successfully: '441421'
-2026-04-17 13:34:28.102 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Creating Habit: name='214124124', description='412124142'
-2026-04-17 13:34:28.104 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting name for Habit, new value='214124124'
-2026-04-17 13:34:28.104 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit name set to '214124124'
-2026-04-17 13:34:28.104 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Setting description for Habit '214124124', new value='412124142'
-2026-04-17 13:34:28.104 [JavaFX Application Thread] DEBUG com.disciplica.domain.model.Habit - Habit '214124124' description set successfully
-2026-04-17 13:34:28.104 [JavaFX Application Thread] INFO  com.disciplica.domain.model.Habit - Habit created successfully: '214124124'
-2026-04-22 18:14:11.435 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Super', points=15, streak=0, completed=false
-2026-04-22 18:14:11.436 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Super
-2026-04-22 18:15:58.763 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Simon', points=15, streak=0, completed=false
-2026-04-22 18:15:58.765 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Simon
-2026-04-22 18:16:07.056 [JavaFX Application Thread] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='Simon', points=15, streak=0, completed=false
-2026-04-22 18:16:07.057 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Simon
-2026-04-22 18:16:13.235 [JavaFX Application Thread] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Simon', points=15, completed=false
-2026-04-22 18:16:13.235 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Simon
-2026-04-22 18:16:21.963 [JavaFX Application Thread] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Simon', points=15, completed=false
-2026-04-22 18:16:21.964 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Simon
-2026-04-22 18:16:24.441 [JavaFX Application Thread] DEBUG c.d.domain.model.OneTimeTask - OneTimeTask created: name='Simonfff', points=15, completed=false
-2026-04-22 18:16:24.442 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Simonfff
-2026-04-22 18:19:54.627 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='1', points=1, streak=0, completed=false
-2026-04-22 18:19:54.629 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: 1
-2026-04-22 18:19:59.388 [JavaFX Application Thread] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='1fff', points=14, streak=0, completed=false
-2026-04-22 18:19:59.388 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: 1fff
-2026-04-22 18:21:23.098 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='1', points=143, streak=0, completed=false
-2026-04-22 18:21:23.100 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: 1
-2026-04-22 18:21:25.387 [JavaFX Application Thread] DEBUG c.d.domain.model.WeeklyHabit - WeeklyHabit created: name='1ffff', points=143, streak=0, completed=false
-2026-04-22 18:21:25.389 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: 1ffff
-2026-04-23 08:08:48.605 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='afasf', points=15, streak=0, completed=false
-2026-04-23 08:08:48.607 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: afasf
+2026-04-24 13:13:19.119 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Super', points=15, streak=0, completed=false
+2026-04-24 13:13:19.129 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Super
+2026-04-24 13:13:20.947 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Super', points=15, streak=0, completed=false
+2026-04-24 13:13:20.948 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: Super
+2026-04-24 13:13:21.500 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Super', points=15, streak=0, completed=false
+2026-04-24 13:13:21.502 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: Super
+2026-04-24 13:13:24.610 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Super', points=15, streak=0, completed=false
+2026-04-24 13:13:24.610 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: Super
+2026-04-24 13:19:26.306 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Simon
+2026-04-24 13:19:27.648 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: Simon
+2026-04-24 13:22:25.739 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: 214
+2026-04-24 13:22:27.303 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: 214
+2026-04-24 13:23:54.050 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: supa
+2026-04-24 13:24:09.192 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: supa
