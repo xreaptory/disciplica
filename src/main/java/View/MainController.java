@@ -1,5 +1,6 @@
 package View;
 
+import com.disciplica.domain.exception.HabitNotFoundException;
 import com.disciplica.domain.exception.InvalidHabitException;
 import com.disciplica.domain.model.*;
 import javafx.application.Platform;
@@ -38,25 +39,64 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         this.simpleView = simpleView;
     }
 
-    public void handleActionEvent(ActionEvent event) throws InvalidHabitException {
+    public void handleActionEvent(ActionEvent event) throws InvalidHabitException, HabitNotFoundException {
         Object source = event.getSource();
 
-        if(source == simpleView.addButton){
+        if (source == simpleView.addButton) {
             String typ = simpleView.comboBox.getSelectionModel().getSelectedItem().toString();
-            if(typ.equals("Daily Habit")){
-                DailyHabit dailyHabit = new DailyHabit(simpleView.nameTF.getText(),simpleView.descriptionTF.getText(),Integer.parseInt(simpleView.pointsTF.getText()));
-                user.addTask(dailyHabit);
-                simpleView.itemsObservable.setAll(user.getAllHabits());
+            if (typ.equals("Daily Habit")) {
+                try {
+                    DailyHabit dailyHabit = new DailyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
+                    user.addTask(dailyHabit);
+                    simpleView.itemsObservable.setAll(user.getAllHabits());
+                } catch (NumberFormatException e) {
+                    throw new NumberFormatException("Error parsing points. Please enter a valid integer.");
+                }
+            } else if (typ.equals("Weekly Habit")) {
+                try {
+                    WeeklyHabit weeklyHabit = new WeeklyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
+                    user.addTask(weeklyHabit);
+                    simpleView.itemsObservable.setAll(user.getAllHabits());
+                } catch (NumberFormatException e) {
+                    throw new NumberFormatException("Error parsing points. Please enter a valid integer.");
+                }
+            } else if (typ.equals("OneTimeTask")) {
+                try {
+                    OneTimeTask oneTimeTask = new OneTimeTask(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
+                    user.addTask(oneTimeTask);
+                    simpleView.itemsObservable.setAll(user.getAllHabits());
+                } catch (NumberFormatException e) {
+                    throw new NumberFormatException("Error parsing points. Please enter a valid integer.");
+                }
             }
-            else if(typ.equals("Weekly Habit")){
-                WeeklyHabit weeklyHabit = new WeeklyHabit(simpleView.nameTF.getText(),simpleView.descriptionTF.getText(),Integer.parseInt(simpleView.pointsTF.getText()));
-                user.addTask(weeklyHabit);
-                simpleView.itemsObservable.setAll(user.getAllHabits());
-            }
-            else if(typ.equals("OneTimeTask")){
-                OneTimeTask oneTimeTask = new OneTimeTask(simpleView.nameTF.getText(),simpleView.descriptionTF.getText(),Integer.parseInt(simpleView.pointsTF.getText()));
-                user.addTask(oneTimeTask);
-                simpleView.itemsObservable.setAll(user.getAllHabits());
+        }
+
+        if (source == simpleView.removeButton) {
+            String typ = simpleView.comboBox.getSelectionModel().getSelectedItem().toString();
+            if (typ.equals("Daily Habit")) {
+                try {
+                    DailyHabit dailyHabit = new DailyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
+                    user.removeTask(dailyHabit);
+                    simpleView.itemsObservable.setAll(user.getAllHabits());
+                } catch (HabitNotFoundException e) {
+                    throw new HabitNotFoundException("Habit not found. Please check the name, description, and points.");
+                }
+            } else if (typ.equals("Weekly Habit")) {
+                try {
+                    WeeklyHabit weeklyHabit = new WeeklyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
+                    user.removeTask(weeklyHabit);
+                    simpleView.itemsObservable.setAll(user.getAllHabits());
+                } catch (HabitNotFoundException e) {
+                    throw new HabitNotFoundException("Habit not found. Please check the name, description, and points.");
+                }
+            } else if (typ.equals("OneTimeTask")) {
+                try {
+                    OneTimeTask oneTimeTask = new OneTimeTask(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
+                    user.removeTask(oneTimeTask);
+                    simpleView.itemsObservable.setAll(user.getAllHabits());
+                } catch (HabitNotFoundException e) {
+                    throw new HabitNotFoundException("Habit not found. Please check the name, description, and points.");
+                }
             }
         }
     }
@@ -78,7 +118,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         if(event instanceof ActionEvent) {
             try {
                 handleActionEvent((ActionEvent) event);
-            } catch (InvalidHabitException e) {
+            } catch (InvalidHabitException | HabitNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }

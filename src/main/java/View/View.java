@@ -35,7 +35,7 @@ public class View extends Stage {
 
     final TextField nameTF,descriptionTF,pointsTF;
 
-    final Button addButton,removeButton;
+    final Button addButton,removeButton,changeButton;
 
     final ListView<String> listViewTasks;
 
@@ -88,6 +88,9 @@ public class View extends Stage {
         removeButton = new Button("Remove");
         removeButton.addEventHandler(Event.ANY,mainController);
         removeButton.setPrefSize(110, 35);
+        changeButton = new Button("Change");
+        changeButton.addEventHandler(Event.ANY,mainController);
+        changeButton.setPrefSize(110, 35);
 
         FlowPane listViewP = new FlowPane();
         listViewP.setOrientation(Orientation.VERTICAL);

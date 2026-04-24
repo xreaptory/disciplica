@@ -21,7 +21,9 @@ public class DailyHabit extends AbstractTask {
     }
 
     public DailyHabit(String name, String description, int points) throws InvalidHabitException {
-        this(new DailyHabitState(name, description, points, 0, false));
+        super(name,description,points);
+        streak = 0;
+
     }
 
     private void restoreCompletedState(boolean completed) {

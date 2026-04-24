@@ -21,7 +21,8 @@ public class WeeklyHabit extends AbstractTask {
     }
 
     public WeeklyHabit(String name, String description, int points) throws InvalidHabitException {
-        this(new WeeklyHabitState(name, description, points, 0, false));
+        super(name,description,points);
+        streak = 0;
     }
 
     private void restoreCompletedState(boolean completed) {
