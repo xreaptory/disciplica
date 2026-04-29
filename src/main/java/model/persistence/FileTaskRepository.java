@@ -1,9 +1,9 @@
-package com.disciplica.infrastructure.persistence;
+package model.persistence;
 
-import com.disciplica.domain.exception.HabitNotFoundException;
-import com.disciplica.domain.exception.InvalidHabitException;
-import com.disciplica.domain.model.AbstractTask;
-import com.disciplica.domain.repository.TaskRepository;
+import model.domain.exception.HabitNotFoundException;
+import model.domain.exception.InvalidHabitException;
+import model.domain.model.AbstractTask;
+import model.domain.repository.TaskRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.*;

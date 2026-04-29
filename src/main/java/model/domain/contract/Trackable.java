@@ -1,4 +1,4 @@
-package com.disciplica.domain.contract;
+package model.domain.contract;
 
 public interface Trackable {
     String getName();

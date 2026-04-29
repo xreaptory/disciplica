@@ -1,8 +1,8 @@
-package com.disciplica.domain.model;
+package model.domain.model;
 
-import com.disciplica.domain.contract.Completable;
-import com.disciplica.domain.contract.Trackable;
-import com.disciplica.domain.exception.InvalidHabitException;
+import model.domain.contract.Completable;
+import model.domain.contract.Trackable;
+import model.domain.exception.InvalidHabitException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

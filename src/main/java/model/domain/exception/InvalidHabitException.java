@@ -1,4 +1,4 @@
-package com.disciplica.domain.exception;
+package model.domain.exception;
 
 public class InvalidHabitException extends Exception {
     public InvalidHabitException(String message) {

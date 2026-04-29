@@ -1,6 +1,6 @@
-package com.disciplica.domain.contract;
+package model.domain.contract;
 
-import com.disciplica.domain.model.Reward;
+import model.domain.model.Reward;
 public interface Completable {
     boolean complete();
     Reward getReward();

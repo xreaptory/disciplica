@@ -1,32 +1,18 @@
 package View;
 
-import com.disciplica.domain.exception.HabitNotFoundException;
-import com.disciplica.domain.exception.InvalidHabitException;
-import com.disciplica.domain.model.*;
-import javafx.application.Platform;
+import model.domain.exception.HabitNotFoundException;
+import model.domain.exception.InvalidHabitException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-
-import java.util.ArrayList;
+import model.domain.model.DailyHabit;
+import model.domain.model.OneTimeTask;
+import model.domain.model.User;
+import model.domain.model.WeeklyHabit;
 
 public class MainController implements EventHandler<Event>, ChangeListener<String> {
 

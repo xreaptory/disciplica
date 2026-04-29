@@ -1,14 +1,13 @@
-2026-04-24 13:13:19.119 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Super', points=15, streak=0, completed=false
-2026-04-24 13:13:19.129 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Super
-2026-04-24 13:13:20.947 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Super', points=15, streak=0, completed=false
-2026-04-24 13:13:20.948 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: Super
-2026-04-24 13:13:21.500 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Super', points=15, streak=0, completed=false
-2026-04-24 13:13:21.502 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: Super
-2026-04-24 13:13:24.610 [JavaFX Application Thread] DEBUG c.disciplica.domain.model.DailyHabit - DailyHabit created: name='Super', points=15, streak=0, completed=false
-2026-04-24 13:13:24.610 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: Super
-2026-04-24 13:19:26.306 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: Simon
-2026-04-24 13:19:27.648 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: Simon
-2026-04-24 13:22:25.739 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: 214
-2026-04-24 13:22:27.303 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: 214
-2026-04-24 13:23:54.050 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: supa
-2026-04-24 13:24:09.192 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: supa
+2026-04-29 11:13:01.695 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: saf
+2026-04-29 11:13:03.560 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: saf
+2026-04-29 11:13:52.773 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: saf
+2026-04-29 11:13:53.322 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: saf
+2026-04-29 11:13:53.559 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: saf
+2026-04-29 11:16:48.740 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
+2026-04-29 11:16:56.369 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: 1
+2026-04-29 11:16:58.299 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: 1
+2026-04-29 11:20:35.932 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
+2026-04-29 11:20:38.365 [JavaFX Application Thread] INFO  model.domain.model.User - Task removed: 1
+2026-04-29 11:39:30.192 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: Trainieren
+2026-04-29 11:39:44.945 [JavaFX Application Thread] INFO  model.domain.model.User - Task removed: Trainieren
+2026-04-29 11:39:46.347 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: Trainieren

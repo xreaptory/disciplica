@@ -1,9 +1,9 @@
-package com.disciplica.infrastructure.persistence;
+package model.persistence;
 
-import com.disciplica.domain.exception.HabitNotFoundException;
-import com.disciplica.domain.exception.InvalidHabitException;
-import com.disciplica.domain.model.Habit;
-import com.disciplica.domain.repository.Repository;
+import model.domain.exception.HabitNotFoundException;
+import model.domain.exception.InvalidHabitException;
+import model.domain.model.Habit;
+import model.domain.repository.Repository;
 import org.slf4j.*;
 import java.util.*;
 

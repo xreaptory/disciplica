@@ -1,6 +1,6 @@
-package com.disciplica.domain.model;
+package model.domain.model;
 
-import com.disciplica.domain.exception.InvalidHabitException;
+import model.domain.exception.InvalidHabitException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;

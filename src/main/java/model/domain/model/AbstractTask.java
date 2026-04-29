@@ -1,12 +1,14 @@
-package com.disciplica.domain.model;
+package model.domain.model;
 
-import com.disciplica.domain.contract.Trackable;
-import com.disciplica.domain.exception.InvalidHabitException;
+import model.domain.contract.Trackable;
+import model.domain.exception.InvalidHabitException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -87,6 +89,21 @@ public abstract class AbstractTask implements Trackable {
         }
         logger.warn("Attempted to complete already-completed task: '{}' ({})", name, this.getClass().getSimpleName());
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractTask that = (AbstractTask) o;
+        return points == that.points &&
+                name.equals(that.name) &&
+                description.equals(that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, points);
     }
 
     public abstract int calculatePoints();

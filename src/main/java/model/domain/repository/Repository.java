@@ -1,8 +1,8 @@
-package com.disciplica.domain.repository;
+package model.domain.repository;
 
-import com.disciplica.domain.contract.Trackable;
-import com.disciplica.domain.exception.HabitNotFoundException;
-import com.disciplica.domain.exception.InvalidHabitException;
+import model.domain.contract.Trackable;
+import model.domain.exception.HabitNotFoundException;
+import model.domain.exception.InvalidHabitException;
 import java.util.List;
 import java.util.Optional;
 
