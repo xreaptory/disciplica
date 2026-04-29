@@ -1,6 +1,6 @@
-package com.disciplica.domain.model;
+package model.domain.model;
 
-import com.disciplica.domain.contract.Trackable;
+import model.domain.contract.Trackable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

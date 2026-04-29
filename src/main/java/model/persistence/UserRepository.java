@@ -1,9 +1,9 @@
-package com.disciplica.infrastructure.persistence;
+package model.persistence;
 
-import com.disciplica.domain.exception.HabitNotFoundException;
-import com.disciplica.domain.exception.InvalidHabitException;
-import com.disciplica.domain.model.User;
-import com.disciplica.domain.repository.Repository;
+import model.domain.exception.HabitNotFoundException;
+import model.domain.exception.InvalidHabitException;
+import model.domain.model.User;
+import model.domain.repository.Repository;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;

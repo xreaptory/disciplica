@@ -2,10 +2,10 @@ package com.disciplica;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.disciplica.domain.exception.HabitNotFoundException;
-import com.disciplica.domain.exception.InvalidHabitException;
-import com.disciplica.domain.model.OneTimeTask;
-import com.disciplica.domain.model.User;
+import model.domain.exception.HabitNotFoundException;
+import model.domain.exception.InvalidHabitException;
+import model.domain.model.OneTimeTask;
+import model.domain.model.User;
 import java.lang.reflect.Field;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

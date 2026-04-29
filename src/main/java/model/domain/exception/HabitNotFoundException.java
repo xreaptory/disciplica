@@ -1,4 +1,4 @@
-package com.disciplica.domain.exception;
+package model.domain.exception;
 
 public class HabitNotFoundException extends Exception {
     public HabitNotFoundException(String message) {

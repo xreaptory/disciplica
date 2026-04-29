@@ -1,4 +1,4 @@
-package com.disciplica.bootstrap;
+package model.bootstrap;
 
 import View.View;
 import javafx.application.Application;
