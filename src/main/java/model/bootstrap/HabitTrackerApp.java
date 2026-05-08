@@ -10,8 +10,4 @@ public class HabitTrackerApp extends Application {
     public void start(Stage primaryStage) {
         new View();
     }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
