@@ -10,3 +10,9 @@
 2026-05-08 11:32:52.784 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
 2026-05-08 11:33:24.706 [JavaFX Application Thread] INFO  model.domain.model.User - Task changed from 1 to 1
 2026-05-08 11:35:22.737 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: super
+2026-05-08 11:36:42.829 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: gooning
+2026-05-08 11:37:00.193 [JavaFX Application Thread] WARN  model.domain.model.User - Attempted to add duplicate task: gooning
+2026-05-08 11:37:01.649 [JavaFX Application Thread] INFO  model.domain.model.User - Task removed: gooning
+2026-05-08 11:37:03.022 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: gooning
+2026-05-08 11:37:17.790 [JavaFX Application Thread] INFO  model.domain.model.User - Task changed from gooning to gooning
+2026-05-08 11:38:11.588 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
