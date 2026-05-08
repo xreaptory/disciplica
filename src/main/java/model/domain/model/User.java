@@ -53,6 +53,19 @@ public class User implements Trackable {
                 .orElse(0);
     }
 
+    public boolean changeTask(AbstractTask oldTask, AbstractTask newTask) throws InvalidHabitException, HabitNotFoundException {
+        if (oldTask == null || newTask == null) {
+            logger.warn("Attempted to change a task with null values");
+            throw new InvalidHabitException("Old and new tasks cannot be null");
+        }
+        ensureTaskExists(oldTask);
+        rejectDuplicateTask(newTask);
+        int index = tasks.indexOf(oldTask);
+        tasks.set(index, newTask);
+        logger.info("Task changed from {} to {}", oldTask.getName(), newTask.getName());
+        return true;
+    }
+
     public boolean addTask(AbstractTask task) throws InvalidHabitException {
         rejectNullTask(task);
         rejectDuplicateTask(task);

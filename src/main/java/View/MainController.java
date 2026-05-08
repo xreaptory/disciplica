@@ -1,5 +1,6 @@
 package View;
 
+import javafx.scene.input.MouseButton;
 import model.domain.exception.HabitNotFoundException;
 import model.domain.exception.InvalidHabitException;
 import javafx.beans.value.ChangeListener;
@@ -9,10 +10,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import model.domain.model.DailyHabit;
-import model.domain.model.OneTimeTask;
-import model.domain.model.User;
-import model.domain.model.WeeklyHabit;
+import model.domain.model.*;
 
 public class MainController implements EventHandler<Event>, ChangeListener<String> {
 
@@ -85,10 +83,55 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 }
             }
         }
+
+        if (source == simpleView.changeButton) {
+            try {
+                String selectedItem = simpleView.listViewTasks.getSelectionModel().getSelectedItem();
+                if (selectedItem == null) return;
+
+                String[] old = selectedItem.split(";");
+                String oldTypLetter = old[0];
+
+                AbstractTask oldHabit;
+                if (oldTypLetter.equals("D")) {
+                    oldHabit = new DailyHabit(old[1], old[2], Integer.parseInt(old[3]));
+                } else if (oldTypLetter.equals("W")) {
+                    oldHabit = new WeeklyHabit(old[1], old[2], Integer.parseInt(old[3]));
+                } else {
+                    oldHabit = new OneTimeTask(old[1], old[2], Integer.parseInt(old[3]));
+                }
+
+                String typNew = simpleView.comboBox.getSelectionModel().getSelectedItem().toString();
+                AbstractTask   newHabit;
+                String name = simpleView.nameTF.getText();
+                String desc = simpleView.descriptionTF.getText();
+                int points = Integer.parseInt(simpleView.pointsTF.getText());
+
+                if (typNew.equals("Daily Habit")) {
+                    newHabit = new DailyHabit(name, desc, points);
+                } else if (typNew.equals("Weekly Habit")) {
+                    newHabit = new WeeklyHabit(name, desc, points);
+                } else {
+                    newHabit = new OneTimeTask(name, desc, points);
+                }
+
+                user.changeTask(oldHabit, newHabit);
+                simpleView.itemsObservable.setAll(user.getAllHabits());
+
+            } catch (InvalidHabitException | HabitNotFoundException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                System.out.println("Fehler: Punkte müssen eine Zahl sein!");
+            }
+        }
     }
 
     public void handleMouseEvent(MouseEvent event){
         Object source = event.getSource();
+
+        if(source == simpleView.listViewTasks && event.getEventType() == MouseEvent.MOUSE_CLICKED && event.getButton().equals(MouseButton.PRIMARY)){
+            simpleView.openNewWindow();
+        }
     }
 
     public void handleKeyEvent(KeyEvent event){
@@ -97,6 +140,10 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
 
     public String[] getHabits() {
         return user.getAllHabits();
+    }
+
+    public String[] getInfo(){
+        return simpleView.listViewTasks.getSelectionModel().getSelectedItem().toString().split(";");
     }
 
     @Override
@@ -120,8 +167,17 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         if(newValue == null) return;
         String[] habits = newValue.split(";");
-        simpleView.nameTF.setText(habits[0]);
-        simpleView.descriptionTF.setText(habits[1]);
-        simpleView.pointsTF.setText(habits[2]);
+        String typ = habits[0];
+        simpleView.nameTF.setText(habits[1]);
+        simpleView.descriptionTF.setText(habits[2]);
+        simpleView.pointsTF.setText(habits[3]);
+
+        if(typ.equals("D")) {
+            simpleView.comboBox.getSelectionModel().select("Daily Habit");
+        } else if(typ.equals("W")) {
+            simpleView.comboBox.getSelectionModel().select("Weekly Habit");
+        } else if(typ.equals("O")) {
+            simpleView.comboBox.getSelectionModel().select("OneTimeTask");
+        }
     }
 }

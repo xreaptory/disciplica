@@ -1,13 +1,12 @@
-2026-04-29 11:13:01.695 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: saf
-2026-04-29 11:13:03.560 [JavaFX Application Thread] ERROR com.disciplica.domain.model.User - Attempted to operate on non-existent task: saf
-2026-04-29 11:13:52.773 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: saf
-2026-04-29 11:13:53.322 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: saf
-2026-04-29 11:13:53.559 [JavaFX Application Thread] INFO  com.disciplica.domain.model.User - Task added: saf
-2026-04-29 11:16:48.740 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
-2026-04-29 11:16:56.369 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: 1
-2026-04-29 11:16:58.299 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: 1
-2026-04-29 11:20:35.932 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
-2026-04-29 11:20:38.365 [JavaFX Application Thread] INFO  model.domain.model.User - Task removed: 1
-2026-04-29 11:39:30.192 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: Trainieren
-2026-04-29 11:39:44.945 [JavaFX Application Thread] INFO  model.domain.model.User - Task removed: Trainieren
-2026-04-29 11:39:46.347 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: Trainieren
+2026-05-08 11:04:42.769 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: Wäsche
+2026-05-08 11:04:50.061 [JavaFX Application Thread] WARN  model.domain.model.User - Attempted to add duplicate task: Wäsche
+2026-05-08 11:05:13.324 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: Schulsachen kafen
+2026-05-08 11:18:59.880 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 11
+2026-05-08 11:26:27.375 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: su
+2026-05-08 11:28:04.644 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
+2026-05-08 11:29:53.082 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
+2026-05-08 11:30:37.694 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
+2026-05-08 11:31:37.282 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
+2026-05-08 11:32:52.784 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
+2026-05-08 11:33:24.706 [JavaFX Application Thread] INFO  model.domain.model.User - Task changed from 1 to 1
+2026-05-08 11:35:22.737 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: super
