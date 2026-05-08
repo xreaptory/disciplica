@@ -129,7 +129,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     public void handleMouseEvent(MouseEvent event){
         Object source = event.getSource();
 
-        if(source == simpleView.listViewTasks && event.getEventType() == MouseEvent.MOUSE_CLICKED && event.getButton().equals(MouseButton.PRIMARY)&&event.getClickCount() == 2){
+        if(source == simpleView.listViewTasks && event.getEventType() == MouseEvent.MOUSE_CLICKED && event.getButton().equals(MouseButton.PRIMARY)&&event.getClickCount() == 2>){
             simpleView.openNewWindow();
         }
     }
