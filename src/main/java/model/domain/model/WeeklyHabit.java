@@ -70,7 +70,7 @@ public class WeeklyHabit extends AbstractTask {
 
     @Override
     public String toString() {
-        return super.toString() +";"+streak;
+        return "W;"+super.toString() +";"+streak;
     }
 
     public record WeeklyHabitState(
