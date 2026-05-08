@@ -10,6 +10,14 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import java.util.Optional;
 import model.domain.model.*;
 
 public class MainController implements EventHandler<Event>, ChangeListener<String> {
@@ -129,13 +137,75 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     public void handleMouseEvent(MouseEvent event){
         Object source = event.getSource();
 
-        if(source == simpleView.listViewTasks && event.getEventType() == MouseEvent.MOUSE_CLICKED && event.getButton().equals(MouseButton.PRIMARY)&&event.getClickCount() == 2>){
+        if (source == simpleView.listViewTasks
+            && event.getEventType() == MouseEvent.MOUSE_CLICKED
+            && event.getButton().equals(MouseButton.PRIMARY)
+            && event.getClickCount() == 2) {
             simpleView.openNewWindow();
         }
     }
 
     public void handleKeyEvent(KeyEvent event){
         Object source = event.getSource();
+    }
+
+    public void onAddHabit() {
+        Dialog<Habit> dialog = new Dialog<>();
+        dialog.setTitle("Add Habit");
+        dialog.setHeaderText("Enter habit details");
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        dialog.getDialogPane().getStylesheets()
+            .add(getClass().getResource("/css/styles.css").toExternalForm());
+        dialog.getDialogPane().getStyleClass().add("app-root");
+
+        TextField nameField = new TextField();
+        TextField descriptionField = new TextField();
+        nameField.setPromptText("Habit name");
+        descriptionField.setPromptText("Habit description");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.add(new javafx.scene.control.Label("Name:"), 0, 0);
+        grid.add(nameField, 1, 0);
+        grid.add(new javafx.scene.control.Label("Description:"), 0, 1);
+        grid.add(descriptionField, 1, 1);
+        GridPane.setHgrow(nameField, Priority.ALWAYS);
+        GridPane.setHgrow(descriptionField, Priority.ALWAYS);
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == ButtonType.OK) {
+                String name = nameField.getText();
+                String description = descriptionField.getText();
+                if (name == null || name.isBlank()) {
+                    return null;
+                }
+                if (description == null) {
+                    description = "";
+                }
+                return new Habit(name, description);
+            }
+            return null;
+        });
+
+        Optional<Habit> result = dialog.showAndWait();
+        result.ifPresent(habit -> {
+            simpleView.habitItemsObservable.add(habit);
+            simpleView.habitListView.getSelectionModel().select(habit);
+        });
+    }
+
+    public IntegerProperty levelProperty() {
+        return user.levelProperty();
+    }
+
+    public IntegerProperty experienceProperty() {
+        return user.experienceProperty();
+    }
+
+    public DoubleProperty completionPercentProperty() {
+        return user.completionPercentProperty();
     }
 
     public String[] getHabits() {

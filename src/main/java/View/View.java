@@ -2,15 +2,37 @@ package View;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.StringExpression;
 import javafx.event.Event;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Properties;
+import model.domain.model.Habit;
 
 public class View extends Stage {
 
@@ -26,217 +48,229 @@ public class View extends Stage {
 
     final Button addButton,removeButton,changeButton;
 
+    final Button addHabitButton;
+
     final ListView<String> listViewTasks;
+
+    final ListView<Habit> habitListView;
 
     final ComboBox<String> comboBox;
 
     ObservableList<String> itemsObservable;
+
+    ObservableList<Habit> habitItemsObservable;
+
+    private final BorderPane root;
+    private final VBox habitListBox;
+    private final VBox statsBox;
 
     public ListView<String> getListViewTasks() {
         return listViewTasks;
     }
 
     public View() {
-
         mainController = new MainController(this);
 
+        nameTF = new TextField();
+        descriptionTF = new TextField();
+        pointsTF = new TextField();
 
+        addButton = new Button("Add");
+        removeButton = new Button("Remove");
+        changeButton = new Button("Change");
 
-        HBox hbox = new HBox();
-        Scene scene = new Scene(hbox, 1100, 600);
+        addHabitButton = new Button("Add Habit");
+        addHabitButton.setOnAction(event -> mainController.onAddHabit());
+
+        itemsObservable = FXCollections.observableArrayList(mainController.getHabits());
+        listViewTasks = new ListView<>(itemsObservable);
+
+        habitItemsObservable = FXCollections.observableArrayList(habit -> new Observable[] { habit.completedProperty() });
+        habitListView = new ListView<>(habitItemsObservable);
+
+        comboBox = new ComboBox<>();
+        String[] types = {"Daily Habit", "Weekly Habit", "OneTimeTask"};
+        comboBox.getItems().addAll(types);
+        comboBox.getSelectionModel().selectFirst();
+
+        root = new BorderPane();
+        root.getStyleClass().add("app-root");
+        Scene scene = new Scene(root, 1100, 600);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+
         setTitle("Disciplica");
         if (Properties.applicationImageIconAsICO != null) {
             getIcons().add(Properties.applicationImageIconAsICO);
         }
+        MenuBar menuBar = new MenuBar();
+        menuBar.getStyleClass().add("app-menu");
+        menuBar.getMenus().addAll(new Menu("File"), new Menu("Edit"), new Menu("View"));
+        root.setTop(menuBar);
 
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(25, 25, 25, 25));
-
-        FlowPane leftMenu = new FlowPane();
-
-        leftMenu.setPadding(new Insets(200,50,0,50));
-        leftMenu.setStyle("-fx-background-color: #bbbbbb");
-        leftMenu.setVgap(25);
-        leftMenu.setOrientation(Orientation.VERTICAL);
+        VBox leftMenu = new VBox(10);
+        leftMenu.getStyleClass().add("nav-panel");
+        leftMenu.setPadding(new Insets(12, 12, 12, 12));
+        leftMenu.setPrefWidth(180);
         for (Button b : buttonsLMenu) {
-            b.setPrefSize(150, 45);
-            b.setStyle("-fx-background-color: #62a0c5;-fx-background-radius: 5px;-fx-border-color: #204170; -fx-border-width: 1px;-fx-border-radius: 5px;");
-            b.setOnMouseEntered(e -> b.setStyle("-fx-background-color: #62a0c5;-fx-background-radius: 5px;-fx-border-color: #204170; -fx-border-width: 1px;-fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, #4c8bbf, 10, 0.5, 0, 0);"));
-            b.setOnMouseExited(e -> b.setStyle("-fx-background-color: #62a0c5;-fx-background-radius: 5px;-fx-border-color: #204170; -fx-border-width: 1px;-fx-border-radius: 5px;"));
-            b.addEventHandler(Event.ANY,mainController);
+            b.setMaxWidth(Double.MAX_VALUE);
+            b.getStyleClass().add("nav-button");
         }
+        dashboardBTN.setOnAction(event -> showHabitsView());
+        habitsBTN.setOnAction(event -> showHabitsView());
+        statsBTN.setOnAction(event -> showStatsView());
         leftMenu.getChildren().addAll(dashboardBTN, habitsBTN, statsBTN);
+        root.setLeft(leftMenu);
 
-        nameTF = new TextField();
-        nameTF.addEventHandler(Event.ANY,mainController);
-        descriptionTF = new TextField();
-        descriptionTF.addEventHandler(Event.ANY,mainController);
-        pointsTF = new TextField();
-        pointsTF.addEventHandler(Event.ANY,mainController);
+        habitListBox = new VBox(10);
+        habitListBox.getStyleClass().add("center-panel");
+        habitListBox.setPadding(new Insets(12, 12, 12, 12));
+        Label habitListTitle = new Label("Habit List");
+        habitListTitle.getStyleClass().add("section-title");
+        addHabitButton.getStyleClass().add("action-button");
+        habitListView.getStyleClass().add("habit-list");
+        StringExpression levelText = Bindings.format("Level: %d (%d XP)",
+                mainController.levelProperty(),
+                mainController.experienceProperty());
+        Label levelLabel = new Label();
+        levelLabel.textProperty().bind(levelText);
 
-
-        addButton = new Button("Add");
-        addButton.addEventHandler(Event.ANY,mainController);
-        addButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;");
-        addButton.setOnMouseEntered(e -> addButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, #4fc05f, 10, 0.5, 0, 0);-fx-text-fill: white;-fx-font-weight: bold;"));
-        addButton.setOnMouseExited(e -> addButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;"));
-        addButton.setPrefSize(125, 40);
-        removeButton = new Button("Remove");
-        removeButton.addEventHandler(Event.ANY,mainController);
-        removeButton.setStyle("-fx-background-color: #e14242;-fx-background-radius: 5px;-fx-border-color: #911010; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;");
-        removeButton.setOnMouseEntered(e -> removeButton.setStyle("-fx-background-color: #e14242;-fx-background-radius: 5px;-fx-border-color: #911010; -fx-border-width: 1px;-fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, #e14242, 10, 0.5, 0, 0);-fx-text-fill: white;-fx-font-weight: bold;"));
-        removeButton.setOnMouseExited(e -> removeButton.setStyle("-fx-background-color: #e14242;-fx-background-radius: 5px;-fx-border-color: #911010; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;"));
-        removeButton.setPrefSize(125, 40);
-        changeButton = new Button("Change");
-        changeButton.addEventHandler(Event.ANY,mainController);
-        changeButton.setStyle("-fx-background-color: #238ac9;-fx-background-radius: 5px;-fx-border-color: #1251af; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;");
-        changeButton.setOnMouseEntered(e -> changeButton.setStyle("-fx-background-color: #238ac9;-fx-background-radius: 5px;-fx-border-color: #1251af; -fx-border-width: 1px;-fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, #238ac9, 10, 0.5, 0, 0);-fx-text-fill: white;-fx-font-weight: bold;"));
-        changeButton.setOnMouseExited(e -> changeButton.setStyle("-fx-background-color: #62a0c5;-fx-background-radius: 5px;-fx-border-color: #1251af; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;"));
-        changeButton.setPrefSize(125, 40);
-
-        FlowPane listViewP = new FlowPane();
-        listViewP.setPadding(new Insets(25,0,0,0));
-        listViewP.setOrientation(Orientation.VERTICAL);
-
-        itemsObservable = FXCollections.observableArrayList(mainController.getHabits());
-        listViewTasks = new ListView<>(itemsObservable);
-        listViewTasks.getSelectionModel().selectedItemProperty().addListener(mainController);
-        listViewTasks.getSelectionModel().selectFirst();
-        listViewTasks.addEventHandler(Event.ANY,mainController);
-        listViewTasks.setPrefWidth(350);
-        listViewTasks.setPrefHeight(500);
-        listViewTasks.setStyle("-fx-background-color: #e4ebff;-fx-border-color: #7f7fab; -fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;-fx-text-fill: white;-fx-font-size: 15px;");
-
-        comboBox = new ComboBox<>();
-        String[] types = {"Daily Habit","Weekly Habit","OneTimeTask"};
-        comboBox.getItems().addAll(types);
-        comboBox.setStyle(
-                "-fx-background-color: #315184;" +
-                        "-fx-background-radius: 5px;" +
-                        "-fx-border-color: #4a6691;" +
-                        "-fx-border-radius: 5px;" +
-                        "-fx-min-width: 200px;" +
-                        "-fx-pref-height: 40px;"+
-                        "-fx-text-fill: white;" +
-                        "-fx-font-size: 15px;"+
-                        "-fx-border-width: 2px;"
-        );
-        comboBox.getSelectionModel().selectFirst();
-        comboBox.setStyle(
-                "-fx-background-color: #315184;" +
-                        "-fx-background-radius: 5px;" +
-                        "-fx-border-color: #4a6691;" +
-                        "-fx-border-radius: 5px;" +
-                        "-fx-min-width: 200px;" +
-                        "-fx-pref-height: 40px;" +
-                        "-fx-border-width: 2px;"
-        );
-
-        comboBox.setButtonCell(new ListCell<String>() {
+        DoubleBinding completionPercentBinding = Bindings.createDoubleBinding(() -> {
+            int total = habitItemsObservable.size();
+            if (total == 0) return 0.0;
+            long completed = habitItemsObservable.stream().filter(Habit::isCompleted).count();
+            return (double) completed / total;
+        }, habitItemsObservable);
+        ProgressBar completionProgress = new ProgressBar(0);
+        completionProgress.progressProperty().bind(completionPercentBinding);
+        HBox progressRow = new HBox(10, levelLabel, completionProgress);
+        HBox.setHgrow(completionProgress, Priority.ALWAYS);
+        habitListView.setCellFactory(list -> new ListCell<>() {
             @Override
-            protected void updateItem(String item, boolean empty) {
+            protected void updateItem(Habit item, boolean empty) {
                 super.updateItem(item, empty);
+                getStyleClass().removeAll("habit-cell", "habit-cell-complete", "habit-cell-incomplete");
                 if (empty || item == null) {
                     setText(null);
+                    return;
+                }
+                setText(item.getName() + " - " + item.getDescription());
+                getStyleClass().add("habit-cell");
+                if (item.isCompleted()) {
+                    getStyleClass().add("habit-cell-complete");
                 } else {
-                    setText(item);
-                    setStyle("-fx-text-fill: #ffffff; -fx-font-family: 'Arial'; -fx-font-size: 14px;");
+                    getStyleClass().add("habit-cell-incomplete");
                 }
             }
         });
+        habitListBox.getChildren().addAll(habitListTitle, progressRow, addHabitButton, habitListView);
+        VBox.setVgrow(habitListView, Priority.ALWAYS);
+        statsBox = buildStatsView();
+        showHabitsView();
 
-        comboBox.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                comboBox.applyCss();
-                comboBox.layout();
-                Node arrow = comboBox.lookup(".arrow");
-                if (arrow != null) {
-                    arrow.setStyle("-fx-background-color: #ffffff;");
-                }
-            }
-        });
+        HBox statusBar = new HBox(12);
+        statusBar.getStyleClass().add("status-bar");
+        statusBar.setPadding(new Insets(8, 12, 8, 12));
+        Label statusLabel = new Label("Ready");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        Label lastSavedLabel = new Label("Last saved: ...");
+        statusBar.getChildren().addAll(statusLabel, spacer, lastSavedLabel);
+        root.setBottom(statusBar);
 
-        comboBox.setCellFactory(lv -> new ListCell<String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setStyle("-fx-background-color: #315184;");
-                } else {
-                    setText(item);
-                    setStyle("-fx-text-fill: #bdbdbd; -fx-background-color: #315184; -fx-font-family: 'Arial';");
-                }
-            }
-        });
-
-
-        nameTF.setPrefWidth(250);
-        nameTF.setPrefHeight(40);
-        nameTF.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        nameTF.setPromptText("Enter habit name");
-        descriptionTF.setPrefHeight(40);
-        descriptionTF.setPrefWidth(250);
-        descriptionTF.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        descriptionTF.setPromptText("Enter habit description");
-        pointsTF.setPrefHeight(40);
-        pointsTF.setPrefWidth(250);
-        pointsTF.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        pointsTF.setPromptText("Enter habit points");
-        comboBox.setPrefHeight(40);
-        comboBox.setPrefWidth(250);
-
-        Label format = new Label("Habit List");
-        format.setStyle("-fx-font-size: 25px;");
-        listViewP.getChildren().addAll(format,listViewTasks);
-
-        FlowPane controlButtons = new FlowPane();
-        controlButtons.setHgap(10);
-
-        controlButtons.getChildren().addAll(addButton,removeButton,changeButton);
-
-        Label head = new Label("Create Habit");
-        head.setStyle("-fx-font-size: 25px;-fx-font-style: bold;");
-        gridPane.add(head,0,13);
-
-        Label l1 = new Label("Name:");
-        l1.setStyle("-fx-font-size: 15px");
-        gridPane.add(l1, 0, 14);
-        gridPane.add(nameTF, 1, 14);
-
-        Label l2 = new Label("Description:");
-        l2.setStyle("-fx-font-size: 15px");
-        gridPane.add(l2, 0, 15);
-        gridPane.add(descriptionTF, 1, 15);
-
-        Label l3 = new Label("Points:");
-        l3.setStyle("-fx-font-size: 15px");
-        gridPane.add(l3, 0, 16);
-        gridPane.add(pointsTF, 1, 16);
-
-        Label l4 = new Label("Type:");
-        l4.setStyle("-fx-font-size: 15px");
-        gridPane.add(l4, 0, 17);
-        gridPane.add(comboBox, 1, 17);
-
-        gridPane.add(controlButtons, 0, 18, 2, 1);
-
-
-        hbox.getChildren().add(leftMenu);
-        hbox.getChildren().add(gridPane);
-        hbox.getChildren().add(listViewP);
-
-        GridPane rightMenu = new GridPane();
-
-
-
-        hbox.getChildren().add(rightMenu);
         setScene(scene);
         setResizable(true);
         centerOnScreen();
         show();
+    }
+
+    private void showHabitsView() {
+        root.setCenter(habitListBox);
+    }
+
+    private void showStatsView() {
+        root.setCenter(statsBox);
+    }
+
+    private VBox buildStatsView() {
+        VBox container = new VBox(16);
+        container.getStyleClass().add("center-panel");
+        container.setPadding(new Insets(12, 12, 12, 12));
+
+        Label title = new Label("Statistics");
+        title.getStyleClass().add("section-title");
+
+        BarChart<String, Number> weeklyChart = buildWeeklyCompletionChart();
+        weeklyChart.getStyleClass().add("stats-chart");
+
+        PieChart categoryChart = buildCategoryDistributionChart();
+        categoryChart.getStyleClass().add("stats-chart");
+
+        LineChart<Number, Number> xpChart = buildXpGrowthChart();
+        xpChart.getStyleClass().add("stats-chart");
+
+        HBox topRow = new HBox(16, weeklyChart, categoryChart);
+        HBox.setHgrow(weeklyChart, Priority.ALWAYS);
+        HBox.setHgrow(categoryChart, Priority.ALWAYS);
+
+        VBox.setVgrow(weeklyChart, Priority.ALWAYS);
+        VBox.setVgrow(categoryChart, Priority.ALWAYS);
+        VBox.setVgrow(xpChart, Priority.ALWAYS);
+
+        container.getChildren().addAll(title, topRow, xpChart);
+        return container;
+    }
+
+    private BarChart<String, Number> buildWeeklyCompletionChart() {
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
+        chart.setTitle("Habits Completed (This Week)");
+        xAxis.setLabel("Day");
+        yAxis.setLabel("Completed");
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Completed");
+        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        int[] values = {2, 4, 3, 5, 1, 6, 4};
+        for (int i = 0; i < days.length; i++) {
+            series.getData().add(new XYChart.Data<>(days[i], values[i]));
+        }
+        chart.getData().add(series);
+        chart.setAnimated(false);
+        return chart;
+    }
+
+    private PieChart buildCategoryDistributionChart() {
+        PieChart chart = new PieChart();
+        chart.setTitle("Habit Categories");
+        chart.getData().addAll(
+                new PieChart.Data("Health", 5),
+                new PieChart.Data("Learning", 3),
+                new PieChart.Data("Productivity", 4),
+                new PieChart.Data("Mindfulness", 2)
+        );
+        chart.setLabelsVisible(true);
+        return chart;
+    }
+
+    private LineChart<Number, Number> buildXpGrowthChart() {
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);
+        chart.setTitle("XP Growth");
+        xAxis.setLabel("Day");
+        yAxis.setLabel("XP");
+
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("XP");
+        int[] xp = {200, 350, 520, 680, 860, 1020, 1200};
+        for (int i = 0; i < xp.length; i++) {
+            series.getData().add(new XYChart.Data<>(i + 1, xp[i]));
+        }
+        chart.getData().add(series);
+        chart.setAnimated(false);
+        chart.setCreateSymbols(true);
+        return chart;
     }
 
     public void openNewWindow() {
@@ -323,6 +357,8 @@ public class View extends Stage {
 
         VBox vbox = new VBox();
         Scene scene = new Scene(vbox, 325, 350);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+        vbox.getStyleClass().add("app-root");
 
         vbox.getChildren().add(gridPane);
 
