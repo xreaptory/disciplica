@@ -108,6 +108,10 @@ public abstract class AbstractTask implements Trackable {
 
     public abstract int calculatePoints();
 
+    public void setCompleted(boolean completed) {
+        this.isCompleted = completed;
+    }
+
     @JsonIgnore
     @Override
     public int getProgress() {

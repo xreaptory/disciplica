@@ -60,6 +60,15 @@ public class WeeklyHabit extends AbstractTask {
         logger.warn("WeeklyHabit '{}' was already completed, streak unchanged", getName());
     }
 
+    public void setStreak(int streak) {
+        if(streak < 0) {
+            logger.warn("Attempted to set a negative streak value for DailyHabit '{}'", getName());
+            throw new IllegalArgumentException("Streak cannot be negative");
+        }
+        logger.info("Setting streak for DailyHabit '{}', was {}, now {}", getName(), this.streak, streak);
+        this.streak = streak;
+    }
+
     @Override
     public int calculatePoints() {
         int total = super.getPoints() + (streak * 15);
