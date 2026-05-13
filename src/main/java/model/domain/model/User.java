@@ -3,10 +3,6 @@ package model.domain.model;
 import model.domain.contract.Trackable;
 import model.domain.exception.HabitNotFoundException;
 import model.domain.exception.InvalidHabitException;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -16,39 +12,17 @@ import org.slf4j.LoggerFactory;
 public class User implements Trackable {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
     private final String username;
-    private final IntegerProperty levelProperty;
-    private final IntegerProperty experienceProperty;
-    private final DoubleProperty completionPercentProperty;
+    private int level;
+    private int experience;
     private String title;
     private final ArrayList<AbstractTask> tasks;
 
     public User(String username) {
         this.username = username;
         title = "Beginner";
-        levelProperty = new SimpleIntegerProperty(this, "level", 1);
-        experienceProperty = new SimpleIntegerProperty(this, "experience", 0);
-        completionPercentProperty = new SimpleDoubleProperty(this, "completionPercent", 0.0);
+        level = 1;
+        experience = 0;
         tasks = new ArrayList<>();
-    }
-
-    public IntegerProperty levelProperty() {
-        return levelProperty;
-    }
-
-    public IntegerProperty experienceProperty() {
-        return experienceProperty;
-    }
-
-    public DoubleProperty completionPercentProperty() {
-        return completionPercentProperty;
-    }
-
-    public int getLevel() {
-        return levelProperty.get();
-    }
-
-    public int getExperience() {
-        return experienceProperty.get();
     }
 
     public String getUsername() {
@@ -88,7 +62,6 @@ public class User implements Trackable {
         rejectDuplicateTask(newTask);
         int index = tasks.indexOf(oldTask);
         tasks.set(index, newTask);
-        updateCompletionPercent();
         logger.info("Task changed from {} to {}", oldTask.getName(), newTask.getName());
         return true;
     }
@@ -97,7 +70,6 @@ public class User implements Trackable {
         rejectNullTask(task);
         rejectDuplicateTask(task);
         tasks.add(task);
-        updateCompletionPercent();
         logger.info("Task added: {}", task.getName());
         return true;
     }
@@ -115,7 +87,6 @@ public class User implements Trackable {
         if (task == null) return handleNullRemoval();
         ensureTaskExists(task);
         tasks.remove(task);
-        updateCompletionPercent();
         logger.info("Task removed: {}", task.getName());
         return task;
     }
@@ -127,9 +98,7 @@ public class User implements Trackable {
     public boolean completeTask(AbstractTask task) throws HabitNotFoundException {
         if (task == null) return handleNullCompletion();
         ensureTaskExists(task);
-        boolean completedNow = completeAndReward(task);
-        updateCompletionPercent();
-        return completedNow;
+        return completeAndReward(task);
     }
 
     private void rejectNullTask(AbstractTask task) throws InvalidHabitException {
@@ -173,7 +142,7 @@ public class User implements Trackable {
     }
 
     private void grantExperience(int awardedExperience) {
-        experienceProperty.set(experienceProperty.get() + awardedExperience);
+        experience += awardedExperience;
         applyLevelUps();
         updateTitle();
     }
@@ -181,28 +150,24 @@ public class User implements Trackable {
     private void applyLevelUps() {
         while (isReadyForNextLevel()) {
             consumeLevelRequirement();
-            levelProperty.set(levelProperty.get() + 1);
+            level++;
         }
     }
 
     private boolean isReadyForNextLevel() {
-        return experienceProperty.get() >= requiredExperienceForCurrentLevel();
+        return experience >= requiredExperienceForCurrentLevel();
     }
 
     private int requiredExperienceForCurrentLevel() {
-        return levelProperty.get() * 50;
+        return level * 50;
     }
 
     private void consumeLevelRequirement() {
-        experienceProperty.set(experienceProperty.get() - requiredExperienceForCurrentLevel());
+        experience -= requiredExperienceForCurrentLevel();
     }
 
     private void updateTitle() {
-        title = resolveTitle(levelProperty.get());
-    }
-
-    private void updateCompletionPercent() {
-        completionPercentProperty.set(getProgress() / 100.0);
+        title = resolveTitle(level);
     }
 
     private String resolveTitle(int currentLevel) {
@@ -244,16 +209,15 @@ public class User implements Trackable {
 
     @Override
     public String toString() {
-        return "Username: " + username + "; Level: " + levelProperty.get() + "; Exp: "
-            + experienceProperty.get()
+        return "Username: " + username + "; Level: " + level + "; Exp: " + experience
                 + "; Tasks: " + tasks.size() + "; Titel: " + title;
     }
 
     public void printUser() {
         System.out.println("User: " + username);
         System.out.println("Titel: " + title);
-        System.out.println("Level: " + levelProperty.get());
-        System.out.println("Exp: " + experienceProperty.get());
+        System.out.println("Level: " + level);
+        System.out.println("Exp: " + experience);
     }
 }
 
