@@ -3,21 +3,15 @@ package model.domain.model;
 import model.domain.contract.Completable;
 import model.domain.contract.Trackable;
 import model.domain.exception.InvalidHabitException;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Habit implements Completable, Trackable {
     private static final Logger logger = LoggerFactory.getLogger(Habit.class);
-    private final StringProperty name = new SimpleStringProperty(this, "name");
+    private String name;
     private String description;
-    private final BooleanProperty completed = new SimpleBooleanProperty(this, "completed", false);
-    private final IntegerProperty streak = new SimpleIntegerProperty(this, "streak", 0);
+    private boolean isCompleted;
+    private int streak;
 
     public Habit(String name, String description) {
         logger.debug("Creating Habit: name='{}', description='{}'", name, description);
@@ -43,10 +37,6 @@ public class Habit implements Completable, Trackable {
     }
 
     public String getName() {
-        return name.get();
-    }
-
-    public StringProperty nameProperty() {
         return name;
     }
 
@@ -56,7 +46,7 @@ public class Habit implements Completable, Trackable {
             logger.error("Habit name must not be null or blank");
             throw new InvalidHabitException("Habit name must not be null or blank");
         }
-        this.name.set(name);
+        this.name = name;
         logger.debug("Habit name set to '{}'", name);
     }
 
@@ -76,72 +66,63 @@ public class Habit implements Completable, Trackable {
 
     @Override
     public int getProgress() {
-        int progress = completed.get() ? 100 : 0;
-        logger.debug("getProgress() for Habit '{}': {}", getName(), progress);
+        int progress = isCompleted ? 100 : 0;
+        logger.debug("getProgress() for Habit '{}': {}", name, progress);
         return progress;
     }
 
     @Override
     public int getStreak() {
-        logger.debug("getStreak() for Habit '{}': {}", getName(), streak.get());
-        return streak.get();
-    }
-
-    public IntegerProperty streakProperty() {
+        logger.debug("getStreak() for Habit '{}': {}", name, streak);
         return streak;
     }
 
     public boolean isCompleted() {
-        return completed.get();
-    }
-
-    public BooleanProperty completedProperty() {
-        return completed;
+        return isCompleted;
     }
 
     @Override
     public boolean complete() {
-        logger.debug("Attempting to complete Habit '{}'", getName());
-        if (completed.get()) return reportAlreadyCompleted();
+        logger.debug("Attempting to complete Habit '{}'", name);
+        if (isCompleted) return reportAlreadyCompleted();
         markCompleted();
         return true;
     }
 
     private boolean reportAlreadyCompleted() {
-        logger.warn("Habit already completed: {}", getName());
+        logger.warn("Habit already completed: {}", name);
         return false;
     }
 
     private void markCompleted() {
-        completed.set(true);
-        streak.set(streak.get() + 1);
-        logger.info("Habit completed: '{}', new streak={}", getName(), streak.get());
+        isCompleted = true;
+        streak++;
+        logger.info("Habit completed: '{}', new streak={}", name, streak);
     }
 
     @Override
     public Reward getReward() {
-        logger.debug("Getting reward for Habit '{}', streak={}", getName(), streak.get());
-        int rewardThreshold = 10 + (streak.get() * 5);
-        Reward reward = new Reward("Habit Streak", "Reward for completing " + getName(), rewardThreshold);
-        logger.info("Reward generated for Habit '{}': {}", getName(), reward);
+        logger.debug("Getting reward for Habit '{}', streak={}", name, streak);
+        int rewardThreshold = 10 + (streak * 5);
+        Reward reward = new Reward("Habit Streak", "Reward for completing " + name, rewardThreshold);
+        logger.info("Reward generated for Habit '{}': {}", name, reward);
         return reward;
     }
 
     public void resetStreak() {
-        logger.info("Resetting streak for Habit '{}', was {}", getName(), streak.get());
-        streak.set(0);
-        logger.debug("Streak reset complete for Habit '{}'", getName());
+        logger.info("Resetting streak for Habit '{}', was {}", name, streak);
+        streak = 0;
+        logger.debug("Streak reset complete for Habit '{}'", name);
     }
 
     public void print() {
-        logger.debug("print() called for Habit '{}'", getName());
-        System.out.println("Habit: " + getName());
+        logger.debug("print() called for Habit '{}'", name);
+        System.out.println("Habit: " + name);
     }
 
     @Override
     public String toString() {
-        return "Name: " + getName() + "; Description: " + description + "; isCompleted: " + completed.get()
-                + "; Streak: " + streak.get();
+        return "Name: " + name + "; Description: " + description + "; isCompleted: " + isCompleted + "; Streak: " + streak;
     }
 }
 
