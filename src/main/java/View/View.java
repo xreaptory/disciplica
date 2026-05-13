@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.binding.StringExpression;
+import javafx.beans.binding.StringBinding;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -25,7 +25,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -128,7 +127,7 @@ public class View extends Stage {
         habitListTitle.getStyleClass().add("section-title");
         addHabitButton.getStyleClass().add("action-button");
         habitListView.getStyleClass().add("habit-list");
-        StringExpression levelText = Bindings.format("Level: %d (%d XP)",
+        StringBinding levelText = Bindings.format("Level: %d (%d XP)",
                 mainController.levelProperty(),
                 mainController.experienceProperty());
         Label levelLabel = new Label();
