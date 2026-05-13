@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Properties;
 
@@ -24,11 +25,15 @@ public class View extends Stage {
 
     final TextField nameTF,descriptionTF,pointsTF;
 
+    final TextField nameField, typeField, pointsField, descriptionField, streakField, isCompletedField;
+
     final Button addButton,removeButton,changeButton;
 
     final ListView<String> listViewTasks;
 
     final ComboBox<String> comboBox;
+
+    final Button completeButton = new Button("Complete");
 
     ObservableList<String> itemsObservable;
 
@@ -188,6 +193,8 @@ public class View extends Stage {
         comboBox.setPrefHeight(40);
         comboBox.setPrefWidth(250);
 
+
+
         Label format = new Label("Habit List");
         format.setStyle("-fx-font-size: 25px;");
         listViewP.getChildren().addAll(format,listViewTasks);
@@ -223,6 +230,14 @@ public class View extends Stage {
 
         gridPane.add(controlButtons, 0, 18, 2, 1);
 
+        isCompletedField = new TextField();
+        nameField = new TextField();
+        descriptionField = new TextField();
+        pointsField = new TextField();
+        typeField = new TextField();
+        streakField = new TextField();
+
+
 
         hbox.getChildren().add(leftMenu);
         hbox.getChildren().add(gridPane);
@@ -240,30 +255,23 @@ public class View extends Stage {
     }
 
     public void openNewWindow() {
-
-        mainController = new MainController(this);
-
         Stage subStage = new Stage();
         subStage.setTitle("Info");
+        subStage.initModality(Modality.APPLICATION_MODAL);
+        subStage.initOwner(this);
 
         String[] info = mainController.getInfo();
 
-        TextField nameField = new TextField();
         nameField.setEditable(false);
         nameField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField descriptionField = new TextField();
         descriptionField.setEditable(false);
         descriptionField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField pointsField = new TextField();
         pointsField.setEditable(false);
         pointsField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField typeField = new TextField();
         typeField.setEditable(false);
         typeField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField streakField = new TextField();
         streakField.setEditable(false);
         streakField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField isCompletedField = new TextField();
         isCompletedField.setEditable(false);
         isCompletedField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
 
@@ -297,6 +305,11 @@ public class View extends Stage {
             isCompletedField.setText(info[4]);
         }
 
+        completeButton.addEventHandler(Event.ANY,mainController);
+        completeButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;");
+        completeButton.setOnMouseEntered(e -> completeButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, #4fc05f, 10, 0.5, 0, 0);-fx-text-fill: white;-fx-font-weight: bold;"));
+        completeButton.setOnMouseExited(e -> completeButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;"));
+
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -319,10 +332,11 @@ public class View extends Stage {
             gridPane.add(new Label("Completed:"), 0, 5);
             gridPane.add(isCompletedField, 1, 5);
         }
+        gridPane.add(completeButton, 0, 7, 2, 1);
 
 
         VBox vbox = new VBox();
-        Scene scene = new Scene(vbox, 325, 350);
+        Scene scene = new Scene(vbox, 325, 375);
 
         vbox.getChildren().add(gridPane);
 

@@ -1,6 +1,8 @@
 package View;
 
+import javafx.scene.control.Alert;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
 import model.domain.exception.HabitNotFoundException;
 import model.domain.exception.InvalidHabitException;
 import javafx.beans.value.ChangeListener;
@@ -124,12 +126,38 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 System.out.println("Fehler: Punkte müssen eine Zahl sein!");
             }
         }
+
+        if(source == simpleView.completeButton){
+            try{
+                user.printTasks();
+
+                String searchedName = simpleView.nameField.getText();
+                AbstractTask task = user.getTaskName(searchedName);
+
+
+                if(task == null) {
+                    throw new HabitNotFoundException("Habit with name '" + searchedName + "' not found. Please check the name.");
+                }
+
+                user.completeTask(task);
+                simpleView.itemsObservable.setAll(user.getAllHabits());
+
+                ((Stage)simpleView.completeButton.getScene().getWindow()).close();
+            }
+            catch (HabitNotFoundException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Fehler");
+                alert.setHeaderText("Aufgabe nicht gefunden");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+        }
     }
 
     public void handleMouseEvent(MouseEvent event){
         Object source = event.getSource();
 
-        if(source == simpleView.listViewTasks && event.getEventType() == MouseEvent.MOUSE_CLICKED && event.getButton().equals(MouseButton.PRIMARY)&&event.getClickCount() == 2>){
+        if(source == simpleView.listViewTasks && event.getEventType() == MouseEvent.MOUSE_CLICKED && event.getButton().equals(MouseButton.PRIMARY)&&event.getClickCount() == 2){
             simpleView.openNewWindow();
         }
     }

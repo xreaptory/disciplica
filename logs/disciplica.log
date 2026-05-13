@@ -1,18 +1,26 @@
-2026-05-08 11:04:42.769 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: Wäsche
-2026-05-08 11:04:50.061 [JavaFX Application Thread] WARN  model.domain.model.User - Attempted to add duplicate task: Wäsche
-2026-05-08 11:05:13.324 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: Schulsachen kafen
-2026-05-08 11:18:59.880 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 11
-2026-05-08 11:26:27.375 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: su
-2026-05-08 11:28:04.644 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
-2026-05-08 11:29:53.082 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
-2026-05-08 11:30:37.694 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
-2026-05-08 11:31:37.282 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
-2026-05-08 11:32:52.784 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
-2026-05-08 11:33:24.706 [JavaFX Application Thread] INFO  model.domain.model.User - Task changed from 1 to 1
-2026-05-08 11:35:22.737 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: super
-2026-05-08 11:36:42.829 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: gooning
-2026-05-08 11:37:00.193 [JavaFX Application Thread] WARN  model.domain.model.User - Attempted to add duplicate task: gooning
-2026-05-08 11:37:01.649 [JavaFX Application Thread] INFO  model.domain.model.User - Task removed: gooning
-2026-05-08 11:37:03.022 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: gooning
-2026-05-08 11:37:17.790 [JavaFX Application Thread] INFO  model.domain.model.User - Task changed from gooning to gooning
-2026-05-08 11:38:11.588 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: 1
+2026-05-13 10:23:17.410 [JavaFX Application Thread] INFO  model.domain.model.Habit - Habit created successfully: 'fa'
+2026-05-13 10:35:59.219 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: Simon
+2026-05-13 10:43:48.380 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: sf
+2026-05-13 10:45:12.782 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 10:47:37.329 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 10:47:40.111 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: test
+2026-05-13 10:47:41.785 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: test
+2026-05-13 10:47:45.307 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: test
+2026-05-13 10:47:46.224 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: test
+2026-05-13 10:49:02.201 [JavaFX Application Thread] INFO  model.domain.model.User - Task removed: test
+2026-05-13 10:58:42.835 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 10:58:44.808 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: test
+2026-05-13 10:58:46.191 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: test
+2026-05-13 10:58:47.433 [JavaFX Application Thread] ERROR model.domain.model.User - Attempted to operate on non-existent task: test
+2026-05-13 11:09:34.907 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 11:16:35.728 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 11:17:53.629 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 11:22:59.138 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 11:24:41.853 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 11:26:02.291 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 11:27:33.565 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 11:36:12.709 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 11:38:34.203 [JavaFX Application Thread] INFO  model.domain.model.User - Task added: test
+2026-05-13 11:38:35.873 [JavaFX Application Thread] INFO  model.domain.model.AbstractTask - Task completed: 'test' (DailyHabit)
+2026-05-13 11:38:35.873 [JavaFX Application Thread] INFO  model.domain.model.DailyHabit - DailyHabit 'test' completed. New streak: 1
+2026-05-13 11:38:35.873 [JavaFX Application Thread] INFO  model.domain.model.User - Task completed and XP granted: test
