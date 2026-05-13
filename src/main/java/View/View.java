@@ -13,6 +13,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Properties;
 
+import java.io.IOException;
+
 public class View extends Stage {
 
     final Button dashboardBTN = new Button("Dashboard");
@@ -23,15 +25,19 @@ public class View extends Stage {
 
     final Button[] buttonsLMenu = {dashboardBTN, habitsBTN, statsBTN};
 
-    final TextField nameTF,descriptionTF,pointsTF;
+    final HBox hbox = new HBox();
 
-    final TextField nameField, typeField, pointsField, descriptionField, streakField, isCompletedField;
+    public StackPane stackPane = new StackPane();
 
-    final Button addButton,removeButton,changeButton;
+    public TextField nameTF,descriptionTF,pointsTF;
 
-    final ListView<String> listViewTasks;
+    public TextField nameField, typeField, pointsField, descriptionField, streakField, isCompletedField;
 
-    final ComboBox<String> comboBox;
+    public Button addButton,removeButton,changeButton;
+
+    public ListView<String> listViewTasks;
+
+    public ComboBox<String> comboBox;
 
     final Button completeButton = new Button("Complete");
 
@@ -46,18 +52,12 @@ public class View extends Stage {
         mainController = new MainController(this);
 
 
-
-        HBox hbox = new HBox();
         Scene scene = new Scene(hbox, 1100, 600);
         setTitle("Disciplica");
         if (Properties.applicationImageIconAsICO != null) {
             getIcons().add(Properties.applicationImageIconAsICO);
         }
 
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(25, 25, 25, 25));
 
         FlowPane leftMenu = new FlowPane();
 
@@ -73,6 +73,30 @@ public class View extends Stage {
             b.addEventHandler(Event.ANY,mainController);
         }
         leftMenu.getChildren().addAll(dashboardBTN, habitsBTN, statsBTN);
+
+        hbox.getChildren().add(leftMenu);
+
+        this.setOnCloseRequest(event -> {
+            try {
+                mainController.saveData();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        hbox.getChildren().add(stackPane);
+        setScene(scene);
+        setResizable(true);
+        centerOnScreen();
+        show();
+    }
+
+    public void openHabitMenu() throws IOException {
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(25, 25, 25, 25));
 
         nameTF = new TextField();
         nameTF.addEventHandler(Event.ANY,mainController);
@@ -104,6 +128,8 @@ public class View extends Stage {
         FlowPane listViewP = new FlowPane();
         listViewP.setPadding(new Insets(25,0,0,0));
         listViewP.setOrientation(Orientation.VERTICAL);
+
+        mainController.readData();
 
         itemsObservable = FXCollections.observableArrayList(mainController.getHabits());
         listViewTasks = new ListView<>(itemsObservable);
@@ -201,6 +227,7 @@ public class View extends Stage {
 
         FlowPane controlButtons = new FlowPane();
         controlButtons.setHgap(10);
+        controlButtons.setPadding(new Insets(10,0,0,0));
 
         controlButtons.getChildren().addAll(addButton,removeButton,changeButton);
 
@@ -237,21 +264,21 @@ public class View extends Stage {
         typeField = new TextField();
         streakField = new TextField();
 
+        HBox contentWrapper = new HBox(20);
+        contentWrapper.getChildren().addAll(gridPane, listViewP);
 
 
-        hbox.getChildren().add(leftMenu);
-        hbox.getChildren().add(gridPane);
-        hbox.getChildren().add(listViewP);
+        stackPane.getChildren().setAll(contentWrapper);
+    }
 
-        GridPane rightMenu = new GridPane();
+    public void openDashboard(){
+        stackPane.getChildren().clear();
+        stackPane.getChildren().add(new Label("Dashboard"));
+    }
 
-
-
-        hbox.getChildren().add(rightMenu);
-        setScene(scene);
-        setResizable(true);
-        centerOnScreen();
-        show();
+    public void openStats(){
+        stackPane.getChildren().clear();
+        stackPane.getChildren().add(new Label("Stats"));
     }
 
     public void openNewWindow() {
@@ -306,6 +333,7 @@ public class View extends Stage {
         }
 
         completeButton.addEventHandler(Event.ANY,mainController);
+        completeButton.setPrefSize(125, 40);
         completeButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;");
         completeButton.setOnMouseEntered(e -> completeButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, #4fc05f, 10, 0.5, 0, 0);-fx-text-fill: white;-fx-font-weight: bold;"));
         completeButton.setOnMouseExited(e -> completeButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;"));
