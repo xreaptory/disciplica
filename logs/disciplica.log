@@ -239,3 +239,5 @@
 2026-05-13 18:09:06.917 [JavaFX Application Thread] INFO  model.domain.model.DailyHabit - Setting streak for DailyHabit 'test', was 0, now 1
 2026-05-13 18:09:06.920 [JavaFX Application Thread] INFO  model.domain.model.WeeklyHabit - Setting streak for DailyHabit 'test3', was 0, now 0
 2026-05-13 18:09:10.971 [JavaFX Application Thread] INFO  model.domain.model.User - Tasks successfully written to C:\Users\Simon_FussballKicker.NB-S200120\Documents\GitHub\disciplica/data/tasks.txt
+2026-05-13 18:12:47.867 [JavaFX Application Thread] INFO  model.domain.model.User - Tasks successfully written to C:\Users\Simon_FussballKicker.NB-S200120\Documents\GitHub\disciplica/data/tasks.txt
+2026-05-13 18:13:04.294 [JavaFX Application Thread] INFO  model.domain.model.User - Tasks successfully written to C:\Users\Simon_FussballKicker.NB-S200120\Documents\GitHub\disciplica/data/tasks.txt
