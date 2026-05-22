@@ -5,9 +5,12 @@ import model.domain.exception.HabitNotFoundException;
 import model.domain.exception.InvalidHabitException;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +21,8 @@ public class User implements Trackable {
     private int experience;
     private String title;
     private final ArrayList<AbstractTask> tasks;
+    private final Map<String, Integer> completionsByDate;
+    private final ArrayList<Integer> xpHistory;
 
     public User(String username) {
         this.username = username;
@@ -25,6 +30,9 @@ public class User implements Trackable {
         level = 1;
         experience = 0;
         tasks = new ArrayList<>();
+        completionsByDate = new HashMap<>();
+        xpHistory = new ArrayList<>();
+        xpHistory.add(experience);
     }
 
     public String getUsername() {
@@ -157,6 +165,7 @@ public class User implements Trackable {
         if (!task.complete()) {
             return false;
         }
+        recordCompletionNow();
         grantExperience(task.calculatePoints());
         logger.info("Task completed and XP granted: {}", task.getName());
         return true;
@@ -166,6 +175,7 @@ public class User implements Trackable {
         experience += awardedExperience;
         applyLevelUps();
         updateTitle();
+        appendXpHistory(experience);
     }
 
     private void applyLevelUps() {
@@ -207,6 +217,19 @@ public class User implements Trackable {
         title = resolveTitle(level);
     }
 
+    private void recordCompletionNow() {
+        String today = LocalDate.now().toString();
+        completionsByDate.put(today, completionsByDate.getOrDefault(today, 0) + 1);
+    }
+
+    private void appendXpHistory(int currentExperience) {
+        xpHistory.add(currentExperience);
+        int maxHistoryEntries = 200;
+        if (xpHistory.size() > maxHistoryEntries) {
+            xpHistory.remove(0);
+        }
+    }
+
     private String resolveTitle(int currentLevel) {
         if (currentLevel >= 25) return "Master";
         if (currentLevel >= 20) return "Legend";
@@ -242,6 +265,22 @@ public class User implements Trackable {
         return tasks.stream()
                 .sorted(Comparator.comparingInt(AbstractTask::getStreak).reversed())
                 .toList();
+    }
+
+    public int getCompletionCountForDate(LocalDate date) {
+        return completionsByDate.getOrDefault(date.toString(), 0);
+    }
+
+    public List<Integer> getXpHistoryWindow(int size) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int start = Math.max(0, xpHistory.size() - size);
+        for (int i = start; i < xpHistory.size(); i++) {
+            result.add(xpHistory.get(i));
+        }
+        while (result.size() < size) {
+            result.add(0, experience);
+        }
+        return result;
     }
 
     public void writeTaskTxt() throws IOException {
@@ -323,6 +362,10 @@ public class User implements Trackable {
             String line = String.format("%s;%d;%d;%s",
                     username, level, experience, title);
             bw.write(line);
+            bw.newLine();
+            bw.write("completions=" + serializeCompletions());
+            bw.newLine();
+            bw.write("xpHistory=" + serializeXpHistory());
             logger.info("User data successfully written to {}", path);
         } catch (IOException e) {
             logger.error("Failed to write user data to file: {}", e.getMessage());
@@ -344,9 +387,74 @@ public class User implements Trackable {
             level = Integer.parseInt(parts[1]);
             experience = Integer.parseInt(parts[2]);
             title = parts[3];
+
+            completionsByDate.clear();
+            xpHistory.clear();
+            xpHistory.add(experience);
+
+            String extraLine;
+            while ((extraLine = br.readLine()) != null) {
+                if (extraLine.startsWith("completions=")) {
+                    parseCompletions(extraLine.substring("completions=".length()));
+                } else if (extraLine.startsWith("xpHistory=")) {
+                    parseXpHistory(extraLine.substring("xpHistory=".length()));
+                }
+            }
         } catch (IOException e) {
             logger.error("Failed to read user data from file: {}", e.getMessage());
             throw e;
+        }
+    }
+
+    private String serializeCompletions() {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (Map.Entry<String, Integer> entry : completionsByDate.entrySet()) {
+            if (!first) {
+                sb.append(",");
+            }
+            sb.append(entry.getKey()).append(":").append(entry.getValue());
+            first = false;
+        }
+        return sb.toString();
+    }
+
+    private String serializeXpHistory() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < xpHistory.size(); i++) {
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append(xpHistory.get(i));
+        }
+        return sb.toString();
+    }
+
+    private void parseCompletions(String payload) {
+        if (payload == null || payload.isBlank()) {
+            return;
+        }
+        String[] entries = payload.split(",");
+        for (String entry : entries) {
+            String[] keyValue = entry.split(":");
+            if (keyValue.length != 2) {
+                continue;
+            }
+            completionsByDate.put(keyValue[0], Integer.parseInt(keyValue[1]));
+        }
+    }
+
+    private void parseXpHistory(String payload) {
+        if (payload == null || payload.isBlank()) {
+            return;
+        }
+        xpHistory.clear();
+        String[] values = payload.split(",");
+        for (String value : values) {
+            xpHistory.add(Integer.parseInt(value));
+        }
+        if (xpHistory.isEmpty()) {
+            xpHistory.add(experience);
         }
     }
 
