@@ -8,7 +8,10 @@ import model.domain.model.DailyHabit;
 import model.domain.model.OneTimeTask;
 import model.domain.model.User;
 import model.domain.model.WeeklyHabit;
-import model.persistence.FileTaskRepository;
+import model.domain.repository.TaskRepository;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import model.di.AppModule;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main {
+    private static final Injector injector = Guice.createInjector(new AppModule());
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static final String MENU_OPTION_SHOW_TASKS = "1";
     private static final String MENU_OPTION_COMPLETE_TASK = "2";
@@ -40,8 +44,8 @@ public class Main {
 
     private static AppContext createContext() {
         Scanner userInput = new Scanner(System.in);
-        FileTaskRepository repository = new FileTaskRepository();
-        User user = new User("Simon");
+        TaskRepository repository = injector.getInstance(TaskRepository.class);
+        User user = injector.getInstance(User.class);
         return new AppContext(userInput, user, repository);
     }
 
@@ -65,7 +69,7 @@ public class Main {
         logger.info("Completable item was already completed");
     }
 
-    private static void initializeUserTasks(User user, FileTaskRepository repository) {
+    private static void initializeUserTasks(User user, TaskRepository repository) {
         try {
             List<AbstractTask> savedTasks = repository.load();
             initializeFromLoadedTasks(user, repository, savedTasks);
@@ -76,7 +80,7 @@ public class Main {
         }
     }
 
-    private static void initializeFromLoadedTasks(User user, FileTaskRepository repository,
+    private static void initializeFromLoadedTasks(User user, TaskRepository repository,
             List<AbstractTask> savedTasks) throws InvalidHabitException, IOException {
         if (savedTasks.isEmpty()) {
             createAndPersistDefaultTasks(user, repository);
@@ -99,7 +103,7 @@ public class Main {
         }
     }
 
-    private static void handleLoadFailure(User user, FileTaskRepository repository,
+    private static void handleLoadFailure(User user, TaskRepository repository,
             IOException ioException) {
         logger.error("Failed to load tasks from file", ioException);
         System.out.println("Warning: Could not load saved tasks. Starting fresh.");
@@ -115,7 +119,7 @@ public class Main {
                System.out.println("Error initializing tasks: " + invalidHabitException.getMessage());
     }
 
-    private static void createAndPersistDefaultTasks(User user, FileTaskRepository repository)
+    private static void createAndPersistDefaultTasks(User user, TaskRepository repository)
             throws InvalidHabitException, IOException {
         logger.info("Creating default tasks");
         System.out.println("Welcome! Setting up your initial tasks...");
@@ -331,7 +335,7 @@ public class Main {
         logger.warn("Invalid menu option selected: {}", selectedOption);
     }
 
-    private record AppContext(Scanner input, User user, FileTaskRepository repository) {
+    private record AppContext(Scanner input, User user, TaskRepository repository) {
     }
 }
 
