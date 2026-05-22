@@ -1,6 +1,8 @@
 package View;
 
+import javafx.scene.control.Alert;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
 import model.domain.exception.HabitNotFoundException;
 import model.domain.exception.InvalidHabitException;
 import javafx.beans.value.ChangeListener;
@@ -11,6 +13,8 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.domain.model.*;
+
+import java.io.IOException;
 
 public class MainController implements EventHandler<Event>, ChangeListener<String> {
 
@@ -23,8 +27,20 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         this.simpleView = simpleView;
     }
 
-    public void handleActionEvent(ActionEvent event) throws InvalidHabitException, HabitNotFoundException {
+    public void handleActionEvent(ActionEvent event) throws InvalidHabitException, HabitNotFoundException, IOException {
         Object source = event.getSource();
+
+        if(source == simpleView.habitsBTN){
+            simpleView.openHabitMenu();
+        }
+
+        if(source == simpleView.statsBTN){
+            simpleView.openStats();
+        }
+
+        if(source == simpleView.dashboardBTN){
+            simpleView.openDashboard();
+        }
 
         if (source == simpleView.addButton) {
             String typ = simpleView.comboBox.getSelectionModel().getSelectedItem().toString();
@@ -89,39 +105,88 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 String selectedItem = simpleView.listViewTasks.getSelectionModel().getSelectedItem();
                 if (selectedItem == null) return;
 
-                String[] old = selectedItem.split(";");
-                String oldTypLetter = old[0];
+                String[] oldParts = selectedItem.split(";");
+                String oldTypLetter = oldParts[0];
+                String oldName = oldParts[1];
 
-                AbstractTask oldHabit;
-                if (oldTypLetter.equals("D")) {
-                    oldHabit = new DailyHabit(old[1], old[2], Integer.parseInt(old[3]));
-                } else if (oldTypLetter.equals("W")) {
-                    oldHabit = new WeeklyHabit(old[1], old[2], Integer.parseInt(old[3]));
-                } else {
-                    oldHabit = new OneTimeTask(old[1], old[2], Integer.parseInt(old[3]));
-                }
+                AbstractTask oldTask = user.getTaskName(oldName);
+
+                if (oldTask == null) return;
 
                 String typNew = simpleView.comboBox.getSelectionModel().getSelectedItem().toString();
-                AbstractTask   newHabit;
                 String name = simpleView.nameTF.getText();
                 String desc = simpleView.descriptionTF.getText();
                 int points = Integer.parseInt(simpleView.pointsTF.getText());
 
+                AbstractTask newTask;
                 if (typNew.equals("Daily Habit")) {
-                    newHabit = new DailyHabit(name, desc, points);
+                    newTask = new DailyHabit(name, desc, points);
                 } else if (typNew.equals("Weekly Habit")) {
-                    newHabit = new WeeklyHabit(name, desc, points);
+                    newTask = new WeeklyHabit(name, desc, points);
                 } else {
-                    newHabit = new OneTimeTask(name, desc, points);
+                    newTask = new OneTimeTask(name, desc, points);
                 }
 
-                user.changeTask(oldHabit, newHabit);
+                newTask.setCompleted(oldTask.isCompleted());
+                if (newTask instanceof DailyHabit && oldTask instanceof DailyHabit) {
+                    ((DailyHabit) newTask).setStreak(((DailyHabit) oldTask).getStreak());
+                } else if (newTask instanceof WeeklyHabit && oldTask instanceof WeeklyHabit) {
+                    ((WeeklyHabit) newTask).setStreak(((WeeklyHabit) oldTask).getStreak());
+                }
+
+                user.changeTask(oldTask, newTask);
+
                 simpleView.itemsObservable.setAll(user.getAllHabits());
 
             } catch (InvalidHabitException | HabitNotFoundException e) {
-                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Fehler beim Ändern: " + e.getMessage());
+                alert.showAndWait();
             } catch (NumberFormatException e) {
-                System.out.println("Fehler: Punkte müssen eine Zahl sein!");
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Punkte müssen eine Zahl sein!");
+                alert.showAndWait();
+            }
+        }
+
+        if(source == simpleView.completeButton){
+            try{
+                user.printTasks();
+
+                String searchedName = simpleView.nameField.getText();
+                String typ = simpleView.typeField.getText();
+                AbstractTask task = user.getTaskName(searchedName);
+
+
+                if(task == null) {
+                    throw new HabitNotFoundException("Habit with name '" + searchedName + "' not found. Please check the name.");
+                }
+
+                user.completeTask(task);
+                if(typ.equals("OneTimeTask")) {
+                    user.removeTask(task);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Aufgabe abgeschlossen");
+                    alert.setHeaderText("Aufgabe '" + searchedName + "' abgeschlossen und entfernt!");
+                    alert.setContentText("Du hast " + task.calculatePoints() + " Punkte erhalten!");
+                    alert.showAndWait();
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Aufgabe abgeschlossen");
+                    alert.setHeaderText("Aufgabe '" + searchedName + "' abgeschlossen!");
+                    alert.setContentText("Du hast " + task.calculatePoints() + " Punkte erhalten! Streak: " + task.getStreak());
+                    alert.showAndWait();
+                }
+
+                simpleView.itemsObservable.setAll(user.getAllHabits());
+
+                ((Stage)simpleView.completeButton.getScene().getWindow()).close();
+            }
+            catch (HabitNotFoundException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Fehler");
+                alert.setHeaderText("Aufgabe nicht gefunden");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
             }
         }
     }
@@ -146,12 +211,22 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         return simpleView.listViewTasks.getSelectionModel().getSelectedItem().toString().split(";");
     }
 
+    public void saveData() throws IOException {
+        user.writeTaskTxt();
+    }
+
+    public void readData() throws IOException {
+        user.readTaskTxt();
+    }
+
     @Override
-    public void handle(Event event) {
+    public void handle(Event event){
         if(event instanceof ActionEvent) {
             try {
                 handleActionEvent((ActionEvent) event);
             } catch (InvalidHabitException | HabitNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }

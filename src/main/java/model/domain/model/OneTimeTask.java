@@ -31,7 +31,7 @@ public class OneTimeTask extends AbstractTask {
     }
 
     public String toString(){
-        return "O;"+getName()+";"+getDescription()+";"+getPoints();
+        return "O;"+getName()+";"+getDescription()+";"+getPoints()+";"+isCompleted();
     }
 
     @Override
