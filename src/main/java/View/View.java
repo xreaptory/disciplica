@@ -2,38 +2,18 @@ package View;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.binding.StringExpression;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Properties;
+
+import java.io.IOException;
 
 public class View extends Stage {
 
@@ -45,13 +25,21 @@ public class View extends Stage {
 
     final Button[] buttonsLMenu = {dashboardBTN, habitsBTN, statsBTN};
 
-    final TextField nameTF,descriptionTF,pointsTF;
+    final HBox hbox = new HBox();
 
-    final Button addButton,removeButton,changeButton;
+    public StackPane stackPane = new StackPane();
 
-    final ListView<String> listViewTasks;
+    public TextField nameTF,descriptionTF,pointsTF;
 
-    final ComboBox<String> comboBox;
+    public TextField nameField, typeField, pointsField, descriptionField, streakField, isCompletedField;
+
+    public Button addButton,removeButton,changeButton;
+
+    public ListView<String> listViewTasks;
+
+    public ComboBox<String> comboBox;
+
+    final Button completeButton = new Button("Complete");
 
     ObservableList<String> itemsObservable;
 
@@ -64,18 +52,12 @@ public class View extends Stage {
         mainController = new MainController(this);
 
 
-
-        HBox hbox = new HBox();
         Scene scene = new Scene(hbox, 1100, 600);
         setTitle("Disciplica");
         if (Properties.applicationImageIconAsICO != null) {
             getIcons().add(Properties.applicationImageIconAsICO);
         }
 
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(25, 25, 25, 25));
 
         FlowPane leftMenu = new FlowPane();
 
@@ -91,6 +73,30 @@ public class View extends Stage {
             b.addEventHandler(Event.ANY,mainController);
         }
         leftMenu.getChildren().addAll(dashboardBTN, habitsBTN, statsBTN);
+
+        hbox.getChildren().add(leftMenu);
+
+        this.setOnCloseRequest(event -> {
+            try {
+                mainController.saveData();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        hbox.getChildren().add(stackPane);
+        setScene(scene);
+        setResizable(true);
+        centerOnScreen();
+        show();
+    }
+
+    public void openHabitMenu() throws IOException {
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(25, 25, 25, 25));
 
         nameTF = new TextField();
         nameTF.addEventHandler(Event.ANY,mainController);
@@ -123,6 +129,8 @@ public class View extends Stage {
         listViewP.setPadding(new Insets(25,0,0,0));
         listViewP.setOrientation(Orientation.VERTICAL);
 
+        mainController.readData();
+
         itemsObservable = FXCollections.observableArrayList(mainController.getHabits());
         listViewTasks = new ListView<>(itemsObservable);
         listViewTasks.getSelectionModel().selectedItemProperty().addListener(mainController);
@@ -147,59 +155,17 @@ public class View extends Stage {
                         "-fx-border-width: 2px;"
         );
         comboBox.getSelectionModel().selectFirst();
+        comboBox.setStyle(
+                "-fx-background-color: #315184;" +
+                        "-fx-background-radius: 5px;" +
+                        "-fx-border-color: #4a6691;" +
+                        "-fx-border-radius: 5px;" +
+                        "-fx-min-width: 200px;" +
+                        "-fx-pref-height: 40px;" +
+                        "-fx-border-width: 2px;"
+        );
 
-        root = new BorderPane();
-        root.getStyleClass().add("app-root");
-        Scene scene = new Scene(root, 1100, 600);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-
-        setTitle("Disciplica");
-        if (Properties.applicationImageIconAsICO != null) {
-            getIcons().add(Properties.applicationImageIconAsICO);
-        }
-        MenuBar menuBar = new MenuBar();
-        menuBar.getStyleClass().add("app-menu");
-        menuBar.getMenus().addAll(new Menu("File"), new Menu("Edit"), new Menu("View"));
-        root.setTop(menuBar);
-
-        VBox leftMenu = new VBox(10);
-        leftMenu.getStyleClass().add("nav-panel");
-        leftMenu.setPadding(new Insets(12, 12, 12, 12));
-        leftMenu.setPrefWidth(180);
-        for (Button b : buttonsLMenu) {
-            b.setMaxWidth(Double.MAX_VALUE);
-            b.getStyleClass().add("nav-button");
-        }
-        dashboardBTN.setOnAction(event -> showHabitsView());
-        habitsBTN.setOnAction(event -> showHabitsView());
-        statsBTN.setOnAction(event -> showStatsView());
-        leftMenu.getChildren().addAll(dashboardBTN, habitsBTN, statsBTN);
-        root.setLeft(leftMenu);
-
-        habitListBox = new VBox(10);
-        habitListBox.getStyleClass().add("center-panel");
-        habitListBox.setPadding(new Insets(12, 12, 12, 12));
-        Label habitListTitle = new Label("Habit List");
-        habitListTitle.getStyleClass().add("section-title");
-        addHabitButton.getStyleClass().add("action-button");
-        habitListView.getStyleClass().add("habit-list");
-        StringExpression levelText = Bindings.format("Level: %d (%d XP)",
-                mainController.levelProperty(),
-                mainController.experienceProperty());
-        Label levelLabel = new Label();
-        levelLabel.textProperty().bind(levelText);
-
-        DoubleBinding completionPercentBinding = Bindings.createDoubleBinding(() -> {
-            int total = habitItemsObservable.size();
-            if (total == 0) return 0.0;
-            long completed = habitItemsObservable.stream().filter(Habit::isCompleted).count();
-            return (double) completed / total;
-        }, habitItemsObservable);
-        ProgressBar completionProgress = new ProgressBar(0);
-        completionProgress.progressProperty().bind(completionPercentBinding);
-        HBox progressRow = new HBox(10, levelLabel, completionProgress);
-        HBox.setHgrow(completionProgress, Priority.ALWAYS);
-        habitListView.setCellFactory(list -> new ListCell<>() {
+        comboBox.setButtonCell(new ListCell<String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -253,12 +219,15 @@ public class View extends Stage {
         comboBox.setPrefHeight(40);
         comboBox.setPrefWidth(250);
 
+
+
         Label format = new Label("Habit List");
         format.setStyle("-fx-font-size: 25px;");
         listViewP.getChildren().addAll(format,listViewTasks);
 
         FlowPane controlButtons = new FlowPane();
         controlButtons.setHgap(10);
+        controlButtons.setPadding(new Insets(10,0,0,0));
 
         controlButtons.getChildren().addAll(addButton,removeButton,changeButton);
 
@@ -288,47 +257,48 @@ public class View extends Stage {
 
         gridPane.add(controlButtons, 0, 18, 2, 1);
 
+        isCompletedField = new TextField();
+        nameField = new TextField();
+        descriptionField = new TextField();
+        pointsField = new TextField();
+        typeField = new TextField();
+        streakField = new TextField();
 
-        hbox.getChildren().add(leftMenu);
-        hbox.getChildren().add(gridPane);
-        hbox.getChildren().add(listViewP);
-
-        GridPane rightMenu = new GridPane();
+        HBox contentWrapper = new HBox(20);
+        contentWrapper.getChildren().addAll(gridPane, listViewP);
 
 
+        stackPane.getChildren().setAll(contentWrapper);
+    }
 
-        hbox.getChildren().add(rightMenu);
-        setScene(scene);
-        setResizable(true);
-        centerOnScreen();
-        show();
+    public void openDashboard(){
+        stackPane.getChildren().clear();
+        stackPane.getChildren().add(new Label("Dashboard"));
+    }
+
+    public void openStats(){
+        stackPane.getChildren().clear();
+        stackPane.getChildren().add(new Label("Stats"));
     }
 
     public void openNewWindow() {
-
-        mainController = new MainController(this);
-
         Stage subStage = new Stage();
         subStage.setTitle("Info");
+        subStage.initModality(Modality.APPLICATION_MODAL);
+        subStage.initOwner(this);
 
         String[] info = mainController.getInfo();
 
-        TextField nameField = new TextField();
         nameField.setEditable(false);
         nameField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField descriptionField = new TextField();
         descriptionField.setEditable(false);
         descriptionField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField pointsField = new TextField();
         pointsField.setEditable(false);
         pointsField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField typeField = new TextField();
         typeField.setEditable(false);
         typeField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField streakField = new TextField();
         streakField.setEditable(false);
         streakField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        TextField isCompletedField = new TextField();
         isCompletedField.setEditable(false);
         isCompletedField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
 
@@ -362,6 +332,12 @@ public class View extends Stage {
             isCompletedField.setText(info[4]);
         }
 
+        completeButton.addEventHandler(Event.ANY,mainController);
+        completeButton.setPrefSize(125, 40);
+        completeButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;");
+        completeButton.setOnMouseEntered(e -> completeButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, #4fc05f, 10, 0.5, 0, 0);-fx-text-fill: white;-fx-font-weight: bold;"));
+        completeButton.setOnMouseExited(e -> completeButton.setStyle("-fx-background-color: #4fc05f;-fx-background-radius: 5px;-fx-border-color: #2f7538; -fx-border-width: 1px;-fx-border-radius: 5px;-fx-text-fill: white;-fx-font-weight: bold;"));
+
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -384,10 +360,11 @@ public class View extends Stage {
             gridPane.add(new Label("Completed:"), 0, 5);
             gridPane.add(isCompletedField, 1, 5);
         }
+        gridPane.add(completeButton, 0, 7, 2, 1);
 
 
         VBox vbox = new VBox();
-        Scene scene = new Scene(vbox, 325, 350);
+        Scene scene = new Scene(vbox, 325, 375);
 
         vbox.getChildren().add(gridPane);
 

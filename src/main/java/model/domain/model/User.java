@@ -3,6 +3,8 @@ package model.domain.model;
 import model.domain.contract.Trackable;
 import model.domain.exception.HabitNotFoundException;
 import model.domain.exception.InvalidHabitException;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -58,8 +60,16 @@ public class User implements Trackable {
             logger.warn("Attempted to change a task with null values");
             throw new InvalidHabitException("Old and new tasks cannot be null");
         }
+
         ensureTaskExists(oldTask);
-        rejectDuplicateTask(newTask);
+
+        for (AbstractTask t : tasks) {
+            if (t.getName().equals(newTask.getName()) && t != oldTask) {
+                logger.error("Attempted to change task name to an already existing name: {}", newTask.getName());
+                throw new InvalidHabitException("Task with the same name already exists: " + newTask.getName());
+            }
+        }
+
         int index = tasks.indexOf(oldTask);
         tasks.set(index, newTask);
         logger.info("Task changed from {} to {}", oldTask.getName(), newTask.getName());
@@ -81,6 +91,15 @@ public class User implements Trackable {
             habits[i++] = task.toString();
         }
         return habits;
+    }
+
+    public AbstractTask getTaskName(String name){
+        for(AbstractTask t : tasks){
+            if(t.getName().equals(name)){
+                return t;
+            }
+        }
+        return null;
     }
 
     public AbstractTask removeTask(AbstractTask task) throws HabitNotFoundException {
@@ -109,9 +128,11 @@ public class User implements Trackable {
     }
 
     private void rejectDuplicateTask(AbstractTask task) throws InvalidHabitException {
-        if (tasks.contains(task)) {
-            logger.warn("Attempted to add duplicate task: {}", task.getName());
-            throw new InvalidHabitException("Task already exists: " + task.getName());
+        for (AbstractTask t : tasks) {
+            if (t.getName().equals(task.getName())) {
+                logger.error("Attempted to add a duplicate task: {}", task.getName());
+                throw new InvalidHabitException("Task with the same name already exists: " + task.getName());
+            }
         }
     }
 
@@ -205,6 +226,76 @@ public class User implements Trackable {
         return tasks.stream()
                 .sorted(Comparator.comparingInt(AbstractTask::getStreak).reversed())
                 .toList();
+    }
+
+    public void writeTaskTxt() throws IOException {
+        String path = System.getProperty("user.dir") + "/data/tasks.txt";
+        File file = new File(path);
+        file.getParentFile().mkdirs();
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            for (AbstractTask t : tasks) {
+                String type = t instanceof DailyHabit ? "D" : (t instanceof WeeklyHabit ? "W" : "O");
+                String line = String.format("%s;%s;%s;%d;%b;%d",
+                        type,
+                        t.getName(),
+                        t.getDescription(),
+                        t.calculatePoints(),
+                        t.isCompleted(),
+                        t.getStreak()
+                );
+                bw.write(line);
+                bw.newLine();
+            }
+            logger.info("Tasks successfully written to {}", path);
+        } catch (IOException e) {
+            logger.error("Failed to write tasks to file: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    public void readTaskTxt() throws IOException {
+        String path = System.getProperty("user.dir") + "/data/tasks.txt";
+        File file = new File(path);
+        if (!file.exists()) return; // Nichts zu tun, wenn keine Datei da ist
+
+        tasks.clear();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts.length < 6) continue;
+
+                AbstractTask task = null;
+                String type = parts[0];
+                String name = parts[1];
+                String desc = parts[2];
+                int points = Integer.parseInt(parts[3]);
+                boolean isDone = Boolean.parseBoolean(parts[4]);
+                int streak = Integer.parseInt(parts[5]);
+
+                if (type.equals("D")) {
+                    DailyHabit dh = new DailyHabit(name, desc, points);
+                    dh.setStreak(streak);
+                    task = dh;
+                } else if (type.equals("W")) {
+                    WeeklyHabit wh = new WeeklyHabit(name, desc, points);
+                    wh.setStreak(streak);
+                    task = wh;
+                } else if (type.equals("O")) {
+                    task = new OneTimeTask(name, desc, points);
+                }
+
+                if (task != null) {
+                    task.setCompleted(isDone);
+                    tasks.add(task);
+                }
+            }
+        } catch (InvalidHabitException e) {
+            logger.error("Invalid habit data in file: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
