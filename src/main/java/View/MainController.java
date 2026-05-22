@@ -219,6 +219,18 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         user.readTaskTxt();
     }
 
+    public void readUserData() throws IOException {
+        user.readUserTxt();
+    }
+
+    public void saveUserData() throws IOException {
+        user.writeUserTxt();
+    }
+
+    public User getUser() {
+        return user.getUser();
+    }
+
     @Override
     public void handle(Event event){
         if(event instanceof ActionEvent) {

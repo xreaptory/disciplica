@@ -31,7 +31,11 @@ public class View extends Stage {
 
     public TextField nameTF,descriptionTF,pointsTF;
 
-    public TextField nameField, typeField, pointsField, descriptionField, streakField, isCompletedField;
+    public TextField nameField, typeField, pointsField, descriptionField, streakField;
+
+    public CheckBox isCompletedCB;
+
+    public TextField usernameTF, levelTF, titelTF, expirienceTF;
 
     public Button addButton,removeButton,changeButton;
 
@@ -50,6 +54,13 @@ public class View extends Stage {
     public View() {
 
         mainController = new MainController(this);
+
+        try {
+            mainController.readData();
+            mainController.readUserData();
+        } catch (IOException e) {
+            System.err.println("Fehler beim Laden der Daten: " + e.getMessage());
+        }
 
 
         Scene scene = new Scene(hbox, 1100, 600);
@@ -79,6 +90,7 @@ public class View extends Stage {
         this.setOnCloseRequest(event -> {
             try {
                 mainController.saveData();
+                mainController.saveUserData();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -104,6 +116,8 @@ public class View extends Stage {
         descriptionTF.addEventHandler(Event.ANY,mainController);
         pointsTF = new TextField();
         pointsTF.addEventHandler(Event.ANY,mainController);
+        streakField = new TextField();
+        streakField.addEventHandler(Event.ANY,mainController);
 
 
         addButton = new Button("Add");
@@ -129,7 +143,6 @@ public class View extends Stage {
         listViewP.setPadding(new Insets(25,0,0,0));
         listViewP.setOrientation(Orientation.VERTICAL);
 
-        mainController.readData();
 
         itemsObservable = FXCollections.observableArrayList(mainController.getHabits());
         listViewTasks = new ListView<>(itemsObservable);
@@ -216,6 +229,9 @@ public class View extends Stage {
         pointsTF.setPrefWidth(250);
         pointsTF.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
         pointsTF.setPromptText("Enter habit points");
+        streakField.setPrefHeight(40);
+        streakField.setPrefWidth(250);
+        streakField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
         comboBox.setPrefHeight(40);
         comboBox.setPrefWidth(250);
 
@@ -257,12 +273,13 @@ public class View extends Stage {
 
         gridPane.add(controlButtons, 0, 18, 2, 1);
 
-        isCompletedField = new TextField();
+
         nameField = new TextField();
         descriptionField = new TextField();
         pointsField = new TextField();
         typeField = new TextField();
         streakField = new TextField();
+        isCompletedCB = new CheckBox();
 
         HBox contentWrapper = new HBox(20);
         contentWrapper.getChildren().addAll(gridPane, listViewP);
@@ -278,7 +295,40 @@ public class View extends Stage {
 
     public void openStats(){
         stackPane.getChildren().clear();
-        stackPane.getChildren().add(new Label("Stats"));
+        GridPane gridPane = new GridPane();
+
+        usernameTF = new TextField();
+        usernameTF.setEditable(false);
+        usernameTF.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
+        levelTF = new TextField();
+        levelTF.setEditable(false);
+        levelTF.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
+        titelTF = new TextField();
+        titelTF.setEditable(false);
+        titelTF.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
+        expirienceTF = new TextField();
+        expirienceTF.setEditable(false);
+        expirienceTF.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
+
+        usernameTF.setText(mainController.getUser().getUsername());
+        levelTF.setText(String.valueOf(mainController.getUser().getLevel()));
+        titelTF.setText(mainController.getUser().getTitle());
+        expirienceTF.setText(String.valueOf(mainController.getUser().getExperience()));
+
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(25, 25, 25, 25));
+        gridPane.add(new Label("Username:"), 0, 1);
+        gridPane.add(usernameTF, 1, 1);
+        gridPane.add(new Label("Level:"), 0, 2);
+        gridPane.add(levelTF, 1, 2);
+        gridPane.add(new Label("Title:"), 0, 3);
+        gridPane.add(titelTF, 1, 3);
+        gridPane.add(new Label("Experience:"), 0, 4);
+        gridPane.add(expirienceTF, 1, 4);
+
+
+        stackPane.getChildren().add(gridPane);
     }
 
     public void openNewWindow() {
@@ -299,8 +349,9 @@ public class View extends Stage {
         typeField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
         streakField.setEditable(false);
         streakField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
-        isCompletedField.setEditable(false);
-        isCompletedField.setStyle("-fx-background-color: #2d5185;-fx-text-fill: white;-fx-font-size: 15px;-fx-border-color: #7f7fab;-fx-border-width: 2px;-fx-border-radius: 6px;-fx-background-radius: 6px;");
+        isCompletedCB.setStyle("-fx-text-fill: white;-fx-font-size: 15px;-fx-background-color: white;");
+        isCompletedCB = new CheckBox();
+        isCompletedCB.setDisable(true);
 
         if(!info[0].equals("O")){
             nameField.setText(info[1]);
@@ -315,7 +366,7 @@ public class View extends Stage {
                 typeField.setText("OneTimeTask");
             }
             streakField.setText(info[5]);
-            isCompletedField.setText(info[4]);
+            isCompletedCB.setSelected(info[4].equals("true"));
         }
         else {
             nameField.setText(info[1]);
@@ -329,7 +380,7 @@ public class View extends Stage {
             else {
                 typeField.setText("OneTimeTask");
             }
-            isCompletedField.setText(info[4]);
+            isCompletedCB.setSelected(info[4].equals("true"));
         }
 
         completeButton.addEventHandler(Event.ANY,mainController);
@@ -354,11 +405,11 @@ public class View extends Stage {
             gridPane.add(new Label("Streak:"), 0, 5);
             gridPane.add(streakField, 1, 5);
             gridPane.add(new Label("Completed:"), 0, 6);
-            gridPane.add(isCompletedField, 1, 6);
+            gridPane.add(isCompletedCB, 1, 6);
         }
         else {
             gridPane.add(new Label("Completed:"), 0, 5);
-            gridPane.add(isCompletedField, 1, 5);
+            gridPane.add(isCompletedCB, 1, 5);
         }
         gridPane.add(completeButton, 0, 7, 2, 1);
 

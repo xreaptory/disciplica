@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class User implements Trackable {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
-    private final String username;
+    private String username;
     private int level;
     private int experience;
     private String title;
@@ -175,6 +175,22 @@ public class User implements Trackable {
         }
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public User getUser() {
+        return this;
+    }
+
     private boolean isReadyForNextLevel() {
         return experience >= requiredExperienceForCurrentLevel();
     }
@@ -297,6 +313,44 @@ public class User implements Trackable {
             throw new RuntimeException(e);
         }
     }
+
+    public void writeUserTxt() throws IOException {
+        String path = System.getProperty("user.dir") + "/data/user.txt";
+        File file = new File(path);
+        file.getParentFile().mkdirs();
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            String line = String.format("%s;%d;%d;%s",
+                    username, level, experience, title);
+            bw.write(line);
+            logger.info("User data successfully written to {}", path);
+        } catch (IOException e) {
+            logger.error("Failed to write user data to file: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    public void readUserTxt() throws IOException {
+        String path = System.getProperty("user.dir") + "/data/user.txt";
+        File file = new File(path);
+        try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line = br.readLine();
+            if (line == null) return;
+
+            String[] parts = line.split(";");
+            if (parts.length < 4) return;
+
+            username = parts[0];
+            level = Integer.parseInt(parts[1]);
+            experience = Integer.parseInt(parts[2]);
+            title = parts[3];
+        } catch (IOException e) {
+            logger.error("Failed to read user data from file: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+
 
     @Override
     public String toString() {
