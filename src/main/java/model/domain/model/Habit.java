@@ -1,17 +1,86 @@
 package model.domain.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.EntityListeners;
 import model.domain.contract.Completable;
 import model.domain.contract.Trackable;
 import model.domain.exception.InvalidHabitException;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "habits")
+@EntityListeners(AuditingEntityListener.class)
+@NamedQueries({
+        @NamedQuery(
+                name = "Habit.findByUserAndFrequency",
+                query = "select h from Habit h where h.user = :user and h.frequency = :frequency order by h.name"
+        ),
+        @NamedQuery(
+                name = "Habit.findLongestStreaks",
+                query = "select h from Habit h where h.user = :user order by h.streak desc, h.name asc"
+        )
+})
 public class Habit implements Completable, Trackable {
     private static final Logger logger = LoggerFactory.getLogger(Habit.class);
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "title", nullable = false)
     private String name;
+    @Column(name = "description", nullable = false)
     private String description;
-    private boolean isCompleted;
+    @Column(name = "difficulty", nullable = false)
+    private String difficulty;
+    @Column(name = "frequency", nullable = false)
+    private String frequency;
+    @Column(name = "metadata_json", nullable = false)
+    private String metadataJson;
+    @Column(name = "completed", nullable = false)
+    private boolean completed;
+    @Column(name = "streak", nullable = false)
     private int streak;
+    private boolean vacationFreezeArmed;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    @OneToMany(mappedBy = "habit", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Completion> completions = new ArrayList<>();
+
+    protected Habit() {
+        this.name = "";
+        this.description = "";
+        this.completed = false;
+        this.streak = 0;
+        this.difficulty = "medium";
+        this.frequency = "daily";
+        this.metadataJson = "{}";
+    }
 
     public Habit(String name, String description) {
         logger.debug("Creating Habit: name='{}', description='{}'", name, description);
@@ -25,6 +94,9 @@ public class Habit implements Completable, Trackable {
     private void initializeHabit(String name, String description) throws InvalidHabitException {
         setName(name);
         setDescription(description);
+        this.difficulty = "medium";
+        this.frequency = "daily";
+        this.metadataJson = "{}";
         logger.info("Habit created successfully: '{}'", name);
     }
 
@@ -38,6 +110,10 @@ public class Habit implements Completable, Trackable {
 
     public String getName() {
         return name;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setName(String name) throws InvalidHabitException {
@@ -54,6 +130,37 @@ public class Habit implements Completable, Trackable {
         return description;
     }
 
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(String frequency) {
+        if (frequency != null && !frequency.isBlank()) {
+            this.frequency = frequency;
+        }
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Completion> getCompletions() {
+        return completions;
+    }
+
+    public void addCompletion(Completion completion) {
+        completions.add(completion);
+        completion.setHabit(this);
+    }
+
     public void setDescription(String description) throws InvalidHabitException {
         logger.debug("Setting description for Habit '{}', new value='{}'", name, description);
         if (description == null) {
@@ -66,7 +173,7 @@ public class Habit implements Completable, Trackable {
 
     @Override
     public int getProgress() {
-        int progress = isCompleted ? 100 : 0;
+        int progress = completed ? 100 : 0;
         logger.debug("getProgress() for Habit '{}': {}", name, progress);
         return progress;
     }
@@ -78,13 +185,13 @@ public class Habit implements Completable, Trackable {
     }
 
     public boolean isCompleted() {
-        return isCompleted;
+        return completed;
     }
 
     @Override
     public boolean complete() {
         logger.debug("Attempting to complete Habit '{}'", name);
-        if (isCompleted) return reportAlreadyCompleted();
+        if (completed) return reportAlreadyCompleted();
         markCompleted();
         return true;
     }
@@ -95,7 +202,7 @@ public class Habit implements Completable, Trackable {
     }
 
     private void markCompleted() {
-        isCompleted = true;
+        completed = true;
         streak++;
         logger.info("Habit completed: '{}', new streak={}", name, streak);
     }
@@ -111,8 +218,18 @@ public class Habit implements Completable, Trackable {
 
     public void resetStreak() {
         logger.info("Resetting streak for Habit '{}', was {}", name, streak);
+        if (vacationFreezeArmed) {
+            vacationFreezeArmed = false;
+            logger.info("Vacation freeze consumed for Habit '{}'; streak remains {}", name, streak);
+            return;
+        }
         streak = 0;
         logger.debug("Streak reset complete for Habit '{}'", name);
+    }
+
+    public void enableVacationFreeze() {
+        vacationFreezeArmed = true;
+        logger.info("Vacation freeze armed for Habit '{}'", name);
     }
 
     public void print() {
@@ -122,7 +239,7 @@ public class Habit implements Completable, Trackable {
 
     @Override
     public String toString() {
-        return "Name: " + name + "; Description: " + description + "; isCompleted: " + isCompleted + "; Streak: " + streak;
+        return "Name: " + name + "; Description: " + description + "; isCompleted: " + completed + "; Streak: " + streak;
     }
 }
 
