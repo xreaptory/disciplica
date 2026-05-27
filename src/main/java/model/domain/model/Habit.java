@@ -218,9 +218,7 @@ public class Habit implements Completable, Trackable {
 
     public void resetStreak() {
         logger.info("Resetting streak for Habit '{}', was {}", name, streak);
-        if (vacationFreezeArmed) {
-            vacationFreezeArmed = false;
-            logger.info("Vacation freeze consumed for Habit '{}'; streak remains {}", name, streak);
+        if (consumeVacationFreezeIfArmed()) {
             return;
         }
         streak = 0;
@@ -230,6 +228,15 @@ public class Habit implements Completable, Trackable {
     public void enableVacationFreeze() {
         vacationFreezeArmed = true;
         logger.info("Vacation freeze armed for Habit '{}'", name);
+    }
+
+    private boolean consumeVacationFreezeIfArmed() {
+        if (!vacationFreezeArmed) {
+            return false;
+        }
+        vacationFreezeArmed = false;
+        logger.info("Vacation freeze consumed for Habit '{}'; streak remains {}", name, streak);
+        return true;
     }
 
     public void print() {
