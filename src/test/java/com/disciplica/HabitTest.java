@@ -63,4 +63,20 @@ class HabitTest {
         habit.complete();
         assertEquals(100, habit.getProgress());
     }
+
+    @Test
+    @DisplayName("Vacation mode freeze prevents next streak reset exactly once")
+    void vacationModeFreezePreventsNextResetOnce() {
+        Habit habit = new Habit("Walk", "Walk 30 minutes");
+        habit.complete();
+        habit.complete();
+        assertEquals(1, habit.getStreak());
+
+        habit.enableVacationFreeze();
+        habit.resetStreak();
+        assertEquals(1, habit.getStreak());
+
+        habit.resetStreak();
+        assertEquals(0, habit.getStreak());
+    }
 }
