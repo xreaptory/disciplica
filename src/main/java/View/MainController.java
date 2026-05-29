@@ -1,8 +1,11 @@
 package View;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import model.service.UserService;
 import model.domain.exception.HabitNotFoundException;
 import model.domain.exception.InvalidHabitException;
 import javafx.beans.value.ChangeListener;
@@ -19,11 +22,13 @@ import java.io.IOException;
 public class MainController implements EventHandler<Event>, ChangeListener<String> {
 
     final User user;
+    private final UserService userService;
 
     final private View simpleView;
 
-    public MainController(View simpleView) {
-        user = new User("Simon");
+    public MainController(View simpleView, UserService userService) {
+        this.userService = userService;
+        user = userService.getUser();
         this.simpleView = simpleView;
     }
 
@@ -42,6 +47,13 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
             simpleView.openDashboard();
         }
 
+        if (source == simpleView.saveButton) {
+            saveAllAsync(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Data saved successfully.");
+                alert.showAndWait();
+            });
+        }
+
         if (source == simpleView.addButton) {
             String typ = simpleView.comboBox.getSelectionModel().getSelectedItem().toString();
             if (typ.equals("Daily Habit")) {
@@ -49,6 +61,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                     DailyHabit dailyHabit = new DailyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.addTask(dailyHabit);
                     simpleView.itemsObservable.setAll(user.getAllHabits());
+                    simpleView.refreshDashboardData();
+                    persistUserStatsSafely();
                 } catch (NumberFormatException e) {
                     throw new NumberFormatException("Error parsing points. Please enter a valid integer.");
                 }
@@ -57,6 +71,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                     WeeklyHabit weeklyHabit = new WeeklyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.addTask(weeklyHabit);
                     simpleView.itemsObservable.setAll(user.getAllHabits());
+                    simpleView.refreshDashboardData();
+                    persistUserStatsSafely();
                 } catch (NumberFormatException e) {
                     throw new NumberFormatException("Error parsing points. Please enter a valid integer.");
                 }
@@ -65,6 +81,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                     OneTimeTask oneTimeTask = new OneTimeTask(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.addTask(oneTimeTask);
                     simpleView.itemsObservable.setAll(user.getAllHabits());
+                    simpleView.refreshDashboardData();
+                    persistUserStatsSafely();
                 } catch (NumberFormatException e) {
                     throw new NumberFormatException("Error parsing points. Please enter a valid integer.");
                 }
@@ -78,6 +96,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                     DailyHabit dailyHabit = new DailyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.removeTask(dailyHabit);
                     simpleView.itemsObservable.setAll(user.getAllHabits());
+                    simpleView.refreshDashboardData();
+                    persistUserStatsSafely();
                 } catch (HabitNotFoundException e) {
                     throw new HabitNotFoundException("Habit not found. Please check the name, description, and points.");
                 }
@@ -86,6 +106,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                     WeeklyHabit weeklyHabit = new WeeklyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.removeTask(weeklyHabit);
                     simpleView.itemsObservable.setAll(user.getAllHabits());
+                    simpleView.refreshDashboardData();
+                    persistUserStatsSafely();
                 } catch (HabitNotFoundException e) {
                     throw new HabitNotFoundException("Habit not found. Please check the name, description, and points.");
                 }
@@ -94,6 +116,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                     OneTimeTask oneTimeTask = new OneTimeTask(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.removeTask(oneTimeTask);
                     simpleView.itemsObservable.setAll(user.getAllHabits());
+                    simpleView.refreshDashboardData();
+                    persistUserStatsSafely();
                 } catch (HabitNotFoundException e) {
                     throw new HabitNotFoundException("Habit not found. Please check the name, description, and points.");
                 }
@@ -137,6 +161,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 user.changeTask(oldTask, newTask);
 
                 simpleView.itemsObservable.setAll(user.getAllHabits());
+                simpleView.refreshDashboardData();
+                persistUserStatsSafely();
 
             } catch (InvalidHabitException | HabitNotFoundException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Fehler beim Ändern: " + e.getMessage());
@@ -178,6 +204,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 }
 
                 simpleView.itemsObservable.setAll(user.getAllHabits());
+                simpleView.refreshDashboardData();
+                persistUserStatsSafely();
 
                 ((Stage)simpleView.completeButton.getScene().getWindow()).close();
             }
@@ -212,23 +240,90 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     }
 
     public void saveData() throws IOException {
-        user.writeTaskTxt();
+        userService.writeTaskData();
     }
 
     public void readData() throws IOException {
-        user.readTaskTxt();
+        userService.readTaskData();
     }
 
     public void readUserData() throws IOException {
-        user.readUserTxt();
+        userService.readUserData();
     }
 
     public void saveUserData() throws IOException {
-        user.writeUserTxt();
+        userService.writeUserData();
+    }
+
+    private void persistUserStatsSafely() {
+        saveUserDataAsync();
     }
 
     public User getUser() {
         return user.getUser();
+    }
+
+    public void loadDataAsync(Runnable onSuccess) {
+        runFileTask("Loading data...", true, () -> {
+            readData();
+            readUserData();
+        }, onSuccess);
+    }
+
+    public void saveAllAsync(Runnable onSuccess) {
+        runFileTask("Saving data...", true, () -> {
+            saveData();
+            saveUserData();
+        }, onSuccess);
+    }
+
+    private void saveUserDataAsync() {
+        runFileTask("Saving user stats...", false, this::saveUserData, null);
+    }
+
+    private void runFileTask(String loadingMessage, boolean showLoadingIndicator, IOAction action, Runnable onSuccess) {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                action.run();
+                return null;
+            }
+        };
+
+        task.setOnRunning(event -> {
+            if (showLoadingIndicator) {
+                simpleView.showLoading(loadingMessage);
+            }
+        });
+        task.setOnSucceeded(event -> {
+            if (showLoadingIndicator) {
+                simpleView.hideLoading();
+            }
+            if (onSuccess != null) {
+                onSuccess.run();
+            }
+            Platform.runLater(simpleView::refreshDashboardData);
+        });
+        task.setOnFailed(event -> {
+            if (showLoadingIndicator) {
+                simpleView.hideLoading();
+            }
+            Throwable error = task.getException();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("I/O Error");
+            alert.setHeaderText("Operation failed");
+            alert.setContentText(error == null ? "Unknown file operation error." : error.getMessage());
+            alert.showAndWait();
+        });
+
+        Thread worker = new Thread(task, "disciplica-io-task");
+        worker.setDaemon(true);
+        worker.start();
+    }
+
+    @FunctionalInterface
+    private interface IOAction {
+        void run() throws IOException;
     }
 
     @Override

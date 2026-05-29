@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,10 +26,12 @@ public class UserRepository implements Repository<User> {
     private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
     private final Path filePath;
     private final String jdbcUrl;
+    private final DatabaseConnection databaseConnection;
 
     public UserRepository(String filePath, String dbPath) {
         this.filePath = Paths.get(filePath);
         this.jdbcUrl = "jdbc:sqlite:" + dbPath;
+        this.databaseConnection = new DatabaseConnection(this.jdbcUrl);
         logger.info("UserRepository initialised: file='{}', db='{}'", filePath, dbPath);
     }
 
@@ -73,7 +74,7 @@ public class UserRepository implements Repository<User> {
     }
 
     public void initDatabase() {
-        try (Connection connection = DriverManager.getConnection(jdbcUrl);
+        try (Connection connection = databaseConnection.getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute(createUsersTableSql());
         } catch (SQLException sqlException) {
@@ -88,7 +89,7 @@ public class UserRepository implements Repository<User> {
     }
 
     private void trySaveUser(User user) {
-        try (Connection connection = DriverManager.getConnection(jdbcUrl);
+        try (Connection connection = databaseConnection.getConnection();
              PreparedStatement preparedStatement = connection
                      .prepareStatement("INSERT OR REPLACE INTO users (username, data) VALUES (?, ?)")) {
             bindUser(preparedStatement, user);
@@ -118,7 +119,7 @@ public class UserRepository implements Repository<User> {
     }
 
     private String runLoadUserQuery(String username) throws SQLException, HabitNotFoundException {
-        try (Connection connection = DriverManager.getConnection(jdbcUrl);
+        try (Connection connection = databaseConnection.getConnection();
              PreparedStatement preparedStatement = connection
                      .prepareStatement("SELECT data FROM users WHERE username = ?")) {
             preparedStatement.setString(1, username);
@@ -141,7 +142,7 @@ public class UserRepository implements Repository<User> {
 
     private void runDeleteUserQuery(String username) throws SQLException, HabitNotFoundException {
         String sql = "DELETE FROM users WHERE username = ?";
-        try (Connection connection = DriverManager.getConnection(jdbcUrl);
+        try (Connection connection = databaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
             ensureUserWasDeleted(username, preparedStatement.executeUpdate());
@@ -183,7 +184,7 @@ public class UserRepository implements Repository<User> {
 
     private List<User> queryAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(jdbcUrl);
+        try (Connection connection = databaseConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT username FROM users")) {
             collectUsers(users, resultSet);
