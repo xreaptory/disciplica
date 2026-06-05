@@ -1,3 +1,3 @@
-Simon;6326;253535;Master
-completions=
-xpHistory=253535
+Simon;3;10;Beginner
+completions=2026-06-03:7
+xpHistory=0,15,30,45,10,40,70,10
