@@ -1,2 +1,4 @@
-D;dd;dd1;100015;true;1
-D;dd8;dd1;10000015;true;1
+D;test;123;40;true;1
+D;test1;123ff;40;true;1
+W;test12;123ff;70;true;1
+W;Wäsche waschen;jede woche wäsche waschen;50;false;0
