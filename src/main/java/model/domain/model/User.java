@@ -402,7 +402,7 @@ public class User implements Trackable {
     }
 
     public void writeTaskTxt() throws IOException {
-        String path = System.getProperty("user.dir") + "/data/tasks.txt";
+        String path = System.getProperty("user.home") + "/tasks.txt";
         File file = new File(path);
         file.getParentFile().mkdirs();
 
@@ -428,7 +428,7 @@ public class User implements Trackable {
     }
 
     public void readTaskTxt() throws IOException {
-        String path = System.getProperty("user.dir") + "/data/tasks.txt";
+        String path = System.getProperty("user.home") + "/tasks.txt";
         File file = new File(path);
         if (!file.exists()) return; // Nichts zu tun, wenn keine Datei da ist
 
@@ -472,7 +472,7 @@ public class User implements Trackable {
     }
 
     public void writeUserTxt() throws IOException {
-        String path = System.getProperty("user.dir") + "/data/user.txt";
+        String path = System.getProperty("user.home") + "/user.txt";
         File file = new File(path);
         file.getParentFile().mkdirs();
 
@@ -492,7 +492,7 @@ public class User implements Trackable {
     }
 
     public void readUserTxt() throws IOException {
-        String path = System.getProperty("user.dir") + "/data/user.txt";
+        String path = System.getProperty("user.home") + "/user.txt";
         File file = new File(path);
         try(BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = br.readLine();
