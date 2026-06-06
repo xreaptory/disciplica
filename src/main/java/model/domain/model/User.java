@@ -1,5 +1,14 @@
 package model.domain.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import model.domain.contract.Trackable;
 import model.domain.exception.HabitNotFoundException;
 import model.domain.exception.InvalidHabitException;
@@ -8,27 +17,65 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Entity
+@Table(name = "users")
 public class User implements Trackable {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+    @Column(name = "level", nullable = false)
     private int level;
+    @Column(name = "xp", nullable = false)
     private int experience;
+    @Column(name = "gold", nullable = false)
+    private int gold;
+    @Column(name = "health", nullable = false)
+    private int health;
+    @Transient
     private String title;
+    @Transient
     private final ArrayList<AbstractTask> tasks;
+    @Transient
     private final Map<String, Integer> completionsByDate;
+    @Transient
     private final ArrayList<Integer> xpHistory;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    private List<Habit> habits = new ArrayList<>();
+
+    protected User() {
+        this.username = "";
+        this.email = "unknown@local";
+        this.title = "Beginner";
+        this.level = 1;
+        this.experience = 0;
+        this.gold = 0;
+        this.health = 50;
+        this.tasks = new ArrayList<>();
+        this.completionsByDate = new HashMap<>();
+        this.xpHistory = new ArrayList<>();
+        this.xpHistory.add(this.experience);
+    }
 
     public User(String username) {
         this.username = username;
+        this.email = username.toLowerCase() + "@local";
         title = "Beginner";
         level = 1;
         experience = 0;
+        gold = 0;
+        health = 50;
         tasks = new ArrayList<>();
         completionsByDate = new HashMap<>();
         xpHistory = new ArrayList<>();
@@ -37,6 +84,23 @@ public class User implements Trackable {
 
     public String getUsername() {
         return username;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public List<Habit> getHabits() {
+        return habits;
+    }
+
+    public void addHabit(Habit habit) {
+        habits.add(habit);
+        habit.setUser(this);
     }
 
     @Override
@@ -166,8 +230,11 @@ public class User implements Trackable {
             return false;
         }
         recordCompletionNow();
-        grantExperience(task.calculatePoints());
-        logger.info("Task completed and XP granted: {}", task.getName());
+        int xpAward = task.calculatePoints();
+        int goldAward = Math.max(1, xpAward / 5);
+        grantExperience(xpAward);
+        gold += goldAward;
+        logger.info("Task completed and rewards granted: {} (xp={}, gold={})", task.getName(), xpAward, goldAward);
         return true;
     }
 
@@ -176,6 +243,41 @@ public class User implements Trackable {
         applyLevelUps();
         updateTitle();
         appendXpHistory(experience);
+    }
+
+    public void awardXpAndGold(int xpAward, int goldAward) {
+        if (xpAward < 0 || goldAward < 0) {
+            throw new IllegalArgumentException("XP and gold awards must be non-negative");
+        }
+        experience += xpAward;
+        gold += goldAward;
+        applyLevelUps();
+        updateTitle();
+        appendXpHistory(experience);
+    }
+
+    public void applyHealthPenalty(int hpLoss) {
+        if (hpLoss < 0) {
+            throw new IllegalArgumentException("Health penalty must be non-negative");
+        }
+        health = Math.max(0, health - hpLoss);
+    }
+
+    public void heal(int hpGain) {
+        if (hpGain < 0) {
+            throw new IllegalArgumentException("Healing must be non-negative");
+        }
+        health = Math.min(50, health + hpGain);
+    }
+
+    public void spendGold(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Gold spend amount must be non-negative");
+        }
+        if (amount > gold) {
+            throw new IllegalArgumentException("Not enough gold to spend " + amount);
+        }
+        gold -= amount;
     }
 
     private void applyLevelUps() {
@@ -191,6 +293,14 @@ public class User implements Trackable {
 
     public int getExperience() {
         return experience;
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     public String getTitle() {
@@ -269,6 +379,14 @@ public class User implements Trackable {
 
     public int getCompletionCountForDate(LocalDate date) {
         return completionsByDate.getOrDefault(date.toString(), 0);
+    }
+
+    public Map<String, Integer> getCompletionsByDateSnapshot() {
+        return Collections.unmodifiableMap(new HashMap<>(completionsByDate));
+    }
+
+    public List<Integer> getXpHistorySnapshot() {
+        return Collections.unmodifiableList(new ArrayList<>(xpHistory));
     }
 
     public List<Integer> getXpHistoryWindow(int size) {
@@ -359,8 +477,8 @@ public class User implements Trackable {
         file.getParentFile().mkdirs();
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-            String line = String.format("%s;%d;%d;%s",
-                    username, level, experience, title);
+            String line = String.format("%s;%d;%d;%d;%d;%s",
+                    username, level, experience, gold, health, title);
             bw.write(line);
             bw.newLine();
             bw.write("completions=" + serializeCompletions());
@@ -386,7 +504,13 @@ public class User implements Trackable {
             username = parts[0];
             level = Integer.parseInt(parts[1]);
             experience = Integer.parseInt(parts[2]);
-            title = parts[3];
+            if (parts.length >= 6) {
+                gold = Integer.parseInt(parts[3]);
+                health = Integer.parseInt(parts[4]);
+                title = parts[5];
+            } else {
+                title = parts[3];
+            }
 
             completionsByDate.clear();
             xpHistory.clear();
@@ -455,6 +579,41 @@ public class User implements Trackable {
         }
         if (xpHistory.isEmpty()) {
             xpHistory.add(experience);
+        }
+    }
+
+    public void applyImportedState(String importedUsername,
+                                   int importedLevel,
+                                   int importedExperience,
+                                   int importedGold,
+                                   int importedHealth,
+                                   String importedTitle,
+                                   List<AbstractTask> importedTasks,
+                                   Map<String, Integer> importedCompletionsByDate,
+                                   List<Integer> importedXpHistory) {
+        this.username = importedUsername;
+        this.email = importedUsername.toLowerCase() + "@local";
+        this.level = importedLevel;
+        this.experience = importedExperience;
+        this.gold = importedGold;
+        this.health = importedHealth;
+        this.title = importedTitle == null || importedTitle.isBlank() ? this.title : importedTitle;
+
+        this.tasks.clear();
+        if (importedTasks != null) {
+            this.tasks.addAll(importedTasks);
+        }
+
+        this.completionsByDate.clear();
+        if (importedCompletionsByDate != null) {
+            this.completionsByDate.putAll(importedCompletionsByDate);
+        }
+
+        this.xpHistory.clear();
+        if (importedXpHistory != null && !importedXpHistory.isEmpty()) {
+            this.xpHistory.addAll(importedXpHistory);
+        } else {
+            this.xpHistory.add(this.experience);
         }
     }
 

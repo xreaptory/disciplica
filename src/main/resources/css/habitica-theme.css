@@ -1,0 +1,119 @@
+.root {
+    -fx-background-color: #1a1a2e;
+    -fx-font-family: "Consolas", "Monospaced";
+}
+
+.label {
+    -fx-text-fill: #f1ecff;
+}
+
+.habitica-nav {
+    -fx-background-color: #1a1a2e;
+    -fx-border-color: transparent #3d3d66 transparent transparent;
+}
+
+.habitica-header {
+    -fx-background-color: #4f2a93;
+}
+
+.habitica-column-header {
+    -fx-background-color: #36205d;
+    -fx-text-fill: #e1e0e3;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.habitica-card {
+    -fx-background-color: #242444;
+    -fx-background-radius: 4;
+    -fx-border-color: #3d3d66;
+    -fx-border-radius: 4;
+    -fx-padding: 8;
+}
+
+.habitica-card:hover {
+    -fx-background-color: #2d2d52;
+}
+
+.task-title {
+    -fx-text-fill: #e1e0e3;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.task-subtitle {
+    -fx-text-fill: #a5a3c2;
+    -fx-font-size: 12px;
+}
+
+.task-strip-easy {
+    -fx-background-color: #fed605;
+}
+
+.task-strip-medium {
+    -fx-background-color: #ff944c;
+}
+
+.task-strip-hard {
+    -fx-background-color: #f74e52;
+}
+
+.task-strip-very-hard {
+    -fx-background-color: #b9023a;
+}
+
+.list-view {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 2 0 2 0;
+}
+
+.chart {
+    -fx-background-color: transparent;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.axis {
+    -fx-tick-label-fill: #a5a3c2;
+}
+
+.axis-label {
+    -fx-text-fill: #c3acff;
+}
+
+.button-primary {
+    -fx-background-color: #9a62ff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 2;
+}
+
+.text-field, .text-area, .combo-box {
+    -fx-background-color: #1a1a2e;
+    -fx-border-color: #3d3d66;
+    -fx-text-fill: #e1e0e3;
+}
+
+.text-field .text,
+.text-area .text {
+    -fx-fill: #f8f4ff;
+}
+
+.text-field,
+.text-area,
+.combo-box,
+.combo-box .list-cell {
+    -fx-text-fill: #f8f4ff;
+}
+
+.text-field,
+.text-area {
+    -fx-prompt-text-fill: #bfb6da;
+}

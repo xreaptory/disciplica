@@ -5,11 +5,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OneTimeTask extends AbstractTask {
+@Entity
+@Table(name = "one_time_tasks")
+@DiscriminatorValue("ONE_TIME")
+public class OneTimeTask extends Task {
     private static final Logger logger = LoggerFactory.getLogger(OneTimeTask.class);
 
     @JsonCreator
@@ -22,6 +28,10 @@ public class OneTimeTask extends AbstractTask {
 
     public OneTimeTask(String name, String description, int points) throws InvalidHabitException {
         super(name, description, points);
+    }
+
+    protected OneTimeTask() {
+        super();
     }
 
     private void restoreCompletedState(boolean completed) {

@@ -5,14 +5,16 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import model.domain.model.User;
 import model.persistence.HabitRepository;
+import model.persistence.InMemoryHabitRepository;
 import model.service.UserService;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class TestModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(HabitRepository.class).toInstance(new HabitRepository());
+        bind(HabitRepository.class).toInstance(new InMemoryHabitRepository());
         bind(UserService.class).toInstance(new MockUserService());
     }
 
@@ -48,6 +50,26 @@ public class TestModule extends AbstractModule {
         @Override
         public void writeUserData() throws IOException {
             // no-op mock
+        }
+
+        @Override
+        public Path exportEncryptedJsonBackup(Path outputFile) {
+            return outputFile;
+        }
+
+        @Override
+        public void importEncryptedJsonBackup(Path inputFile) {
+            // no-op mock
+        }
+
+        @Override
+        public Path exportHabitsCsv(Path outputFile) {
+            return outputFile;
+        }
+
+        @Override
+        public Path prepareCloudSyncFolder() {
+            return Path.of("data", "cloud-sync", "dropbox-ready");
         }
     }
 }

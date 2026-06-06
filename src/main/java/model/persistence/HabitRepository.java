@@ -1,67 +1,23 @@
 package model.persistence;
 
-import model.domain.exception.HabitNotFoundException;
-import model.domain.exception.InvalidHabitException;
 import model.domain.model.Habit;
-import model.domain.repository.Repository;
-import org.slf4j.*;
-import java.util.*;
+import model.domain.model.User;
 
-public class HabitRepository implements Repository<Habit> {
+import java.util.List;
+import java.util.Optional;
 
-    private static final Logger logger = LoggerFactory.getLogger(HabitRepository.class);
-    private final List<Habit> habits = new ArrayList<>();
+public interface HabitRepository {
+    void save(Habit habit);
 
-    @Override
-    public void save(Habit entity) throws InvalidHabitException {
-        logger.debug("HabitRepository.save() called for '{}'", entity);
-        validateEntity(entity);
-        replaceExisting(entity);
-        habits.add(entity);
-        logger.info("Habit '{}' saved to repository ({} total)", entity.getName(), habits.size());
-    }
+    Optional<Habit> findById(Long id);
 
-    private void validateEntity(Habit entity) throws InvalidHabitException {
-        if (entity == null) {
-            logger.error("Cannot save a null Habit");
-            throw new InvalidHabitException("Cannot save a null Habit");
-        }
-    }
+    List<Habit> findByUser(User user);
 
-    private void replaceExisting(Habit entity) {
-        Optional<Habit> existingHabit = findByName(entity.getName());
-        if (existingHabit.isPresent()) {
-            habits.remove(existingHabit.get());
-            logger.debug("Replacing existing Habit '{}'", entity.getName());
-        }
-    }
+    void update(Habit habit);
 
-    @Override
-    public Optional<Habit> findByName(String name) {
-        logger.debug("HabitRepository.findByName() called, name='{}'", name);
-        return habits.stream()
-            .filter(habit -> habit.getName().equals(name))
-                .findFirst();
-    }
+    void delete(Long id);
 
-    @Override
-    public List<Habit> findAll() {
-        logger.debug("HabitRepository.findAll() called, returning {} habit(s)", habits.size());
-        return new ArrayList<>(habits);
-    }
+    List<Habit> findAll();
 
-    @Override
-    public void delete(String name) throws HabitNotFoundException {
-        logger.debug("HabitRepository.delete() called, name='{}'", name);
-        Habit habit = findByName(name)
-                .orElseThrow(() -> {
-                    logger.error("Habit '{}' not found for deletion", name);
-                    return new HabitNotFoundException("Habit not found: " + name);
-                });
-        habits.remove(habit);
-        logger.info("Habit '{}' deleted from repository ({} remaining)", name, habits.size());
-    }
+    void completeHabit(Long habitId, int quality, int xpGain, int goldGain);
 }
-
-
-

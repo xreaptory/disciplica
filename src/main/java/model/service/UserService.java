@@ -3,6 +3,7 @@ package model.service;
 import model.domain.model.User;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 public interface UserService {
     User getUser();
@@ -14,4 +15,12 @@ public interface UserService {
     void readUserData() throws IOException;
 
     void writeUserData() throws IOException;
+
+    Path exportEncryptedJsonBackup(Path outputFile);
+
+    void importEncryptedJsonBackup(Path inputFile);
+
+    Path exportHabitsCsv(Path outputFile);
+
+    Path prepareCloudSyncFolder();
 }
