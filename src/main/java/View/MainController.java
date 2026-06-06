@@ -25,11 +25,32 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     private final UserService userService;
 
     final private View simpleView;
+    private UserStatsSnapshot cachedStats;
+    private long cachedStatsNanos;
+    private static final long STATS_CACHE_TTL_NANOS = 1_000_000_000L;
 
     public MainController(View simpleView, UserService userService) {
         this.userService = userService;
         user = userService.getUser();
         this.simpleView = simpleView;
+    }
+
+    public static int calculateHabitPoints(String category, int minutes, String type) {
+        int safeMinutes = Math.max(5, Math.min(480, minutes));
+        double base = safeMinutes * 0.8;
+        double categoryMultiplier = switch (category == null ? "" : category) {
+            case "Health" -> 1.2;
+            case "Learning" -> 1.25;
+            case "Fitness" -> 1.35;
+            case "Chores" -> 0.95;
+            default -> 1.0; // Work
+        };
+        double typeMultiplier = switch (type == null ? "" : type) {
+            case "Weekly Habit" -> 1.35;
+            case "OneTimeTask" -> 1.15;
+            default -> 1.0; // Daily Habit
+        };
+        return Math.max(1, (int) Math.round(base * categoryMultiplier * typeMultiplier));
     }
 
     public void handleActionEvent(ActionEvent event) throws InvalidHabitException, HabitNotFoundException, IOException {
@@ -60,9 +81,10 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 try {
                     DailyHabit dailyHabit = new DailyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.addTask(dailyHabit);
+                    invalidateStatsCache();
                     simpleView.itemsObservable.setAll(user.getAllHabits());
                     simpleView.refreshDashboardData();
-                    persistUserStatsSafely();
+                    persistAllDataSafely();
                 } catch (NumberFormatException e) {
                     throw new NumberFormatException("Error parsing points. Please enter a valid integer.");
                 }
@@ -70,9 +92,10 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 try {
                     WeeklyHabit weeklyHabit = new WeeklyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.addTask(weeklyHabit);
+                    invalidateStatsCache();
                     simpleView.itemsObservable.setAll(user.getAllHabits());
                     simpleView.refreshDashboardData();
-                    persistUserStatsSafely();
+                    persistAllDataSafely();
                 } catch (NumberFormatException e) {
                     throw new NumberFormatException("Error parsing points. Please enter a valid integer.");
                 }
@@ -80,9 +103,10 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 try {
                     OneTimeTask oneTimeTask = new OneTimeTask(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.addTask(oneTimeTask);
+                    invalidateStatsCache();
                     simpleView.itemsObservable.setAll(user.getAllHabits());
                     simpleView.refreshDashboardData();
-                    persistUserStatsSafely();
+                    persistAllDataSafely();
                 } catch (NumberFormatException e) {
                     throw new NumberFormatException("Error parsing points. Please enter a valid integer.");
                 }
@@ -95,6 +119,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 try {
                     DailyHabit dailyHabit = new DailyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.removeTask(dailyHabit);
+                    invalidateStatsCache();
                     simpleView.itemsObservable.setAll(user.getAllHabits());
                     simpleView.refreshDashboardData();
                     persistUserStatsSafely();
@@ -105,6 +130,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 try {
                     WeeklyHabit weeklyHabit = new WeeklyHabit(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.removeTask(weeklyHabit);
+                    invalidateStatsCache();
                     simpleView.itemsObservable.setAll(user.getAllHabits());
                     simpleView.refreshDashboardData();
                     persistUserStatsSafely();
@@ -115,6 +141,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 try {
                     OneTimeTask oneTimeTask = new OneTimeTask(simpleView.nameTF.getText(), simpleView.descriptionTF.getText(), Integer.parseInt(simpleView.pointsTF.getText()));
                     user.removeTask(oneTimeTask);
+                    invalidateStatsCache();
                     simpleView.itemsObservable.setAll(user.getAllHabits());
                     simpleView.refreshDashboardData();
                     persistUserStatsSafely();
@@ -159,6 +186,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 }
 
                 user.changeTask(oldTask, newTask);
+                invalidateStatsCache();
 
                 simpleView.itemsObservable.setAll(user.getAllHabits());
                 simpleView.refreshDashboardData();
@@ -187,8 +215,10 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 }
 
                 user.completeTask(task);
+                invalidateStatsCache();
                 if(typ.equals("OneTimeTask")) {
                     user.removeTask(task);
+                    invalidateStatsCache();
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Aufgabe abgeschlossen");
                     alert.setHeaderText("Aufgabe '" + searchedName + "' abgeschlossen und entfernt!");
@@ -259,8 +289,43 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         saveUserDataAsync();
     }
 
+    private void persistAllDataSafely() {
+        runFileTask("Saving data...", false, () -> {
+            saveData();
+            saveUserData();
+        }, null);
+    }
+
     public User getUser() {
         return user.getUser();
+    }
+
+    public void spendGoldAndPersist(int amount) {
+        user.spendGold(amount);
+        invalidateStatsCache();
+        persistAllDataSafely();
+    }
+
+    public UserStatsSnapshot getCachedUserStats() {
+        long now = System.nanoTime();
+        if (cachedStats != null && (now - cachedStatsNanos) < STATS_CACHE_TTL_NANOS) {
+            return cachedStats;
+        }
+        cachedStats = new UserStatsSnapshot(
+                user.getUsername(),
+                user.getLevel(),
+                user.getTitle(),
+                user.getExperience(),
+                user.getGold(),
+                user.getHealth()
+        );
+        cachedStatsNanos = now;
+        return cachedStats;
+    }
+
+    private void invalidateStatsCache() {
+        cachedStats = null;
+        cachedStatsNanos = 0L;
     }
 
     public void loadDataAsync(Runnable onSuccess) {
@@ -325,6 +390,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     private interface IOAction {
         void run() throws IOException;
     }
+
+    public record UserStatsSnapshot(String username, int level, String title, int experience, int gold, int health) {}
 
     @Override
     public void handle(Event event){

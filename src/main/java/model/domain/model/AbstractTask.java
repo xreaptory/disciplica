@@ -5,6 +5,11 @@ import model.domain.exception.InvalidHabitException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +25,26 @@ import java.util.Objects;
     @JsonSubTypes.Type(value = WeeklyHabit.class, name = "WeeklyHabit"),
     @JsonSubTypes.Type(value = OneTimeTask.class, name = "OneTimeTask")
 })
+@MappedSuperclass
 public abstract class AbstractTask implements Trackable {
     private static final Logger logger = LoggerFactory.getLogger(AbstractTask.class);
-    private final String name;
-    private final String description;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "name", nullable = false)
+    private String name;
+    @Column(name = "description", nullable = false)
+    private String description;
     private boolean isCompleted;
-    private final int points;
+    @Column(name = "points", nullable = false)
+    private int points;
+
+    protected AbstractTask() {
+        this.name = "";
+        this.description = "";
+        this.points = 0;
+        this.isCompleted = false;
+    }
 
     public AbstractTask(String name, String description, int points) throws InvalidHabitException {
         validateName(name);
@@ -65,6 +84,10 @@ public abstract class AbstractTask implements Trackable {
 
     public String getDescription() {
         return description;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public boolean isCompleted() {

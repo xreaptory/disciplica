@@ -1,0 +1,2 @@
+ALTER TABLE completions
+ADD COLUMN xp_earned INTEGER NOT NULL DEFAULT 0;

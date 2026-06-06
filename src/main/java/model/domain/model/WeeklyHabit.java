@@ -3,10 +3,16 @@ package model.domain.model;
 import model.domain.exception.InvalidHabitException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WeeklyHabit extends AbstractTask {
+@Entity
+@Table(name = "weekly_habits")
+@DiscriminatorValue("WEEKLY")
+public class WeeklyHabit extends Task {
     private static final Logger logger = LoggerFactory.getLogger(WeeklyHabit.class);
     @JsonProperty("streak")
     private int streak;
@@ -23,6 +29,10 @@ public class WeeklyHabit extends AbstractTask {
     public WeeklyHabit(String name, String description, int points) throws InvalidHabitException {
         super(name,description,points);
         streak = 0;
+    }
+
+    protected WeeklyHabit() {
+        super();
     }
 
     private void restoreCompletedState(boolean completed) {
