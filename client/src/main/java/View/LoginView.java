@@ -46,11 +46,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 public class LoginView {
     private static final String GOOGLE_LOGO_URL = "https://developers.google.com/identity/images/g-logo.png";
     private static final Duration OAUTH_TIMEOUT = Duration.ofMinutes(3);
     private static final String DEFAULT_HOSTED_API_BASE_URL = "https://disciplica-api-now5.onrender.com";
+    private static final Pattern BASIC_EMAIL_PATTERN = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
 
     private final Stage stage;
     private final SessionStore sessionStore;
@@ -139,11 +141,36 @@ public class LoginView {
     }
 
     private void submit() {
-        String email = emailField.getText();
+        String username = usernameField.getText().trim();
+        String email = emailField.getText().trim();
         String password = passwordField.getText();
+        String validationError = validateCredentials(username, email, password);
+        if (validationError != null) {
+            showError(registerMode ? "Create account failed" : "Sign-in failed", validationError);
+            return;
+        }
         runAuth(() -> registerMode
-                ? apiClient.register(new RegisterRequest(usernameField.getText(), email, password))
+                ? apiClient.register(new RegisterRequest(username, email, password))
                 : apiClient.login(new LoginRequest(email, password)));
+    }
+
+    private String validateCredentials(String username, String email, String password) {
+        StringBuilder errors = new StringBuilder();
+        if (registerMode && (username.length() < 3 || username.length() > 32)) {
+            errors.append("Username must be 3 to 32 characters.\n");
+        }
+        if (!BASIC_EMAIL_PATTERN.matcher(email).matches()) {
+            errors.append("Email must be valid.\n");
+        }
+        if (password.isBlank()) {
+            errors.append("Password is required.\n");
+        } else if (registerMode && (password.length() < 10 || password.length() > 128)) {
+            errors.append("Password must be 10 to 128 characters.\n");
+        }
+        if (errors.isEmpty()) {
+            return null;
+        }
+        return errors.toString().stripTrailing();
     }
 
     private void google() {

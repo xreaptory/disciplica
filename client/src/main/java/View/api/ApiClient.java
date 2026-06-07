@@ -17,6 +17,7 @@ import com.disciplica.shared.task.UpdateTaskRequest;
 import com.disciplica.shared.user.UpdateAvatarProfileRequest;
 import com.disciplica.shared.user.UserProfile;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -190,7 +191,22 @@ public class ApiClient {
 
     private void ensureSuccess(HttpResponse<String> response) {
         if (response.statusCode() < 200 || response.statusCode() >= 300) {
-            throw new ApiClientException("Server returned " + response.statusCode() + ": " + response.body());
+            throw new ApiClientException("Server returned " + response.statusCode() + ": " + errorMessage(response.body()));
         }
+    }
+
+    private String errorMessage(String body) {
+        if (body == null || body.isBlank()) {
+            return "No error details returned.";
+        }
+        try {
+            JsonNode root = objectMapper.readTree(body);
+            JsonNode error = root.get("error");
+            if (error != null && error.isTextual() && !error.asText().isBlank()) {
+                return error.asText();
+            }
+        } catch (IOException ignored) {
+        }
+        return body;
     }
 }
