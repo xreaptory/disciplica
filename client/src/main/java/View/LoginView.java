@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.concurrent.Task;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
@@ -25,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
 import java.awt.Desktop;
@@ -51,6 +54,8 @@ import java.util.regex.Pattern;
 public class LoginView {
     private static final String GOOGLE_LOGO_URL = "https://developers.google.com/identity/images/g-logo.png";
     private static final Duration OAUTH_TIMEOUT = Duration.ofMinutes(3);
+    // Render free tier can take 50–90s to wake from cold — use a generous timeout.
+    private static final Duration SERVER_WARMUP_TIMEOUT = Duration.ofSeconds(90);
     private static final String DEFAULT_HOSTED_API_BASE_URL = "https://disciplica-api-now5.onrender.com";
     private static final Pattern BASIC_EMAIL_PATTERN = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
 
@@ -69,6 +74,7 @@ public class LoginView {
     private final Button offlineButton = new Button("Continue Offline");
     private final Hyperlink modeLink = new Hyperlink("Create an account");
     private final Label title = new Label("Welcome to Disciplica");
+    private final Label serverStatusLabel = new Label("");
 
     public LoginView(Stage stage, SessionStore sessionStore, Runnable onAuthenticated) {
         this.stage = stage;
@@ -89,6 +95,10 @@ public class LoginView {
         title.getStyleClass().add("auth-title");
         Label subtitle = new Label("Sign in to sync tasks, join parties, and play with friends.");
         subtitle.getStyleClass().add("auth-subtitle");
+
+        serverStatusLabel.getStyleClass().add("auth-server-status");
+        serverStatusLabel.setVisible(false);
+        serverStatusLabel.setManaged(false);
 
         for (TextField field : new TextField[]{usernameField, emailField, passwordField}) {
             field.getStyleClass().add("habitica-field");
@@ -115,22 +125,28 @@ public class LoginView {
         Label offlineHint = new Label("Offline mode stores data only on this computer. Multiplayer and Google login need the hosted server.");
         offlineHint.getStyleClass().add("auth-offline-hint");
 
-        VBox card = new VBox(14, title, subtitle, usernameField, emailField, passwordField, submitButton,
-                googleButton, offlineButton, offlineHint, modeLink);
+        VBox card = new VBox(14, title, subtitle, usernameField, emailField, passwordField,
+                submitButton, googleButton, serverStatusLabel, offlineButton, offlineHint, modeLink);
         card.getStyleClass().add("auth-card");
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(28));
 
-        HBox brand = new HBox(new Label("Disciplica"));
+        Node logo = createDisciplicaLogo();
+        Label brandName = new Label("Disciplica");
+        brandName.getStyleClass().add("auth-brand-name");
+        Label brandTagline = new Label("Level up your life");
+        brandTagline.getStyleClass().add("auth-brand-tagline");
+
+        VBox brand = new VBox(6, logo, brandName, brandTagline);
         brand.getStyleClass().add("auth-brand");
         brand.setAlignment(Pos.CENTER);
 
-        VBox layout = new VBox(22, brand, card);
+        VBox layout = new VBox(20, brand, card);
         layout.setAlignment(Pos.CENTER);
         StackPane root = new StackPane(layout);
         root.getStyleClass().add("auth-root");
 
-        Scene scene = new Scene(root, 760, 620);
+        Scene scene = new Scene(root, 760, 680);
         var css = getClass().getResource("/css/habitica-theme.css");
         if (css != null) {
             scene.getStylesheets().add(css.toExternalForm());
@@ -138,6 +154,27 @@ public class LoginView {
         stage.setTitle("Disciplica Login");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private Node createDisciplicaLogo() {
+        // Pentagon shield: flat top, pointed bottom
+        Polygon shield = new Polygon(
+                0.0, 0.0,
+                64.0, 0.0,
+                64.0, 44.0,
+                32.0, 64.0,
+                0.0, 44.0
+        );
+        shield.getStyleClass().add("logo-shield");
+
+        Label letter = new Label("D");
+        letter.getStyleClass().add("logo-letter");
+        letter.setTranslateY(-6);
+
+        StackPane logoPane = new StackPane(shield, letter);
+        logoPane.setPrefSize(64, 64);
+        logoPane.setMaxSize(64, 64);
+        return logoPane;
     }
 
     private void submit() {
@@ -203,6 +240,7 @@ public class LoginView {
             submitButton.setDisable(false);
             googleButton.setDisable(false);
             offlineButton.setDisable(false);
+            clearServerStatus();
             Throwable exception = task.getException();
             showError("Sign-in failed", exception.getMessage());
         });
@@ -219,6 +257,22 @@ public class LoginView {
         modeLink.setText(registerMode ? "Already have an account?" : "Create an account");
         title.setText(registerMode ? "Create your hero" : "Welcome to Disciplica");
         Platform.runLater(usernameField::requestFocus);
+    }
+
+    private void setServerStatus(String message) {
+        Platform.runLater(() -> {
+            serverStatusLabel.setText(message);
+            serverStatusLabel.setVisible(true);
+            serverStatusLabel.setManaged(true);
+        });
+    }
+
+    private void clearServerStatus() {
+        Platform.runLater(() -> {
+            serverStatusLabel.setText("");
+            serverStatusLabel.setVisible(false);
+            serverStatusLabel.setManaged(false);
+        });
     }
 
     private String resolveBaseUrl() {
@@ -308,28 +362,34 @@ public class LoginView {
     }
 
     private void ensureBackendReachable() {
+        setServerStatus("⏳ Waking up the server — this takes up to 60 s on first launch. Please wait…");
         try {
-            HttpRequest request = HttpRequest.newBuilder(URI.create(apiBaseUrl + "/"))
-                    .timeout(Duration.ofSeconds(3))
+            HttpRequest request = HttpRequest.newBuilder(URI.create(apiBaseUrl + "/healthz"))
+                    .timeout(SERVER_WARMUP_TIMEOUT)
                     .GET()
                     .build();
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            clearServerStatus();
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
                 throw new ApiClientException("Disciplica server returned " + response.statusCode()
                         + " while checking " + apiBaseUrl + ".");
             }
         } catch (ConnectException exception) {
+            clearServerStatus();
             throw new ApiClientException("""
                     Disciplica server is not running.
-                    
+
                     The client tried:
                     %s
-                    
+
                     If this is a consumer build, the hosted Disciplica backend must be online.
                     For local development, set DISCIPLICA_API_BASE_URL=http://localhost:8080 and DISCIPLICA_ALLOW_LOCAL_API=true.""".formatted(apiBaseUrl), exception);
         } catch (IOException exception) {
-            throw new ApiClientException("Could not reach Disciplica server at " + apiBaseUrl, exception);
+            clearServerStatus();
+            throw new ApiClientException("Could not reach Disciplica server at " + apiBaseUrl
+                    + ". The server may still be starting up — try again in a moment.", exception);
         } catch (InterruptedException exception) {
+            clearServerStatus();
             Thread.currentThread().interrupt();
             throw new ApiClientException("Server reachability check was interrupted", exception);
         }
@@ -341,7 +401,6 @@ public class LoginView {
         }
         Desktop.getDesktop().browse(URI.create(uri));
     }
-
 
     private Map<String, String> parseQuery(String query) {
         Map<String, String> params = new HashMap<>();
