@@ -13,6 +13,8 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 COPY --from=build /workspace/server/target/disciplica-server-1.0-SNAPSHOT.jar app.jar
+COPY server/docker-entrypoint.sh docker-entrypoint.sh
+RUN chmod +x docker-entrypoint.sh
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
