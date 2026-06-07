@@ -46,6 +46,8 @@ import model.domain.model.WeeklyHabit;
 import model.service.UserService;
 import View.api.SessionStore;
 import View.api.ApiClientException;
+import View.avatar.AvatarPixelRenderer;
+import View.avatar.AvatarState;
 import com.disciplica.shared.party.ChatMessageDto;
 import com.disciplica.shared.party.PartyDto;
 
@@ -119,10 +121,6 @@ public class View extends Stage {
     private String equippedWeapon = "None";
     private String equippedArmor = "None";
     private String equippedHeadgear = "None";
-    private String selectedSkinTone = "Light";
-    private String selectedHairStyle = "Short";
-    private String selectedHairColor = "Black";
-    private String selectedBeardStyle = "None";
     private final ResourceBundle bundle;
 
     public ListView<String> getListViewTasks() {
@@ -797,38 +795,45 @@ public class View extends Stage {
         customizer.setHgap(10);
         customizer.setVgap(8);
 
-        skinToneSelector = createAvatarCombo("Light", "Tan", "Brown", "Dark");
-        skinToneSelector.setValue(selectedSkinTone);
+        AvatarState avatarState = sessionStore.avatarState();
+
+        skinToneSelector = createAvatarCombo("Warm", "Tan", "Brown", "Dark", "Fantasy");
+        skinToneSelector.setValue(avatarState.getSkinColor());
         skinToneSelector.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                selectedSkinTone = newVal;
+                avatarState.setSkinColor(newVal);
+                persistAvatarProfile();
                 renderAvatarPixelArt();
             }
         });
 
-        hairStyleSelector = createAvatarCombo("Short", "Mohawk", "Long");
-        hairStyleSelector.setValue(selectedHairStyle);
+        hairStyleSelector = createAvatarCombo("Short", "Long", "Bangs", "Spikes");
+        hairStyleSelector.setValue(avatarState.getHairStyle());
         hairStyleSelector.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                selectedHairStyle = newVal;
+                avatarState.setHairStyle(newVal);
+                avatarState.setHairBangs("Bangs".equals(newVal) ? "Bangs" : "None");
+                persistAvatarProfile();
                 renderAvatarPixelArt();
             }
         });
 
-        hairColorSelector = createAvatarCombo("Black", "Brown", "Blonde", "Red", "White");
-        hairColorSelector.setValue(selectedHairColor);
+        hairColorSelector = createAvatarCombo("Brown", "Black", "Blonde", "Red", "White");
+        hairColorSelector.setValue(avatarState.getHairColor());
         hairColorSelector.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                selectedHairColor = newVal;
+                avatarState.setHairColor(newVal);
+                persistAvatarProfile();
                 renderAvatarPixelArt();
             }
         });
 
-        beardStyleSelector = createAvatarCombo("None", "Goatee", "Full");
-        beardStyleSelector.setValue(selectedBeardStyle);
+        beardStyleSelector = createAvatarCombo("None", "Glasses", "Wheelchair");
+        beardStyleSelector.setValue(avatarState.getExtra());
         beardStyleSelector.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                selectedBeardStyle = newVal;
+                avatarState.setExtra(newVal);
+                persistAvatarProfile();
                 renderAvatarPixelArt();
             }
         });
@@ -839,7 +844,7 @@ public class View extends Stage {
         customizer.add(hairStyleSelector, 1, 1);
         customizer.add(createFieldLabel("Hair Color"), 2, 0);
         customizer.add(hairColorSelector, 3, 0);
-        customizer.add(createFieldLabel("Beard"), 2, 1);
+        customizer.add(createFieldLabel("Extra"), 2, 1);
         customizer.add(beardStyleSelector, 3, 1);
 
         VBox panel = new VBox(10, title, avatarCanvas, customizer);
@@ -1001,204 +1006,22 @@ public class View extends Stage {
         renderAvatarPixelArt();
     }
 
+    private void persistAvatarProfile() {
+        try {
+            sessionStore.updateAvatar(sessionStore.avatarState());
+        } catch (ApiClientException exception) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, exception.getMessage());
+            alert.setHeaderText("Avatar updated for this session");
+            alert.show();
+        }
+    }
+
     private void renderAvatarPixelArt() {
         if (avatarPixelCanvas == null) {
             return;
         }
-
-        GraphicsContext gc = avatarPixelCanvas.getGraphicsContext2D();
-        double width = avatarPixelCanvas.getWidth();
-        double height = avatarPixelCanvas.getHeight();
-
-        gc.setFill(Color.web("#1d1731"));
-        gc.fillRect(0, 0, width, height);
-
-        int p = 6;
-        int ox = 86;
-        int oy = 8;
-
-        Color skin = resolveSkinColor(selectedSkinTone);
-        Color hair = resolveHairColor(selectedHairColor);
-        Color beard = hair.darker();
-
-        // cape sits behind the body
-        if ("Cape".equals(equippedArmor)) {
-            gc.setFill(Color.web("#704fd1"));
-            gc.fillRect(ox + 4 * p, oy + 10 * p, 20 * p, 18 * p);
-            gc.setFill(Color.web("#5a3cad"));
-            gc.fillRect(ox + 6 * p, oy + 12 * p, 16 * p, 15 * p);
-            gc.setFill(Color.web("#8a6bf2"));
-            gc.fillRect(ox + 9 * p, oy + 10 * p, 10 * p, 2 * p);
-        }
-
-        // Base avatar body
-        gc.setFill(skin);
-        gc.fillRect(ox + 9 * p, oy + 8 * p, 10 * p, 8 * p); // face
-        gc.fillRect(ox + 8 * p, oy + 16 * p, 2 * p, 3 * p); // left hand
-        gc.fillRect(ox + 18 * p, oy + 16 * p, 2 * p, 3 * p); // right hand
-
-        drawHair(gc, ox, oy, p, hair);
-        drawBeard(gc, ox, oy, p, beard);
-
-        gc.setFill(Color.web("#2b2b3d"));
-        gc.fillRect(ox + 11 * p, oy + 11 * p, p, p); // eye L
-        gc.fillRect(ox + 16 * p, oy + 11 * p, p, p); // eye R
-        gc.setFill(skin.darker());
-        gc.fillRect(ox + 14 * p, oy + 12 * p, p, p); // nose
-        gc.setFill(Color.web("#7a2f2f"));
-        gc.fillRect(ox + 13 * p, oy + 14 * p, 3 * p, p); // mouth
-        gc.setFill(Color.web("#4c8bbf"));
-        gc.fillRect(ox + 8 * p, oy + 16 * p, 12 * p, 8 * p); // torso
-        gc.fillRect(ox + 5 * p, oy + 16 * p, 3 * p, 7 * p);  // arm L
-        gc.fillRect(ox + 20 * p, oy + 16 * p, 3 * p, 7 * p); // arm R
-        gc.setFill(Color.web("#3a72a3"));
-        gc.fillRect(ox + 10 * p, oy + 18 * p, 8 * p, 4 * p);
-        gc.setFill(Color.web("#2c3f84"));
-        gc.fillRect(ox + 10 * p, oy + 24 * p, 4 * p, 7 * p);  // leg L
-        gc.fillRect(ox + 14 * p, oy + 24 * p, 4 * p, 7 * p); // leg R
-
-        // Headgear overlays
-        if ("Helm".equals(equippedHeadgear)) {
-            gc.setFill(Color.web("#9ec4e6"));
-            gc.fillRect(ox + 8 * p, oy + 6 * p, 12 * p, 3 * p);
-            gc.fillRect(ox + 9 * p, oy + 9 * p, 10 * p, p);
-            gc.setFill(Color.web("#6e8ca8"));
-            gc.fillRect(ox + 8 * p, oy + 6 * p, 2 * p, 4 * p);
-            gc.fillRect(ox + 18 * p, oy + 6 * p, 2 * p, 4 * p);
-        } else if ("Crown".equals(equippedHeadgear)) {
-            gc.setFill(Color.web("#ffd45c"));
-            gc.fillRect(ox + 9 * p, oy + 6 * p, 10 * p, 2 * p);
-            gc.fillRect(ox + 10 * p, oy + 5 * p, 2 * p, p);
-            gc.fillRect(ox + 13 * p, oy + 4 * p, 2 * p, 2 * p);
-            gc.fillRect(ox + 16 * p, oy + 5 * p, 2 * p, p);
-            gc.setFill(Color.web("#d39b28"));
-            gc.fillRect(ox + 9 * p, oy + 7 * p, 10 * p, p);
-        } else if ("RoyalCrown".equals(equippedHeadgear)) {
-            gc.setFill(Color.web("#ffe07c"));
-            gc.fillRect(ox + 8 * p, oy + 6 * p, 12 * p, 2 * p);
-            gc.fillRect(ox + 9 * p, oy + 5 * p, 2 * p, p);
-            gc.fillRect(ox + 12 * p, oy + 4 * p, 2 * p, 2 * p);
-            gc.fillRect(ox + 15 * p, oy + 5 * p, 2 * p, p);
-            gc.fillRect(ox + 18 * p, oy + 5 * p, p, p);
-            gc.setFill(Color.web("#cf9f2c"));
-            gc.fillRect(ox + 8 * p, oy + 7 * p, 12 * p, p);
-            gc.setFill(Color.web("#8cd7ff"));
-            gc.fillRect(ox + 13 * p, oy + 6 * p, p, p);
-        }
-
-        // Armor overlays
-        if ("Armor".equals(equippedArmor)) {
-            gc.setFill(Color.web("#8da6bd"));
-            gc.fillRect(ox + 8 * p, oy + 16 * p, 12 * p, 8 * p);
-            gc.setFill(Color.web("#5f7388"));
-            gc.fillRect(ox + 12 * p, oy + 17 * p, 4 * p, 7 * p);
-            gc.setFill(Color.web("#c9d8e6"));
-            gc.fillRect(ox + 9 * p, oy + 18 * p, 2 * p, 3 * p);
-            gc.fillRect(ox + 17 * p, oy + 18 * p, 2 * p, 3 * p);
-        } else if ("DragonArmor".equals(equippedArmor)) {
-            gc.setFill(Color.web("#4f2b6f"));
-            gc.fillRect(ox + 8 * p, oy + 16 * p, 12 * p, 8 * p);
-            gc.setFill(Color.web("#6e3f93"));
-            gc.fillRect(ox + 10 * p, oy + 17 * p, 8 * p, 6 * p);
-            gc.setFill(Color.web("#c08cff"));
-            gc.fillRect(ox + 11 * p, oy + 18 * p, p, 3 * p);
-            gc.fillRect(ox + 16 * p, oy + 18 * p, p, 3 * p);
-            gc.setFill(Color.web("#2d173d"));
-            gc.fillRect(ox + 13 * p, oy + 17 * p, 2 * p, 6 * p);
-        }
-
-        // Weapon overlays anchored to right hand
-        int handX = ox + 20 * p;
-        int handY = oy + 18 * p;
-        gc.setFill(skin);
-        gc.fillRect(handX, handY, 2 * p, 2 * p);
-        if ("Sword".equals(equippedWeapon)) {
-            gc.setFill(Color.web("#dfe7ef"));
-            gc.fillRect(handX + 2 * p, handY - 6 * p, 2 * p, 8 * p);
-            gc.setFill(Color.web("#ffd45c"));
-            gc.fillRect(handX + p, handY + p, 4 * p, p);
-            gc.setFill(Color.web("#8b5a2b"));
-            gc.fillRect(handX + 2 * p, handY + 2 * p, 2 * p, 3 * p);
-        } else if ("Axe".equals(equippedWeapon)) {
-            gc.setFill(Color.web("#8b5a2b"));
-            gc.fillRect(handX + 2 * p, handY - 5 * p, 2 * p, 10 * p);
-            gc.setFill(Color.web("#a7b4c6"));
-            gc.fillRect(handX - p, handY - 6 * p, 4 * p, 3 * p);
-            gc.fillRect(handX - 2 * p, handY - 5 * p, p, 2 * p);
-            gc.fillRect(handX + 3 * p, handY - 5 * p, p, p);
-        } else if ("Greatsword".equals(equippedWeapon)) {
-            gc.setFill(Color.web("#dbe6f3"));
-            gc.fillRect(handX + 2 * p, handY - 9 * p, 2 * p, 12 * p);
-            gc.setFill(Color.web("#b8c7d8"));
-            gc.fillRect(handX + p, handY - 9 * p, 4 * p, p);
-            gc.setFill(Color.web("#f0cc58"));
-            gc.fillRect(handX, handY + p, 6 * p, p);
-            gc.setFill(Color.web("#7a4f24"));
-            gc.fillRect(handX + 2 * p, handY + 2 * p, 2 * p, 4 * p);
-        } else if ("Halberd".equals(equippedWeapon)) {
-            gc.setFill(Color.web("#8b5a2b"));
-            gc.fillRect(handX + 2 * p, handY - 10 * p, 2 * p, 15 * p);
-            gc.setFill(Color.web("#b9c8d8"));
-            gc.fillRect(handX + p, handY - 10 * p, 4 * p, 2 * p);
-            gc.fillRect(handX + 4 * p, handY - 9 * p, 2 * p, 3 * p);
-            gc.fillRect(handX, handY - 8 * p, p, 2 * p);
-        }
-    }
-
-    private Color resolveSkinColor(String tone) {
-        return switch (tone) {
-            case "Tan" -> Color.web("#d6a77f");
-            case "Brown" -> Color.web("#a56e45");
-            case "Dark" -> Color.web("#70452d");
-            default -> Color.web("#f2c8a0");
-        };
-    }
-
-    private Color resolveHairColor(String colorName) {
-        return switch (colorName) {
-            case "Brown" -> Color.web("#5a3a29");
-            case "Blonde" -> Color.web("#d8bf64");
-            case "Red" -> Color.web("#9a3f2e");
-            case "White" -> Color.web("#d8d8e8");
-            default -> Color.web("#3a4161");
-        };
-    }
-
-    private void drawHair(GraphicsContext gc, int ox, int oy, int p, Color hair) {
-        gc.setFill(hair);
-        if ("Mohawk".equals(selectedHairStyle)) {
-            gc.fillRect(ox + 13 * p, oy + 4 * p, 2 * p, 5 * p);
-            gc.fillRect(ox + 12 * p, oy + 6 * p, 4 * p, 2 * p);
-            gc.setFill(hair.brighter());
-            gc.fillRect(ox + 13 * p, oy + 5 * p, p, 3 * p);
-            return;
-        }
-        if ("Long".equals(selectedHairStyle)) {
-            gc.fillRect(ox + 8 * p, oy + 6 * p, 12 * p, 3 * p);
-            gc.fillRect(ox + 8 * p, oy + 9 * p, 2 * p, 5 * p);
-            gc.fillRect(ox + 18 * p, oy + 9 * p, 2 * p, 5 * p);
-            gc.setFill(hair.brighter());
-            gc.fillRect(ox + 10 * p, oy + 7 * p, 8 * p, p);
-            return;
-        }
-        gc.fillRect(ox + 9 * p, oy + 6 * p, 10 * p, 2 * p);
-        gc.fillRect(ox + 10 * p, oy + 8 * p, 8 * p, p);
-        gc.fillRect(ox + 9 * p, oy + 9 * p, p, p);
-        gc.fillRect(ox + 18 * p, oy + 9 * p, p, p);
-        gc.setFill(hair.brighter());
-        gc.fillRect(ox + 11 * p, oy + 7 * p, 6 * p, p);
-    }
-
-    private void drawBeard(GraphicsContext gc, int ox, int oy, int p, Color beard) {
-        gc.setFill(beard);
-        if ("Goatee".equals(selectedBeardStyle)) {
-            gc.fillRect(ox + 13 * p, oy + 15 * p, 2 * p, 2 * p);
-            return;
-        }
-        if ("Full".equals(selectedBeardStyle)) {
-            gc.fillRect(ox + 10 * p, oy + 14 * p, 8 * p, 3 * p);
-            gc.fillRect(ox + 11 * p, oy + 17 * p, 6 * p, p);
-        }
+        AvatarPixelRenderer.render(avatarPixelCanvas, sessionStore.avatarState(),
+                new AvatarPixelRenderer.Equipment(equippedWeapon, equippedArmor, equippedHeadgear));
     }
 
     private void playLevelUpEffect() {
