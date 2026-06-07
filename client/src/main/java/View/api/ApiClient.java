@@ -14,6 +14,7 @@ import com.disciplica.shared.party.SendChatMessageRequest;
 import com.disciplica.shared.task.CreateTaskRequest;
 import com.disciplica.shared.task.TaskDto;
 import com.disciplica.shared.task.UpdateTaskRequest;
+import com.disciplica.shared.user.UpdateAvatarProfileRequest;
 import com.disciplica.shared.user.UserProfile;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +59,10 @@ public class ApiClient {
 
     public UserProfile me() {
         return get("/me", UserProfile.class);
+    }
+
+    public UserProfile updateAvatar(UpdateAvatarProfileRequest request) {
+        return patch("/me/avatar", request, UserProfile.class);
     }
 
     public List<TaskDto> tasks() {

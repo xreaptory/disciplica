@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ import com.disciplica.shared.auth.GoogleLoginRequest;
 import com.disciplica.shared.auth.LoginRequest;
 import com.disciplica.shared.auth.RefreshTokenRequest;
 import com.disciplica.shared.auth.RegisterRequest;
+import com.disciplica.shared.user.UpdateAvatarProfileRequest;
 import com.disciplica.shared.user.UserProfile;
 
 @RestController
@@ -122,6 +124,12 @@ public class AuthController {
     public UserProfile me(Authentication authentication) {
         UUID userId = currentUser.requireUserId(authentication);
         return authService.me(userId);
+    }
+
+    @PatchMapping("/me/avatar")
+    public UserProfile updateAvatar(Authentication authentication, @Valid @RequestBody UpdateAvatarProfileRequest request) {
+        UUID userId = currentUser.requireUserId(authentication);
+        return authService.updateAvatar(userId, request);
     }
 
     private ResponseEntity<Void> redirect(String location) {

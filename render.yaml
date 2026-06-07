@@ -1,21 +1,46 @@
 services:
   - type: web
     name: disciplica-api
-    env: docker
+    runtime: docker
     dockerfilePath: ./server/Dockerfile
+    dockerContext: .
     plan: free
     envVars:
       - key: PUBLIC_BASE_URL
-        sync: false
+        value: https://disciplica-api.onrender.com
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: disciplica-db
+          property: connectionString
       - key: DATABASE_USERNAME
-        sync: false
+        fromDatabase:
+          name: disciplica-db
+          property: user
       - key: DATABASE_PASSWORD
-        sync: false
+        fromDatabase:
+          name: disciplica-db
+          property: password
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: disciplica-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: disciplica-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: disciplica-db
+          property: password
       - key: JWT_SECRET
         generateValue: true
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
+
+databases:
+  - name: disciplica-db
+    databaseName: disciplica
+    user: disciplica
+    plan: free

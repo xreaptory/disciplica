@@ -28,8 +28,8 @@ public class HabitTrackerApp extends Application {
         backupSchedulerService = injector.getInstance(BackupSchedulerService.class);
         SessionStore sessionStore = injector.getInstance(SessionStore.class);
         new LoginView(primaryStage, sessionStore, () -> {
+            new OnboardingDialog(primaryStage, sessionStore).show();
             new View(injector);
-            new OnboardingDialog(primaryStage).show();
             lazyInitializeBackgroundServices();
         });
     }

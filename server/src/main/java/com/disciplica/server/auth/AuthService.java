@@ -33,6 +33,7 @@ import com.disciplica.shared.auth.GoogleLoginRequest;
 import com.disciplica.shared.auth.LoginRequest;
 import com.disciplica.shared.auth.RefreshTokenRequest;
 import com.disciplica.shared.auth.RegisterRequest;
+import com.disciplica.shared.user.UpdateAvatarProfileRequest;
 import com.disciplica.shared.user.UserProfile;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -164,6 +165,24 @@ public class AuthService {
     public UserProfile me(UUID userId) {
         return userMapper.toProfile(userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found")));
+    }
+
+    @Transactional
+    public UserProfile updateAvatar(UUID userId, UpdateAvatarProfileRequest request) {
+        jdbcTemplate.update("""
+                INSERT INTO avatar_profiles (user_id, body_size, shirt_color, skin_color, hair_color, hair_bangs, hair_style, extra)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT (user_id) DO UPDATE SET
+                    body_size = excluded.body_size,
+                    shirt_color = excluded.shirt_color,
+                    skin_color = excluded.skin_color,
+                    hair_color = excluded.hair_color,
+                    hair_bangs = excluded.hair_bangs,
+                    hair_style = excluded.hair_style,
+                    extra = excluded.extra
+                """, userId, request.bodySize(), request.shirtColor(), request.skinColor(), request.hairColor(),
+                request.hairBangs(), request.hairStyle(), request.extra());
+        return me(userId);
     }
 
     private AuthResponse issueTokens(UserRow user) {
