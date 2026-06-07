@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:16-alpine:///disciplica
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+disciplica:
+  jwt:
+    issuer: disciplica-test
+    secret: test-secret-test-secret-test-secret-1234
+    access-token-minutes: 15
+    refresh-token-days: 30
+  google:
+    client-id: test-google-client

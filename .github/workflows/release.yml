@@ -1,0 +1,121 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-installers:
+    name: Build Installer (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            package_type: exe
+            artifact_glob: "*.exe"
+          - os: macos-latest
+            package_type: dmg
+            artifact_glob: "*.dmg"
+          - os: ubuntu-latest
+            package_type: deb
+            artifact_glob: "*.deb"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Build shaded JAR
+        run: mvn -B -ntp -DskipTests package
+
+      - name: Prepare jpackage input (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p dist/input dist/output
+          cp target/*SNAPSHOT.jar dist/input/disciplica.jar
+
+      - name: Prepare jpackage input (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path dist\input | Out-Null
+          New-Item -ItemType Directory -Force -Path dist\output | Out-Null
+          Copy-Item target\*SNAPSHOT.jar dist\input\disciplica.jar
+
+      - name: Build native installer (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          jpackage \
+            --name Disciplica \
+            --input dist/input \
+            --main-jar disciplica.jar \
+            --main-class model.bootstrap.Main \
+            --type ${{ matrix.package_type }} \
+            --dest dist/output \
+            --vendor "Disciplica" \
+            --app-version ${GITHUB_REF_NAME#v}
+
+      - name: Build native installer (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          jpackage `
+            --name Disciplica `
+            --input dist\input `
+            --main-jar disciplica.jar `
+            --main-class model.bootstrap.Main `
+            --type ${{ matrix.package_type }} `
+            --dest dist\output `
+            --vendor "Disciplica" `
+            --app-version $env:GITHUB_REF_NAME.Replace("v","")
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ matrix.os }}
+          path: dist/output/${{ matrix.artifact_glob }}
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    needs: build-installers
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download installer artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/release-assets
+
+      - name: Create release notes file
+        run: |
+          cp .github/RELEASE_NOTES_TEMPLATE.md dist/RELEASE_NOTES.md
+          echo "" >> dist/RELEASE_NOTES.md
+          echo "Tag: ${GITHUB_REF_NAME}" >> dist/RELEASE_NOTES.md
+
+      - name: Publish release and upload assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: dist/RELEASE_NOTES.md
+          files: |
+            dist/release-assets/**/*.exe
+            dist/release-assets/**/*.msi
+            dist/release-assets/**/*.dmg
+            dist/release-assets/**/*.deb
+            dist/release-assets/**/*.rpm

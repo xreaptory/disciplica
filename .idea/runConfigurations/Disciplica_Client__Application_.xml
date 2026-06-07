@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Disciplica Client (Application)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="model.bootstrap.Main" />
+    <module name="client" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/client" />
+    <envs>
+      <env name="DISCIPLICA_API_BASE_URL" value="http://localhost:8080" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
