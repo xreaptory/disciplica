@@ -476,22 +476,49 @@
 }
 
 .auth-root {
-    -fx-background-color: #3b236a;
+    -fx-background-color: linear-gradient(to bottom, #2a1850 0%, #3b236a 55%, #4a2878 100%);
 }
 
-.auth-brand .label {
-    -fx-text-fill: #fed605;
-    -fx-font-size: 34px;
+/* ── Logo ── */
+.logo-shield {
+    -fx-fill: #fed605;
+    -fx-stroke: #c9a300;
+    -fx-stroke-width: 2.5;
+    -fx-effect: dropshadow(gaussian, rgba(254, 214, 5, 0.55), 18, 0.38, 0, 4);
+}
+
+.logo-letter {
+    -fx-text-fill: #2f214d;
+    -fx-font-size: 28px;
     -fx-font-weight: bold;
 }
 
+/* ── Brand ── */
+.auth-brand {
+    -fx-padding: 0 0 4 0;
+}
+
+.auth-brand-name {
+    -fx-text-fill: #fed605;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(254, 214, 5, 0.45), 14, 0.3, 0, 3);
+}
+
+.auth-brand-tagline {
+    -fx-text-fill: #c9b9ea;
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+}
+
+/* ── Auth card ── */
 .auth-card {
     -fx-background-color: #ffffff;
-    -fx-background-radius: 14;
+    -fx-background-radius: 16;
     -fx-border-color: #e3d9ff;
-    -fx-border-radius: 14;
+    -fx-border-radius: 16;
     -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.36), 26, 0.22, 0, 8);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.42), 32, 0.26, 0, 10);
 }
 
 .auth-title {
@@ -507,10 +534,30 @@
     -fx-max-width: 320;
 }
 
+/* Server warm-up status banner */
+.auth-server-status {
+    -fx-text-fill: #7a5000;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+    -fx-max-width: 300;
+    -fx-text-alignment: center;
+    -fx-padding: 6 10 6 10;
+    -fx-background-color: #fff8e1;
+    -fx-background-radius: 7;
+    -fx-border-color: #ffe082;
+    -fx-border-radius: 7;
+    -fx-border-width: 1;
+}
+
 .auth-offline-hint {
     -fx-text-fill: #857995;
     -fx-font-size: 12px;
     -fx-wrap-text: true;
     -fx-max-width: 320;
     -fx-text-alignment: center;
+}
+
+/* Override the old brand label rule — now handled by auth-brand-name */
+.auth-brand .label {
+    -fx-text-fill: #fed605;
 }
