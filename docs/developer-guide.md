@@ -47,7 +47,7 @@ Commands:
 ```
 
 Output:
-- shaded runnable JAR under `target/`
+- shaded runnable consumer JAR under `client/target/disciplica-client-1.0-SNAPSHOT-consumer.jar`
 
 ## CI / Release
 

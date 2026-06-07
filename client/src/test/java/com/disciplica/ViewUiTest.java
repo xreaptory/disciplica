@@ -20,6 +20,8 @@ import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -115,7 +117,7 @@ class ViewUiTest extends ApplicationTest {
     }
 
     private void closeAnyInfoAlertIfPresent(FxRobot robot) {
-        WaitForAsyncUtils.sleep(java.time.Duration.ofMillis(150));
+        WaitForAsyncUtils.sleep(150, TimeUnit.MILLISECONDS);
         if (!robot.lookup(".dialog-pane").queryAll().isEmpty()) {
             robot.clickOn("OK");
         }
