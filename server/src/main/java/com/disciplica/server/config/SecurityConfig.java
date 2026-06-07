@@ -1,5 +1,7 @@
 package com.disciplica.server.config;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -17,6 +19,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
@@ -28,7 +31,12 @@ public class SecurityConfig {
     @Order(0)
     SecurityFilterChain publicSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/", "/auth/**", "/ws/**", "/actuator/health")
+                .securityMatcher(new OrRequestMatcher(
+                        antMatcher("/"),
+                        antMatcher("/auth/**"),
+                        antMatcher("/ws/**"),
+                        antMatcher("/actuator/health")
+                ))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll())
