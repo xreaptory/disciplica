@@ -7,7 +7,7 @@ import java.util.Map;
 
 @RestController
 public class PublicStatusController {
-    private static final String BUILD_MARKER = "security-ant-public-auth";
+    private static final String BUILD_MARKER = "ant-ignoring-v2";
 
     @GetMapping("/")
     public Map<String, String> index() {
