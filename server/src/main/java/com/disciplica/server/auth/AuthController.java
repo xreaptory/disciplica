@@ -94,10 +94,16 @@ public class AuthController {
         if (request == null || request.expiresAt().isBefore(Instant.now())) {
             return redirect("http://127.0.0.1/?error=" + urlEncode("Google login session expired"));
         }
-        AuthResponse authResponse = authService.googleAuthorizationCode(code, serverGoogleRedirectUri());
-        String desktopCode = UUID.randomUUID().toString();
-        desktopTokens.put(desktopCode, new DesktopOAuthToken(authResponse, Instant.now().plusSeconds(120)));
-        return redirect(request.appRedirectUri() + "?code=" + urlEncode(desktopCode));
+        try {
+            AuthResponse authResponse = authService.googleAuthorizationCode(code, serverGoogleRedirectUri());
+            String desktopCode = UUID.randomUUID().toString();
+            desktopTokens.put(desktopCode, new DesktopOAuthToken(authResponse, Instant.now().plusSeconds(120)));
+            return redirect(request.appRedirectUri() + "?code=" + urlEncode(desktopCode));
+        } catch (ApiException exception) {
+            return redirect(request.appRedirectUri() + "?error=" + urlEncode(exception.getMessage()));
+        } catch (RuntimeException exception) {
+            return redirect(request.appRedirectUri() + "?error=" + urlEncode("Google sign-in failed on the server"));
+        }
     }
 
     @PostMapping("/auth/google/desktop/complete")
