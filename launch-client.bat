@@ -27,7 +27,7 @@ if not errorlevel 1 (
     echo [ERROR] apiBaseUrl still points to a local server:
     echo         %API_BASE_URL%
     echo Update %PROPERTIES_FILE% to your live Render backend URL, for example:
-    echo         apiBaseUrl=https://disciplica-api.onrender.com
+    echo         apiBaseUrl=https://disciplica-api-now5.onrender.com
     exit /b 1
 )
 

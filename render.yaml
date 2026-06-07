@@ -1,36 +1,36 @@
 services:
   - type: web
-    name: disciplica-api
+    name: disciplica-api-now5
     runtime: docker
     dockerfilePath: ./server/Dockerfile
     dockerContext: .
     plan: free
     envVars:
       - key: PUBLIC_BASE_URL
-        value: https://disciplica-api.onrender.com
+        value: https://disciplica-api-now5.onrender.com
       - key: DATABASE_URL
         fromDatabase:
-          name: disciplica-db
+          name: disciplica-db-now5
           property: connectionString
       - key: DATABASE_USERNAME
         fromDatabase:
-          name: disciplica-db
+          name: disciplica-db-now5
           property: user
       - key: DATABASE_PASSWORD
         fromDatabase:
-          name: disciplica-db
+          name: disciplica-db-now5
           property: password
       - key: SPRING_DATASOURCE_URL
         fromDatabase:
-          name: disciplica-db
+          name: disciplica-db-now5
           property: connectionString
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
-          name: disciplica-db
+          name: disciplica-db-now5
           property: user
       - key: SPRING_DATASOURCE_PASSWORD
         fromDatabase:
-          name: disciplica-db
+          name: disciplica-db-now5
           property: password
       - key: JWT_SECRET
         generateValue: true
@@ -40,7 +40,7 @@ services:
         sync: false
 
 databases:
-  - name: disciplica-db
+  - name: disciplica-db-now5
     databaseName: disciplica
     user: disciplica
     plan: free

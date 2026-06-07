@@ -20,7 +20,7 @@ For a consumer-style test build:
    - `https://your-server.example.com/auth/google/desktop/callback`
 4. Set `client/src/main/resources/disciplica-client.properties` before packaging:
    - `apiBaseUrl=https://your-server.example.com`
-   - The default is already `https://disciplica-api.onrender.com` for the included Render blueprint.
+   - The default is already `https://disciplica-api-now5.onrender.com` for the included Render blueprint.
 5. Package and distribute only the JavaFX client:
    - `./mvnw -pl client -am -DskipTests package`
    - send `client/target/disciplica-client-1.0-SNAPSHOT-consumer.jar`
