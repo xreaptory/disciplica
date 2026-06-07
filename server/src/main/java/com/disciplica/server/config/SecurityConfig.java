@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -24,22 +25,30 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 @EnableConfigurationProperties({JwtProperties.class, GoogleProperties.class})
 public class SecurityConfig {
 
-    // Single filter chain: public paths are explicitly permitted, everything else requires JWT.
-    // The two-chain approach (public + authenticated) caused 401s on /auth/** in some Spring Security
-    // 6.x deployments because OrRequestMatcher + securityMatcher() did not match as expected.
+    // Completely bypass the Spring Security filter chain for public paths.
+    // Using WebSecurityCustomizer.ignoring() is the most reliable approach:
+    // it removes the paths from Spring Security processing entirely, so neither
+    // the BearerTokenAuthenticationFilter nor any other security filter runs for them.
+    // This resolves the persistent 401 on /auth/** that occurred even with permitAll()
+    // + oauth2ResourceServer in a single filter chain (Spring Security 6.3 + Spring Boot 3.3).
+    @Bean
+    WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+                .requestMatchers(
+                        "/",
+                        "/status",
+                        "/healthz",
+                        "/auth/**",
+                        "/ws/**",
+                        "/actuator/health"
+                );
+    }
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/status",
-                                "/healthz",
-                                "/auth/**",
-                                "/ws/**",
-                                "/actuator/health"
-                        ).permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> {
                 }))
