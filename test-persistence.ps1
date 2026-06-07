@@ -1,4 +1,4 @@
-# Test persistence by simulating user interaction
+ vv# Test persistence by simulating user interaction
 
 Write-Host "`n=== Persistence Test Script ===" -ForegroundColor Cyan
 Write-Host "This will test if tasks persist between program restarts`n" -ForegroundColor Yellow

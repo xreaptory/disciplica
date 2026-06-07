@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: disciplica-postgres
+    environment:
+      POSTGRES_DB: disciplica
+      POSTGRES_USER: disciplica
+      POSTGRES_PASSWORD: disciplica
+    ports:
+      - "5432:5432"
+    volumes:
+      - disciplica-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  disciplica-postgres-data:
