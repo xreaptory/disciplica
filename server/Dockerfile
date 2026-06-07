@@ -5,6 +5,7 @@ COPY .mvn .mvn
 COPY mvnw pom.xml ./
 COPY shared shared
 COPY server server
+COPY client client
 
 RUN chmod +x mvnw && ./mvnw -q -pl server -am -DskipTests package
 

@@ -47,6 +47,10 @@ public final class AvatarPixelRenderer {
             rect(gc, originX, originY, 8, bodyTop, 12, bodyHeight + 5, pixel, Color.web("#52359f"));
         }
 
+        if ("Wheelchair".equals(state.getExtra())) {
+            drawWheelchair(gc, originX, originY, pixel, torsoLeft, bodyTop, bodyHeight, outline);
+        }
+
         drawBackHair(gc, originX, originY, pixel, state, hair, headLeft, headTop);
         rect(gc, originX, originY, headLeft - 1, headTop - 1, 10, 9, pixel, outline);
         rect(gc, originX, originY, headLeft, headTop, 8, 7, pixel, skin);
@@ -120,10 +124,42 @@ public final class AvatarPixelRenderer {
             rect(gc, ox, oy, headLeft + 1, headTop + 2, 3, 2, p, Color.web("#51466f"));
             rect(gc, ox, oy, headLeft + 5, headTop + 2, 3, 2, p, Color.web("#51466f"));
             rect(gc, ox, oy, headLeft + 4, headTop + 3, 1, 1, p, Color.web("#51466f"));
-        } else if ("Wheelchair".equals(extra)) {
-            rect(gc, ox, oy, headLeft - 2, headTop + 22, 2, 2, p, Color.web("#5d6680"));
-            rect(gc, ox, oy, headLeft + 9, headTop + 22, 2, 2, p, Color.web("#5d6680"));
         }
+    }
+
+    private static void drawWheelchair(GraphicsContext gc, int ox, int oy, int p,
+                                       int torsoLeft, int bodyTop, int bodyHeight, Color outline) {
+        Color frame = Color.web("#6f7893");
+        Color frameLight = Color.web("#aeb7c8");
+        Color wheel = Color.web("#3a4058");
+        Color wheelLight = Color.web("#d8deea");
+        int seatY = bodyTop + bodyHeight - 2;
+        int wheelY = bodyTop + bodyHeight + 3;
+
+        rect(gc, ox, oy, torsoLeft - 5, bodyTop + 3, 2, bodyHeight + 4, p, outline);
+        rect(gc, ox, oy, torsoLeft - 4, bodyTop + 4, 1, bodyHeight + 2, p, frameLight);
+        rect(gc, ox, oy, torsoLeft + 11, bodyTop + 5, 2, bodyHeight + 1, p, outline);
+        rect(gc, ox, oy, torsoLeft + 12, bodyTop + 6, 1, bodyHeight - 1, p, frameLight);
+
+        rect(gc, ox, oy, torsoLeft - 4, seatY, 17, 2, p, outline);
+        rect(gc, ox, oy, torsoLeft - 3, seatY, 15, 1, p, frame);
+        rect(gc, ox, oy, torsoLeft - 2, seatY + 2, 12, 2, p, frame);
+
+        drawWheel(gc, ox, oy, p, torsoLeft - 6, wheelY, wheel, wheelLight, outline);
+        drawWheel(gc, ox, oy, p, torsoLeft + 10, wheelY, wheel, wheelLight, outline);
+
+        rect(gc, ox, oy, torsoLeft + 8, seatY + 3, 7, 1, p, outline);
+        rect(gc, ox, oy, torsoLeft + 13, seatY + 2, 1, 5, p, frame);
+        rect(gc, ox, oy, torsoLeft + 14, seatY + 6, 3, 1, p, frame);
+    }
+
+    private static void drawWheel(GraphicsContext gc, int ox, int oy, int p, int x, int y,
+                                  Color wheel, Color wheelLight, Color outline) {
+        rect(gc, ox, oy, x + 1, y, 5, 1, p, outline);
+        rect(gc, ox, oy, x, y + 1, 7, 5, p, outline);
+        rect(gc, ox, oy, x + 1, y + 2, 5, 3, p, wheel);
+        rect(gc, ox, oy, x + 3, y + 3, 1, 1, p, wheelLight);
+        rect(gc, ox, oy, x + 1, y + 6, 5, 1, p, outline);
     }
 
     private static void drawEquipment(GraphicsContext gc, int ox, int oy, int p, Equipment equipment,
