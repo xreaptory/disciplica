@@ -33,6 +33,8 @@ public class SecurityConfig {
         return http
                 .securityMatcher(new OrRequestMatcher(
                         antMatcher("/"),
+                        antMatcher("/status"),
+                        antMatcher("/healthz"),
                         antMatcher("/auth/**"),
                         antMatcher("/ws/**"),
                         antMatcher("/actuator/health")

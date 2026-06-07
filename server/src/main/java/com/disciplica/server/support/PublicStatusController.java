@@ -11,8 +11,13 @@ public class PublicStatusController {
 
     @GetMapping("/")
     public Map<String, String> index() {
+        return status();
+    }
+
+    @GetMapping({"/status", "/healthz"})
+    public Map<String, String> status() {
         return Map.of(
-                "service", "disciplica-api",
+                "service", "disciplica-api-now5",
                 "status", "ok",
                 "build", BUILD_MARKER
         );

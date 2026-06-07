@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginView {
     private static final String GOOGLE_LOGO_URL = "https://developers.google.com/identity/images/g-logo.png";
     private static final Duration OAUTH_TIMEOUT = Duration.ofMinutes(3);
-    private static final String DEFAULT_HOSTED_API_BASE_URL = "https://disciplica-api.onrender.com";
+    private static final String DEFAULT_HOSTED_API_BASE_URL = "https://disciplica-api-now5.onrender.com";
 
     private final Stage stage;
     private final SessionStore sessionStore;
