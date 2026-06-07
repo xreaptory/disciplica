@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
@@ -25,22 +26,21 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 @EnableConfigurationProperties({JwtProperties.class, GoogleProperties.class})
 public class SecurityConfig {
 
-    // Completely bypass the Spring Security filter chain for public paths.
-    // Using WebSecurityCustomizer.ignoring() is the most reliable approach:
-    // it removes the paths from Spring Security processing entirely, so neither
-    // the BearerTokenAuthenticationFilter nor any other security filter runs for them.
-    // This resolves the persistent 401 on /auth/** that occurred even with permitAll()
-    // + oauth2ResourceServer in a single filter chain (Spring Security 6.3 + Spring Boot 3.3).
+    // Bypass the Spring Security FilterChainProxy entirely for public paths.
+    // We use explicit AntPathRequestMatcher instances rather than requestMatchers(String...)
+    // to avoid Spring Boot 3 / Spring Security 6 creating MvcRequestMatcher objects, which
+    // rely on HandlerMappingIntrospector and can silently fail to match paths like /auth/**
+    // even when the pattern is syntactically correct.
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 .requestMatchers(
-                        "/",
-                        "/status",
-                        "/healthz",
-                        "/auth/**",
-                        "/ws/**",
-                        "/actuator/health"
+                        new AntPathRequestMatcher("/"),
+                        new AntPathRequestMatcher("/status"),
+                        new AntPathRequestMatcher("/healthz"),
+                        new AntPathRequestMatcher("/actuator/health"),
+                        new AntPathRequestMatcher("/auth/**"),
+                        new AntPathRequestMatcher("/ws/**")
                 );
     }
 
