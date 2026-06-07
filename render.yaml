@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: disciplica-api
+    env: docker
+    dockerfilePath: ./server/Dockerfile
+    plan: free
+    envVars:
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
