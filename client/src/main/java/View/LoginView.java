@@ -282,11 +282,15 @@ public class LoginView {
 
     private void ensureBackendReachable() {
         try {
-            HttpRequest request = HttpRequest.newBuilder(URI.create(apiBaseUrl + "/auth/google/desktop/start"))
+            HttpRequest request = HttpRequest.newBuilder(URI.create(apiBaseUrl + "/"))
                     .timeout(Duration.ofSeconds(3))
                     .GET()
                     .build();
-            HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.discarding());
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                throw new ApiClientException("Disciplica server returned " + response.statusCode()
+                        + " while checking " + apiBaseUrl + ".");
+            }
         } catch (ConnectException exception) {
             throw new ApiClientException("""
                     Disciplica server is not running.
@@ -294,8 +298,8 @@ public class LoginView {
                     The client tried:
                     %s
                     
-                    If this is a consumer build, deploy the Render backend and set apiBaseUrl in disciplica-client.properties.
-                    For local development only, set DISCIPLICA_API_BASE_URL=http://localhost:8080 and DISCIPLICA_ALLOW_LOCAL_API=true.""".formatted(apiBaseUrl), exception);
+                    If this is a consumer build, the hosted Disciplica backend must be online.
+                    For local development, set DISCIPLICA_API_BASE_URL=http://localhost:8080 and DISCIPLICA_ALLOW_LOCAL_API=true.""".formatted(apiBaseUrl), exception);
         } catch (IOException exception) {
             throw new ApiClientException("Could not reach Disciplica server at " + apiBaseUrl, exception);
         } catch (InterruptedException exception) {

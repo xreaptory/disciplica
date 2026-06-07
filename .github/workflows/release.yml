@@ -44,7 +44,7 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           mkdir -p dist/input dist/output
-          cp target/*SNAPSHOT.jar dist/input/disciplica.jar
+          cp client/target/*-consumer.jar dist/input/disciplica.jar
 
       - name: Prepare jpackage input (Windows)
         if: runner.os == 'Windows'
@@ -52,7 +52,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path dist\input | Out-Null
           New-Item -ItemType Directory -Force -Path dist\output | Out-Null
-          Copy-Item target\*SNAPSHOT.jar dist\input\disciplica.jar
+          Copy-Item client\target\*-consumer.jar dist\input\disciplica.jar
 
       - name: Build native installer (Linux/macOS)
         if: runner.os != 'Windows'
@@ -61,7 +61,7 @@ jobs:
             --name Disciplica \
             --input dist/input \
             --main-jar disciplica.jar \
-            --main-class model.bootstrap.Main \
+            --main-class com.disciplica.client.ClientApplication \
             --type ${{ matrix.package_type }} \
             --dest dist/output \
             --vendor "Disciplica" \
@@ -75,7 +75,7 @@ jobs:
             --name Disciplica `
             --input dist\input `
             --main-jar disciplica.jar `
-            --main-class model.bootstrap.Main `
+            --main-class com.disciplica.client.ClientApplication `
             --type ${{ matrix.package_type }} `
             --dest dist\output `
             --vendor "Disciplica" `

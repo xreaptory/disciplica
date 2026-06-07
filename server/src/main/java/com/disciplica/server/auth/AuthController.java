@@ -69,7 +69,7 @@ public class AuthController {
 
     @GetMapping("/auth/google/desktop/start")
     public ResponseEntity<Void> googleDesktopStart(@RequestParam String appRedirectUri) {
-        if (googleProperties.clientId() == null || googleProperties.clientId().isBlank()) {
+        if (!isDesktopGoogleOAuthConfigured()) {
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Google OAuth is not configured on the server");
         }
         cleanupDesktopOAuth();
@@ -153,6 +153,11 @@ public class AuthController {
 
     private String urlEncode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
+    private boolean isDesktopGoogleOAuthConfigured() {
+        return googleProperties.clientId() != null && !googleProperties.clientId().isBlank()
+                && googleProperties.clientSecret() != null && !googleProperties.clientSecret().isBlank();
     }
 
     private void cleanupDesktopOAuth() {
