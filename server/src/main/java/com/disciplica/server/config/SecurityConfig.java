@@ -1,14 +1,11 @@
 package com.disciplica.server.config;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -19,7 +16,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
@@ -27,30 +23,23 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 @EnableWebSecurity
 @EnableConfigurationProperties({JwtProperties.class, GoogleProperties.class})
 public class SecurityConfig {
-    @Bean
-    @Order(0)
-    SecurityFilterChain publicSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .securityMatcher(new OrRequestMatcher(
-                        antMatcher("/"),
-                        antMatcher("/status"),
-                        antMatcher("/healthz"),
-                        antMatcher("/auth/**"),
-                        antMatcher("/ws/**"),
-                        antMatcher("/actuator/health")
-                ))
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll())
-                .build();
-    }
 
+    // Single filter chain: public paths are explicitly permitted, everything else requires JWT.
+    // The two-chain approach (public + authenticated) caused 401s on /auth/** in some Spring Security
+    // 6.x deployments because OrRequestMatcher + securityMatcher() did not match as expected.
     @Bean
-    @Order(1)
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/",
+                                "/status",
+                                "/healthz",
+                                "/auth/**",
+                                "/ws/**",
+                                "/actuator/health"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> {
                 }))
