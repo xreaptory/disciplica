@@ -50,6 +50,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginView {
     private static final String GOOGLE_LOGO_URL = "https://developers.google.com/identity/images/g-logo.png";
     private static final Duration OAUTH_TIMEOUT = Duration.ofMinutes(3);
+    private static final String DEFAULT_HOSTED_API_BASE_URL = "https://disciplica-api.onrender.com";
 
     private final Stage stage;
     private final SessionStore sessionStore;
@@ -195,11 +196,11 @@ public class LoginView {
 
     private String resolveBaseUrl() {
         String property = System.getProperty("disciplica.apiBaseUrl");
-        if (property != null && !property.isBlank()) {
+        if (isUsableApiOverride(property)) {
             return property;
         }
         String env = System.getenv("DISCIPLICA_API_BASE_URL");
-        if (env != null && !env.isBlank()) {
+        if (isUsableApiOverride(env)) {
             return env;
         }
         try (var stream = LoginView.class.getResourceAsStream("/disciplica-client.properties")) {
@@ -213,7 +214,25 @@ public class LoginView {
             }
         } catch (IOException ignored) {
         }
-        return "http://localhost:8080";
+        return DEFAULT_HOSTED_API_BASE_URL;
+    }
+
+    private boolean isUsableApiOverride(String value) {
+        if (value == null || value.isBlank()) {
+            return false;
+        }
+        if (!isLocalApiUrl(value)) {
+            return true;
+        }
+        return Boolean.parseBoolean(System.getProperty("disciplica.allowLocalApi", "false"))
+                || Boolean.parseBoolean(System.getenv().getOrDefault("DISCIPLICA_ALLOW_LOCAL_API", "false"));
+    }
+
+    private boolean isLocalApiUrl(String value) {
+        String normalized = value.toLowerCase();
+        return normalized.contains("localhost")
+                || normalized.contains("127.0.0.1")
+                || normalized.contains("0.0.0.0");
     }
 
     private AuthResponse runGoogleOAuth() {
@@ -272,9 +291,11 @@ public class LoginView {
             throw new ApiClientException("""
                     Disciplica server is not running.
                     
-                    Start the Spring server first, or set DISCIPLICA_API_BASE_URL to your hosted server URL.
-                    Local default expected server:
-                    http://localhost:8080""", exception);
+                    The client tried:
+                    %s
+                    
+                    If this is a consumer build, deploy the Render backend and set apiBaseUrl in disciplica-client.properties.
+                    For local development only, set DISCIPLICA_API_BASE_URL=http://localhost:8080 and DISCIPLICA_ALLOW_LOCAL_API=true.""".formatted(apiBaseUrl), exception);
         } catch (IOException exception) {
             throw new ApiClientException("Could not reach Disciplica server at " + apiBaseUrl, exception);
         } catch (InterruptedException exception) {
