@@ -7,7 +7,7 @@ import java.util.Map;
 
 @RestController
 public class PublicStatusController {
-    private static final String BUILD_MARKER = "ant-ignoring-v2";
+    private static final String BUILD_MARKER = "custom-jwt-filter-v1";
 
     @GetMapping("/")
     public Map<String, String> index() {
