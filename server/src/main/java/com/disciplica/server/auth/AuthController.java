@@ -68,9 +68,13 @@ public class AuthController {
     }
 
     @GetMapping("/auth/google/desktop/start")
-    public ResponseEntity<Void> googleDesktopStart(@RequestParam String appRedirectUri) {
+    public ResponseEntity<?> googleDesktopStart(@RequestParam String appRedirectUri) {
         if (!isDesktopGoogleOAuthConfigured()) {
-            throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Google OAuth is not configured on the server");
+            // Return JSON directly — avoid any exception/handler path that could produce a 500.
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .header("Content-Type", "application/json")
+                    .body(java.util.Map.of("error",
+                            "Google OAuth is not configured. Set GOOGLE_CLIENT_SECRET in Render → Environment."));
         }
         cleanupDesktopOAuth();
         String state = UUID.randomUUID().toString();
@@ -138,7 +142,7 @@ public class AuthController {
         return authService.updateAvatar(userId, request);
     }
 
-    private ResponseEntity<Void> redirect(String location) {
+    private ResponseEntity<?> redirect(String location) {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(location));
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
