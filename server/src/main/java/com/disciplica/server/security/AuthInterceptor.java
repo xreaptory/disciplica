@@ -30,6 +30,10 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || uri.equals("/status")
                 || uri.equals("/healthz")
                 || uri.equals("/actuator/health")
+                // Spring Boot's error dispatch — must be public so the real error response
+                // reaches the client instead of being swallowed by this interceptor.
+                || uri.equals("/error")
+                || uri.startsWith("/error/")
                 || uri.equals("/auth")
                 || uri.startsWith("/auth/")
                 || uri.equals("/ws")
