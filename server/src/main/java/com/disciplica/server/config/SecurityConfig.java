@@ -1,14 +1,11 @@
 package com.disciplica.server.config;
 
-import jakarta.servlet.http.HttpServletResponse;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,40 +23,27 @@ import com.disciplica.server.security.JwtAuthFilter;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
 /**
- * Application security configuration.
+ * Spring Security configuration.
  *
- * <p>Design decisions:
- * <ul>
- *   <li>No {@code oauth2ResourceServer()} — that DSL adds {@code BearerTokenAuthenticationFilter}
- *       which returns 401 before {@code AuthorizationFilter} can apply {@code permitAll()}.
- *       JWT validation is done by our own {@link JwtAuthFilter}.</li>
- *   <li>No path-matcher-based permit rules — in Spring Security 6.3 with Spring MVC on the
- *       classpath, {@code AntPathRequestMatcher} objects passed to
- *       {@code authorizeHttpRequests().requestMatchers()} may be silently wrapped by
- *       {@code MvcRequestHandlerProvider} and fail to match paths.  We use
- *       {@code anyRequest().access()} with a raw {@code getRequestURI()} string check instead.</li>
- * </ul>
+ * <p>Authorization is intentionally NOT handled here.  After multiple failed attempts to
+ * make Spring Security path matchers work with Spring MVC on the classpath
+ * ({@code AntPathRequestMatcher}, {@code web.ignoring()}, {@code access()} lambda), we moved
+ * authorization to {@link com.disciplica.server.security.AuthInterceptor} — a Spring MVC
+ * {@code HandlerInterceptor} that runs at the DispatcherServlet level.
+ *
+ * <p>Spring Security's role here is only:
+ * <ol>
+ *   <li>Validate bearer JWT via {@link JwtAuthFilter} and populate the SecurityContext.</li>
+ *   <li>Disable CSRF (stateless API).</li>
+ *   <li>Use stateless sessions.</li>
+ *   <li>Permit ALL requests at the Spring Security layer ({@code anyRequest().permitAll()}) so
+ *       nothing is blocked before reaching the interceptor.</li>
+ * </ol>
  */
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties({JwtProperties.class, GoogleProperties.class})
 public class SecurityConfig {
-
-    /**
-     * Returns {@code true} for every URI that must be publicly accessible without a JWT.
-     * This is evaluated against {@link jakarta.servlet.http.HttpServletRequest#getRequestURI()},
-     * which is the raw path (no query string) relative to the web application root.
-     */
-    private static boolean isPublicUri(String uri) {
-        return uri.equals("/")
-                || uri.equals("/status")
-                || uri.equals("/healthz")
-                || uri.equals("/actuator/health")
-                || uri.startsWith("/auth/")
-                || uri.equals("/auth")
-                || uri.startsWith("/ws/")
-                || uri.equals("/ws");
-    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder) throws Exception {
@@ -67,31 +51,13 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Run JWT validation before Spring Security's own auth filters.
+                // Validate JWT tokens and populate SecurityContext.  Must run before
+                // UsernamePasswordAuthenticationFilter so that the auth context is available
+                // to downstream filters and the interceptor.
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(auth -> auth
-                        // Use a raw URI string check to avoid AntPathMatcher / MvcRequestMatcher
-                        // path-resolution issues with Spring MVC on the classpath.
-                        .anyRequest().access((authentication, context) -> {
-                            String uri = context.getRequest().getRequestURI();
-                            if (isPublicUri(uri)) {
-                                // Public endpoint — allow unconditionally.
-                                return new org.springframework.security.authorization.AuthorizationDecision(true);
-                            }
-                            // Protected endpoint — must be authenticated (not anonymous).
-                            var auth2 = authentication.get();
-                            boolean authenticated = auth2 != null
-                                    && auth2.isAuthenticated()
-                                    && !(auth2 instanceof AnonymousAuthenticationToken);
-                            return new org.springframework.security.authorization.AuthorizationDecision(authenticated);
-                        }))
-                // Return a plain 401 JSON body instead of redirecting to /login.
-                .exceptionHandling(e -> e
-                        .authenticationEntryPoint((req, res, ex) -> {
-                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            res.setContentType("application/json");
-                            res.getWriter().write("{\"error\":\"Unauthorized\"}");
-                        }))
+                // Allow every request through Spring Security.
+                // Authorization is enforced in AuthInterceptor (Spring MVC layer).
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .build();
     }
 
