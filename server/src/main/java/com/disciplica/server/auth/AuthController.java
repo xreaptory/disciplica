@@ -92,7 +92,7 @@ public class AuthController {
     }
 
     @GetMapping("/auth/google/desktop/callback")
-    public ResponseEntity<Void> googleDesktopCallback(@RequestParam String code, @RequestParam String state) {
+    public ResponseEntity<?> googleDesktopCallback(@RequestParam String code, @RequestParam String state) {
         cleanupDesktopOAuth();
         DesktopOAuthRequest request = desktopRequests.remove(state);
         if (request == null || request.expiresAt().isBefore(Instant.now())) {
