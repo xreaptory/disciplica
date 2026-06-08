@@ -7,7 +7,7 @@ import java.util.Map;
 
 @RestController
 public class PublicStatusController {
-    private static final String BUILD_MARKER = "mvc-interceptor-v1";
+    private static final String BUILD_MARKER = "mvc-interceptor-v2";
 
     @GetMapping("/")
     public Map<String, String> index() {
