@@ -13,6 +13,15 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Einfacher Verbindungspool für Datenbankverbindungen.
+ * <p>
+ * Hält eine begrenzte Anzahl an Verbindungen bereit und gibt sie über
+ * {@link #getConnection()} aus. Wird eine ausgeliehene Verbindung
+ * geschlossen, kehrt sie tatsächlich in den Pool zurück, statt physisch
+ * geschlossen zu werden. Beim Schließen des Pools werden alle Verbindungen
+ * freigegeben.
+ */
 public class DatabaseConnection implements AutoCloseable {
     private final String jdbcUrl;
     private final int maxPoolSize;
@@ -21,10 +30,27 @@ public class DatabaseConnection implements AutoCloseable {
     private final Set<Connection> leasedConnections = new HashSet<>();
     private boolean closed;
 
+    /**
+     * Erzeugt einen Pool mit Standardgröße (5 Verbindungen) und einem
+     * Prüf-Zeitlimit von 2 Sekunden.
+     *
+     * @param jdbcUrl die JDBC-Adresse der Datenbank
+     */
     public DatabaseConnection(String jdbcUrl) {
         this(jdbcUrl, 5, Duration.ofSeconds(2));
     }
 
+    /**
+     * Erzeugt einen Pool mit den angegebenen Einstellungen.
+     *
+     * @param jdbcUrl           die JDBC-Adresse der Datenbank
+     * @param maxPoolSize       die maximale Anzahl gleichzeitiger Verbindungen
+     *                          (muss größer als 0 sein)
+     * @param validationTimeout das Zeitlimit für die Gültigkeitsprüfung einer
+     *                          Verbindung
+     * @throws IllegalArgumentException wenn {@code maxPoolSize} nicht positiv
+     *                                  ist
+     */
     public DatabaseConnection(String jdbcUrl, int maxPoolSize, Duration validationTimeout) {
         if (maxPoolSize <= 0) {
             throw new IllegalArgumentException("maxPoolSize must be > 0");
@@ -34,6 +60,14 @@ public class DatabaseConnection implements AutoCloseable {
         this.validationTimeoutSeconds = (int) Math.max(1, validationTimeout.getSeconds());
     }
 
+    /**
+     * Leiht eine Verbindung aus dem Pool aus. Die zurückgegebene Verbindung
+     * kehrt beim Schließen automatisch in den Pool zurück.
+     *
+     * @return eine einsatzbereite Datenbankverbindung
+     * @throws DatabaseException wenn der Pool geschlossen ist oder keine
+     *                           Verbindung beschafft werden kann
+     */
     public synchronized Connection getConnection() {
         ensureOpen();
         try {
@@ -45,6 +79,13 @@ public class DatabaseConnection implements AutoCloseable {
         }
     }
 
+    /**
+     * Prüft, ob eine Verbindung aus dem Pool gültig ist.
+     *
+     * @return {@code true}, wenn eine gültige Verbindung hergestellt werden
+     *         kann
+     * @throws DatabaseException wenn die Prüfung fehlschlägt
+     */
     public synchronized boolean validateConnection() {
         ensureOpen();
         try (Connection connection = getConnection()) {
@@ -54,6 +95,14 @@ public class DatabaseConnection implements AutoCloseable {
         }
     }
 
+    /**
+     * Beschafft eine physische Verbindung – bevorzugt aus dem Vorrat
+     * ungenutzter Verbindungen, sonst durch Neuaufbau.
+     *
+     * @return eine gültige physische Verbindung
+     * @throws SQLException      bei einem Fehler beim Verbindungsaufbau
+     * @throws DatabaseException wenn die maximale Poolgröße erreicht ist
+     */
     private Connection borrowPhysicalConnection() throws SQLException {
         while (!idleConnections.isEmpty()) {
             Connection connection = idleConnections.pop();
@@ -69,6 +118,14 @@ public class DatabaseConnection implements AutoCloseable {
         throw new DatabaseException("No available database connections in pool");
     }
 
+    /**
+     * Umhüllt eine physische Verbindung mit einem Stellvertreter, dessen
+     * {@code close()}-Aufruf die Verbindung in den Pool zurückgibt, statt sie
+     * zu schließen.
+     *
+     * @param physicalConnection die zu umhüllende physische Verbindung
+     * @return die umhüllte Verbindung
+     */
     private Connection wrapConnection(Connection physicalConnection) {
         InvocationHandler handler = new InvocationHandler() {
             private boolean returned;
@@ -95,6 +152,12 @@ public class DatabaseConnection implements AutoCloseable {
         );
     }
 
+    /**
+     * Gibt eine Verbindung in den Pool zurück oder schließt sie, falls sie
+     * nicht mehr gültig oder der Pool geschlossen ist.
+     *
+     * @param connection die zurückzugebende Verbindung
+     */
     private synchronized void returnConnection(Connection connection) {
         if (closed) {
             silentlyClose(connection);
@@ -112,12 +175,21 @@ public class DatabaseConnection implements AutoCloseable {
         }
     }
 
+    /**
+     * Stellt sicher, dass der Pool noch geöffnet ist.
+     *
+     * @throws DatabaseException wenn der Pool bereits geschlossen wurde
+     */
     private void ensureOpen() {
         if (closed) {
             throw new DatabaseException("DatabaseConnection is already closed");
         }
     }
 
+    /**
+     * Schließt den Pool und gibt alle ausgeliehenen und ungenutzten
+     * Verbindungen frei.
+     */
     @Override
     public synchronized void close() {
         if (closed) {
@@ -133,11 +205,17 @@ public class DatabaseConnection implements AutoCloseable {
         }
     }
 
+    /**
+     * Schließt eine Verbindung und unterdrückt dabei etwaige Fehler (für den
+     * Aufräum-/Abschaltvorgang).
+     *
+     * @param connection die zu schließende Verbindung
+     */
     private void silentlyClose(Connection connection) {
         try {
             connection.close();
         } catch (SQLException ignored) {
-            // intentionally ignored during shutdown/cleanup
+            // Während Abschaltung/Aufräumen bewusst ignoriert
         }
     }
 }

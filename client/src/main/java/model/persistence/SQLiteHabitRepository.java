@@ -19,6 +19,15 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Auf SQLite gestützte Umsetzung von {@link HabitRepository}.
+ * <p>
+ * Speichert Gewohnheiten, Benutzer und Erfüllungen in einer lokalen
+ * SQLite-Datenbank. Stellt darüber hinaus erweiterte Funktionen bereit:
+ * Volltextsuche, Auswertungen (Rangliste nach Erfüllungsquote), das
+ * transaktionssichere Abschließen von Gewohnheiten sowie das Sichern der
+ * Datenbankdatei.
+ */
 @Singleton
 public class SQLiteHabitRepository implements HabitRepository {
     private static final String DEFAULT_DB_PATH = "data/habittracker.db";
@@ -29,11 +38,23 @@ public class SQLiteHabitRepository implements HabitRepository {
     private final ConcurrentMap<String, Long> userIdCache = new ConcurrentHashMap<>();
     private int transactionIsolationLevel = Connection.TRANSACTION_SERIALIZABLE;
 
+    /**
+     * Erzeugt das Repository für die Standard-SQLite-Datenbank.
+     *
+     * @param currentUser der aktuell angemeldete Benutzer
+     */
     @Inject
     public SQLiteHabitRepository(User currentUser) {
         this(currentUser, "jdbc:sqlite:" + DEFAULT_DB_PATH);
     }
 
+    /**
+     * Erzeugt das Repository für eine bestimmte Datenbank und stellt das
+     * Schema sicher.
+     *
+     * @param currentUser der aktuell angemeldete Benutzer
+     * @param jdbcUrl     die JDBC-Adresse der Datenbank
+     */
     public SQLiteHabitRepository(User currentUser, String jdbcUrl) {
         this.jdbcUrl = jdbcUrl;
         this.databaseConnection = new DatabaseConnection(jdbcUrl);
@@ -41,6 +62,12 @@ public class SQLiteHabitRepository implements HabitRepository {
         ensureSchema();
     }
 
+    /**
+     * Speichert eine neue Gewohnheit für den aktuellen Benutzer.
+     *
+     * @param habit die zu speichernde Gewohnheit
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     @Override
     public void save(Habit habit) {
         String sql = "INSERT INTO habits (user_id, title, description, difficulty, frequency, metadata_json) VALUES (?, ?, ?, ?, ?, ?)";
@@ -53,6 +80,13 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Sucht eine Gewohnheit anhand ihrer Kennung.
+     *
+     * @param id die Kennung der Gewohnheit
+     * @return die Gewohnheit oder ein leeres {@link Optional}
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     @Override
     public Optional<Habit> findById(Long id) {
         String sql = "SELECT id, user_id, title, description, difficulty, frequency, metadata_json FROM habits WHERE id = ?";
@@ -70,6 +104,13 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Liefert alle Gewohnheiten eines Benutzers, nach Kennung sortiert.
+     *
+     * @param user der Benutzer
+     * @return die Liste seiner Gewohnheiten
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     @Override
     public List<Habit> findByUser(User user) {
         String sql = "SELECT id, user_id, title, description, difficulty, frequency, metadata_json FROM habits WHERE user_id = ? ORDER BY id";
@@ -84,6 +125,14 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Aktualisiert eine vorhandene Gewohnheit (anhand von Titel und Benutzer
+     * identifiziert).
+     *
+     * @param habit die zu aktualisierende Gewohnheit
+     * @throws DatabaseException wenn die Gewohnheit nicht existiert oder ein
+     *                           Datenbankfehler auftritt
+     */
     @Override
     public void update(Habit habit) {
         Long habitId = findHabitIdByTitleAndUser(habit.getName(), currentUser);
@@ -100,6 +149,12 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Löscht eine Gewohnheit anhand ihrer Kennung.
+     *
+     * @param id die Kennung der zu löschenden Gewohnheit
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     @Override
     public void delete(Long id) {
         String sql = "DELETE FROM habits WHERE id = ?";
@@ -112,6 +167,10 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * {@return alle gespeicherten Gewohnheiten, nach Kennung sortiert}
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     @Override
     public List<Habit> findAll() {
         String sql = "SELECT id, user_id, title, description, difficulty, frequency, metadata_json FROM habits ORDER BY id";
@@ -124,19 +183,51 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Schließt eine Gewohnheit transaktionssicher ab: vermerkt die Erfüllung,
+     * schreibt dem Benutzer XP und Gold gut und erhöht die Serie.
+     *
+     * @param habitId  die Kennung der Gewohnheit
+     * @param quality  die Qualität der Erfüllung (von -1 bis 1)
+     * @param xpGain   die verdienten Erfahrungspunkte
+     * @param goldGain das verdiente Gold
+     */
     @Override
     public void completeHabit(Long habitId, int quality, int xpGain, int goldGain) {
         executeCompleteHabitTransaction(habitId, quality, xpGain, goldGain, false);
     }
 
+    /**
+     * Wie {@link #completeHabit(Long, int, int, int)}, erzwingt jedoch
+     * absichtlich einen Fehler – dient zum Testen des Transaktions-Rollbacks.
+     *
+     * @param habitId  die Kennung der Gewohnheit
+     * @param quality  die Qualität der Erfüllung
+     * @param xpGain   die Erfahrungspunkte
+     * @param goldGain das Gold
+     */
     public void completeHabitForRollbackTest(Long habitId, int quality, int xpGain, int goldGain) {
         executeCompleteHabitTransaction(habitId, quality, xpGain, goldGain, true);
     }
 
+    /**
+     * Setzt die für Transaktionen verwendete Isolationsstufe.
+     *
+     * @param isolationLevel die Isolationsstufe (Konstante aus {@link Connection})
+     */
     public void setTransactionIsolationLevel(int isolationLevel) {
         this.transactionIsolationLevel = isolationLevel;
     }
 
+    /**
+     * Durchsucht die Beschreibungen der Gewohnheiten eines Benutzers per
+     * Volltextsuche.
+     *
+     * @param searchTerm der Suchbegriff
+     * @param user       der Benutzer
+     * @return die Treffer, nach Relevanz sortiert
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     public List<HabitSearchResult> searchHabitsByDescription(String searchTerm, User user) {
         String sql = """
                 SELECT h.id, h.title, h.description, bm25(habits_fts) AS score
@@ -166,6 +257,14 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Erstellt eine Rangliste der Gewohnheiten eines Benutzers nach ihrer
+     * Erfüllungsquote.
+     *
+     * @param user der Benutzer
+     * @return die Gewohnheiten samt Rang
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     public List<HabitCompletionRank> rankHabitsByCompletionRate(User user) {
         String sql = """
                 WITH per_habit AS (
@@ -209,6 +308,14 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Gibt den Abfrageplan (EXPLAIN QUERY PLAN) für eine SQL-Anweisung zurück
+     * – nützlich zur Analyse der Datenbankleistung.
+     *
+     * @param sql die zu analysierende SQL-Anweisung
+     * @return die Zeilen des Abfrageplans
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     public List<String> explainQueryPlan(String sql) {
         String planSql = "EXPLAIN QUERY PLAN " + sql;
         try (Connection connection = databaseConnection.getConnection();
@@ -224,6 +331,14 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Erstellt eine Sicherungskopie der Datenbankdatei.
+     *
+     * @param targetFile die Zieldatei der Sicherung
+     * @return der Pfad der erstellten Sicherung
+     * @throws DatabaseException wenn die Datenbankdatei fehlt oder die
+     *                           Sicherung fehlschlägt
+     */
     public Path backupDatabase(Path targetFile) {
         try {
             String dbFile = jdbcUrl.replaceFirst("^jdbc:sqlite:", "");
@@ -239,10 +354,24 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Lädt eine Gewohnheit samt ihrer letzten Erfüllungen (Standardumfang).
+     *
+     * @param habitId die Kennung der Gewohnheit
+     * @return die Gewohnheit mit Erfüllungen oder ein leeres {@link Optional}
+     */
     public Optional<HabitWithCompletions> findHabitWithCompletions(Long habitId) {
         return findHabitWithCompletions(habitId, 200, 0);
     }
 
+    /**
+     * Lädt eine Gewohnheit samt einer Seite ihrer Erfüllungen.
+     *
+     * @param habitId  die Kennung der Gewohnheit
+     * @param pageSize die Anzahl der zu ladenden Erfüllungen
+     * @param offset   die Anzahl der zu überspringenden Erfüllungen
+     * @return die Gewohnheit mit Erfüllungen oder ein leeres {@link Optional}
+     */
     public Optional<HabitWithCompletions> findHabitWithCompletions(Long habitId, int pageSize, int offset) {
         Optional<Habit> habitOptional = findById(habitId);
         if (habitOptional.isEmpty()) {
@@ -252,6 +381,14 @@ public class SQLiteHabitRepository implements HabitRepository {
         return Optional.of(new HabitWithCompletions(habitId, habitOptional.get(), completions));
     }
 
+    /**
+     * Lädt die Erfüllungen einer Gewohnheit seitenweise, neueste zuerst.
+     *
+     * @param habitId  die Kennung der Gewohnheit
+     * @param pageSize die Anzahl der Einträge
+     * @param offset   die Anzahl der zu überspringenden Einträge
+     * @return die geladenen Erfüllungs-Datensätze
+     */
     private List<CompletionRecord> loadCompletions(Long habitId, int pageSize, int offset) {
         String sql = "SELECT id, habit_id, completed_at, quality FROM completions WHERE habit_id = ? ORDER BY completed_at DESC LIMIT ? OFFSET ?";
         try (Connection connection = databaseConnection.getConnection();
@@ -276,6 +413,13 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Wandelt alle Zeilen eines Ergebnisses in eine Liste von Gewohnheiten um.
+     *
+     * @param resultSet das Datenbankergebnis
+     * @return die gelesenen Gewohnheiten
+     * @throws SQLException bei einem Fehler beim Auslesen
+     */
     private List<Habit> mapHabitList(ResultSet resultSet) throws SQLException {
         List<Habit> habits = new ArrayList<>();
         while (resultSet.next()) {
@@ -284,12 +428,28 @@ public class SQLiteHabitRepository implements HabitRepository {
         return habits;
     }
 
+    /**
+     * Wandelt die aktuelle Ergebniszeile in eine {@link Habit} um.
+     *
+     * @param resultSet das Datenbankergebnis, positioniert auf der Zeile
+     * @return die gelesene Gewohnheit
+     * @throws SQLException bei einem Fehler beim Auslesen
+     */
     private Habit mapHabitRow(ResultSet resultSet) throws SQLException {
         String title = resultSet.getString("title");
         String description = resultSet.getString("description");
         return new Habit(title, description);
     }
 
+    /**
+     * Belegt die Parameter einer INSERT-Anweisung mit den Werten einer
+     * Gewohnheit.
+     *
+     * @param statement die vorzubereitende Anweisung
+     * @param habit     die Gewohnheit
+     * @param userId    die Kennung des Besitzers
+     * @throws SQLException bei einem Fehler beim Setzen der Parameter
+     */
     private void bindHabitToInsertStatement(PreparedStatement statement, Habit habit, long userId) throws SQLException {
         statement.setLong(1, userId);
         statement.setString(2, habit.getName());
@@ -299,6 +459,15 @@ public class SQLiteHabitRepository implements HabitRepository {
         statement.setString(6, "{}");
     }
 
+    /**
+     * Belegt die Parameter einer UPDATE-Anweisung mit den Werten einer
+     * Gewohnheit.
+     *
+     * @param statement die vorzubereitende Anweisung
+     * @param habit     die Gewohnheit
+     * @param habitId   die Kennung der Gewohnheit
+     * @throws SQLException bei einem Fehler beim Setzen der Parameter
+     */
     private void bindHabitToUpdateStatement(PreparedStatement statement, Habit habit, long habitId) throws SQLException {
         statement.setString(1, habit.getName());
         statement.setString(2, habit.getDescription());
@@ -308,6 +477,14 @@ public class SQLiteHabitRepository implements HabitRepository {
         statement.setLong(6, habitId);
     }
 
+    /**
+     * Ermittelt die Datenbank-Kennung eines Benutzers und legt ihn bei Bedarf
+     * an. Das Ergebnis wird zwischengespeichert.
+     *
+     * @param user der Benutzer
+     * @return die Kennung des Benutzers
+     * @throws SQLException wenn die Kennung nicht ermittelt werden kann
+     */
     private long resolveUserId(User user) throws SQLException {
         Long cachedUserId = userIdCache.get(user.getUsername());
         if (cachedUserId != null) {
@@ -347,6 +524,14 @@ public class SQLiteHabitRepository implements HabitRepository {
         throw new SQLException("Unable to resolve user id");
     }
 
+    /**
+     * Sucht die Kennung einer Gewohnheit anhand von Titel und Benutzer.
+     *
+     * @param title der Titel der Gewohnheit
+     * @param user  der Benutzer
+     * @return die Kennung oder {@code null}, falls nicht vorhanden
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     private Long findHabitIdByTitleAndUser(String title, User user) {
         String sql = "SELECT id FROM habits WHERE title = ? AND user_id = ?";
         try (Connection connection = databaseConnection.getConnection();
@@ -364,6 +549,12 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Legt – falls noch nicht vorhanden – die Tabellen, Indizes und die
+     * Volltextsuche an.
+     *
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     private void ensureSchema() {
         String usersSql = "CREATE TABLE IF NOT EXISTS users ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -411,6 +602,18 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Führt das Abschließen einer Gewohnheit als einzelne Transaktion aus und
+     * rollt bei einem Fehler alle Änderungen zurück.
+     *
+     * @param habitId      die Kennung der Gewohnheit
+     * @param quality      die Qualität der Erfüllung
+     * @param xpGain       die Erfahrungspunkte
+     * @param goldGain     das Gold
+     * @param forceFailure {@code true}, um zu Testzwecken einen Fehler zu
+     *                     erzwingen
+     * @throws DatabaseException wenn die Transaktion fehlschlägt
+     */
     private void executeCompleteHabitTransaction(Long habitId, int quality, int xpGain, int goldGain, boolean forceFailure) {
         validateQuality(quality);
         String insertCompletionSql = "INSERT INTO completions (habit_id, completed_at, quality, xp_earned) VALUES (?, datetime('now'), ?, ?)";
@@ -459,6 +662,15 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Ermittelt innerhalb einer Transaktion die Benutzer-Kennung zu einer
+     * Gewohnheit.
+     *
+     * @param habitId    die Kennung der Gewohnheit
+     * @param connection die zu verwendende Verbindung
+     * @return die Benutzer-Kennung oder -1, falls nicht gefunden
+     * @throws SQLException bei einem Datenbankfehler
+     */
     private long findUserIdForHabit(Long habitId, Connection connection) throws SQLException {
         String sql = "SELECT user_id FROM habits WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -472,12 +684,25 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Prüft, dass die Qualität im erlaubten Bereich liegt.
+     *
+     * @param quality die zu prüfende Qualität
+     * @throws DatabaseException wenn die Qualität nicht zwischen -1 und 1 liegt
+     */
     private void validateQuality(int quality) {
         if (quality < -1 || quality > 1) {
             throw new DatabaseException("Quality must be between -1 and 1");
         }
     }
 
+    /**
+     * Ergänzt die Spalte {@code streak}, falls sie noch fehlt.
+     *
+     * @param statement die zu verwendende Anweisung
+     * @throws SQLException bei einem anderen Fehler als „Spalte existiert
+     *                      bereits“
+     */
     private void ensureStreakColumn(Statement statement) throws SQLException {
         try {
             statement.execute("ALTER TABLE habits ADD COLUMN streak INTEGER NOT NULL DEFAULT 0");
@@ -489,6 +714,13 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Ergänzt die Spalte {@code metadata_json}, falls sie noch fehlt.
+     *
+     * @param statement die zu verwendende Anweisung
+     * @throws SQLException bei einem anderen Fehler als „Spalte existiert
+     *                      bereits“
+     */
     private void ensureMetadataJsonColumn(Statement statement) throws SQLException {
         try {
             statement.execute("ALTER TABLE habits ADD COLUMN metadata_json TEXT NOT NULL DEFAULT '{}'");
@@ -500,6 +732,13 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Richtet die Volltextsuche (FTS5) für Gewohnheiten samt
+     * Aktualisierungs-Triggern ein.
+     *
+     * @param statement die zu verwendende Anweisung
+     * @throws SQLException bei einem Datenbankfehler
+     */
     private void ensureFullTextSearch(Statement statement) throws SQLException {
         statement.execute("""
                 CREATE VIRTUAL TABLE IF NOT EXISTS habits_fts USING fts5(
@@ -528,6 +767,13 @@ public class SQLiteHabitRepository implements HabitRepository {
                 """);
     }
 
+    /**
+     * Zählt die Erfüllungen einer Gewohnheit.
+     *
+     * @param habitId die Kennung der Gewohnheit
+     * @return die Anzahl der Erfüllungen
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     public int getCompletionCountForHabit(Long habitId) {
         String sql = "SELECT COUNT(*) AS cnt FROM completions WHERE habit_id = ?";
         try (Connection connection = databaseConnection.getConnection();
@@ -541,6 +787,13 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Liest die aktuelle Serie einer Gewohnheit.
+     *
+     * @param habitId die Kennung der Gewohnheit
+     * @return die Serie der Gewohnheit
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     public int getHabitStreak(Long habitId) {
         String sql = "SELECT streak FROM habits WHERE id = ?";
         try (Connection connection = databaseConnection.getConnection();
@@ -554,6 +807,13 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Liest die Erfahrungspunkte und das Gold eines Benutzers.
+     *
+     * @param userId die Kennung des Benutzers
+     * @return ein Feld {@code [xp, gold]} (bei unbekanntem Benutzer {@code [0, 0]})
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     public int[] getUserXpAndGold(Long userId) {
         String sql = "SELECT xp, gold FROM users WHERE id = ?";
         try (Connection connection = databaseConnection.getConnection();
@@ -570,10 +830,21 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Ermittelt die Kennung einer Gewohnheit des aktuellen Benutzers anhand
+     * ihres Titels.
+     *
+     * @param title der Titel der Gewohnheit
+     * @return die Kennung oder {@code null}, falls nicht vorhanden
+     */
     public Long getHabitIdByTitleForCurrentUser(String title) {
         return findHabitIdByTitleAndUser(title, currentUser);
     }
 
+    /**
+     * {@return die Datenbank-Kennung des aktuellen Benutzers}
+     * @throws DatabaseException bei einem Datenbankfehler
+     */
     public Long getCurrentUserId() {
         try {
             return resolveUserId(currentUser);
@@ -582,15 +853,47 @@ public class SQLiteHabitRepository implements HabitRepository {
         }
     }
 
+    /**
+     * Ein einzelner Erfüllungs-Datensatz, wie er aus der Datenbank gelesen wird.
+     *
+     * @param id          die Kennung der Erfüllung
+     * @param habitId     die Kennung der zugehörigen Gewohnheit
+     * @param completedAt der Zeitpunkt der Erfüllung als Text
+     * @param quality     die Qualität der Erfüllung
+     */
     public record CompletionRecord(Long id, Long habitId, String completedAt, Integer quality) {
     }
 
+    /**
+     * Eine Gewohnheit samt ihrer geladenen Erfüllungen.
+     *
+     * @param id          die Kennung der Gewohnheit
+     * @param habit       die Gewohnheit
+     * @param completions die zugehörigen Erfüllungen
+     */
     public record HabitWithCompletions(Long id, Habit habit, List<CompletionRecord> completions) {
     }
 
+    /**
+     * Ein Treffer der Volltextsuche.
+     *
+     * @param habitId     die Kennung der gefundenen Gewohnheit
+     * @param title       der Titel
+     * @param description die Beschreibung
+     * @param score       der Relevanzwert (kleiner ist besser)
+     */
     public record HabitSearchResult(Long habitId, String title, String description, Double score) {
     }
 
+    /**
+     * Ein Ranglisteneintrag nach Erfüllungsquote.
+     *
+     * @param habitId         die Kennung der Gewohnheit
+     * @param title           der Titel
+     * @param completionCount die Anzahl der Erfüllungen
+     * @param completionRate  die Erfüllungsquote
+     * @param rankPosition    der Rang in der Liste
+     */
     public record HabitCompletionRank(Long habitId, String title, Integer completionCount,
                                      Double completionRate, Integer rankPosition) {
     }
