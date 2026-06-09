@@ -51,10 +51,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+/**
+ * Das Anmeldefenster der Anwendung.
+ * <p>
+ * Bietet Anmeldung und Registrierung mit E-Mail und Passwort, Anmeldung über
+ * Google (per lokalem Rückleitungs-Server im Browser) sowie einen
+ * Offline-Modus, in dem die Daten nur lokal gespeichert werden. Nach
+ * erfolgreicher Anmeldung wird die übergebene Rückruf-Aktion ausgeführt.
+ */
 public class LoginView {
     private static final String GOOGLE_LOGO_URL = "https://developers.google.com/identity/images/g-logo.png";
     private static final Duration OAUTH_TIMEOUT = Duration.ofMinutes(3);
-    // Render free tier can take 50–90s to wake from cold — use a generous timeout.
+    // Der kostenlose Render-Tarif braucht aus dem Ruhezustand 50–90 s — daher ein großzügiges Zeitlimit.
     private static final Duration SERVER_WARMUP_TIMEOUT = Duration.ofSeconds(90);
     private static final String DEFAULT_HOSTED_API_BASE_URL = "https://disciplica-api-now5.onrender.com";
     private static final Pattern BASIC_EMAIL_PATTERN = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
@@ -76,6 +84,15 @@ public class LoginView {
     private final Label title = new Label("Welcome to Disciplica");
     private final Label serverStatusLabel = new Label("");
 
+    /**
+     * Erzeugt das Anmeldefenster und zeigt es sofort an.
+     *
+     * @param stage           das anzuzeigende Fenster
+     * @param sessionStore    der Sitzungsspeicher, in den die Anmeldung
+     *                        eingetragen wird
+     * @param onAuthenticated die Aktion, die nach erfolgreicher Anmeldung
+     *                        ausgeführt wird
+     */
     public LoginView(Stage stage, SessionStore sessionStore, Runnable onAuthenticated) {
         this.stage = stage;
         this.sessionStore = sessionStore;
@@ -85,6 +102,9 @@ public class LoginView {
         show();
     }
 
+    /**
+     * Baut die Oberfläche des Anmeldefensters auf und zeigt sie an.
+     */
     private void show() {
         usernameField.setPromptText("Username");
         emailField.setPromptText("Email");
@@ -156,8 +176,14 @@ public class LoginView {
         stage.show();
     }
 
+    /**
+     * Erstellt das Logo (Wappenschild mit Buchstaben „D“) für das
+     * Anmeldefenster.
+     *
+     * @return der Logo-Knoten
+     */
     private Node createDisciplicaLogo() {
-        // Pentagon shield: flat top, pointed bottom
+        // Fünfeckiges Schild: flache Oberseite, spitze Unterseite
         Polygon shield = new Polygon(
                 0.0, 0.0,
                 64.0, 0.0,
@@ -177,6 +203,10 @@ public class LoginView {
         return logoPane;
     }
 
+    /**
+     * Prüft die Eingaben und führt je nach Modus Anmeldung oder Registrierung
+     * durch.
+     */
     private void submit() {
         String username = usernameField.getText().trim();
         String email = emailField.getText().trim();
@@ -191,6 +221,14 @@ public class LoginView {
                 : apiClient.login(new LoginRequest(email, password)));
     }
 
+    /**
+     * Prüft die eingegebenen Anmeldedaten auf Gültigkeit.
+     *
+     * @param username der Benutzername (nur bei Registrierung)
+     * @param email    die E-Mail-Adresse
+     * @param password das Passwort
+     * @return eine Fehlerbeschreibung oder {@code null}, wenn alles gültig ist
+     */
     private String validateCredentials(String username, String email, String password) {
         StringBuilder errors = new StringBuilder();
         if (registerMode && (username.length() < 3 || username.length() > 32)) {
@@ -210,15 +248,27 @@ public class LoginView {
         return errors.toString().stripTrailing();
     }
 
+    /**
+     * Startet die Anmeldung über Google.
+     */
     private void google() {
         runAuth(this::runGoogleOAuth);
     }
 
+    /**
+     * Setzt die Anwendung im Offline-Modus fort (ohne Server).
+     */
     private void continueOffline() {
         stage.hide();
         onAuthenticated.run();
     }
 
+    /**
+     * Führt einen Anmeldevorgang in einem Hintergrund-Thread aus, sperrt
+     * währenddessen die Schaltflächen und reagiert auf Erfolg bzw. Fehler.
+     *
+     * @param authCall der auszuführende Anmeldevorgang
+     */
     private void runAuth(AuthCall authCall) {
         submitButton.setDisable(true);
         googleButton.setDisable(true);
@@ -249,6 +299,10 @@ public class LoginView {
         thread.start();
     }
 
+    /**
+     * Wechselt zwischen Anmelde- und Registrierungsmodus und passt die
+     * Oberfläche entsprechend an.
+     */
     private void toggleMode() {
         registerMode = !registerMode;
         usernameField.setVisible(registerMode);
@@ -259,6 +313,11 @@ public class LoginView {
         Platform.runLater(usernameField::requestFocus);
     }
 
+    /**
+     * Zeigt eine Statusmeldung zum Server an (auf dem JavaFX-Thread).
+     *
+     * @param message die anzuzeigende Meldung
+     */
     private void setServerStatus(String message) {
         Platform.runLater(() -> {
             serverStatusLabel.setText(message);
@@ -267,6 +326,9 @@ public class LoginView {
         });
     }
 
+    /**
+     * Blendet die Server-Statusmeldung wieder aus.
+     */
     private void clearServerStatus() {
         Platform.runLater(() -> {
             serverStatusLabel.setText("");
@@ -275,6 +337,12 @@ public class LoginView {
         });
     }
 
+    /**
+     * Ermittelt die zu verwendende Server-Adresse aus System-Eigenschaft,
+     * Umgebungsvariable, Konfigurationsdatei oder dem voreingestellten Wert.
+     *
+     * @return die Basis-Adresse des Servers
+     */
     private String resolveBaseUrl() {
         String property = System.getProperty("disciplica.apiBaseUrl");
         if (isUsableApiOverride(property)) {
@@ -298,6 +366,13 @@ public class LoginView {
         return DEFAULT_HOSTED_API_BASE_URL;
     }
 
+    /**
+     * Prüft, ob eine angegebene Server-Adresse verwendet werden darf. Lokale
+     * Adressen sind nur erlaubt, wenn dies ausdrücklich freigeschaltet wurde.
+     *
+     * @param value die zu prüfende Adresse
+     * @return {@code true}, wenn die Adresse verwendet werden darf
+     */
     private boolean isUsableApiOverride(String value) {
         if (value == null || value.isBlank()) {
             return false;
@@ -309,6 +384,12 @@ public class LoginView {
                 || Boolean.parseBoolean(System.getenv().getOrDefault("DISCIPLICA_ALLOW_LOCAL_API", "false"));
     }
 
+    /**
+     * Prüft, ob eine Adresse auf einen lokalen Rechner verweist.
+     *
+     * @param value die zu prüfende Adresse
+     * @return {@code true}, wenn es sich um eine lokale Adresse handelt
+     */
     private boolean isLocalApiUrl(String value) {
         String normalized = value.toLowerCase();
         return normalized.contains("localhost")
@@ -316,6 +397,14 @@ public class LoginView {
                 || normalized.contains("0.0.0.0");
     }
 
+    /**
+     * Führt den vollständigen Google-Anmeldeablauf durch: startet einen
+     * lokalen Rückleitungs-Server, öffnet den Browser, wartet auf die Antwort
+     * von Google und schließt die Anmeldung am Server ab.
+     *
+     * @return die Anmeldeantwort mit Tokens und Profil
+     * @throws ApiClientException wenn die Anmeldung fehlschlägt
+     */
     private AuthResponse runGoogleOAuth() {
         HttpServer callbackServer = null;
         try {
@@ -361,6 +450,12 @@ public class LoginView {
         }
     }
 
+    /**
+     * Prüft, ob der Server erreichbar ist, und weckt ihn bei Bedarf aus dem
+     * Ruhezustand (mit Statusanzeige).
+     *
+     * @throws ApiClientException wenn der Server nicht erreichbar ist
+     */
     private void ensureBackendReachable() {
         setServerStatus("⏳ Waking up the server — this takes up to 60 s on first launch. Please wait…");
         try {
@@ -395,6 +490,13 @@ public class LoginView {
         }
     }
 
+    /**
+     * Öffnet die angegebene Adresse im Standardbrowser des Systems.
+     *
+     * @param uri die zu öffnende Adresse
+     * @throws IOException        bei einem Fehler beim Öffnen
+     * @throws ApiClientException wenn kein Browser verfügbar ist
+     */
     private void openBrowser(String uri) throws IOException {
         if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
             throw new ApiClientException("No desktop browser is available for Google Sign-In.");
@@ -402,6 +504,12 @@ public class LoginView {
         Desktop.getDesktop().browse(URI.create(uri));
     }
 
+    /**
+     * Zerlegt eine Query-Zeichenkette in ihre Schlüssel-Wert-Paare.
+     *
+     * @param query die Query-Zeichenkette (darf {@code null} sein)
+     * @return die enthaltenen Parameter
+     */
     private Map<String, String> parseQuery(String query) {
         Map<String, String> params = new HashMap<>();
         if (query == null || query.isBlank()) {
@@ -416,14 +524,31 @@ public class LoginView {
         return params;
     }
 
+    /**
+     * Kodiert einen Wert für die Verwendung in einer URL.
+     *
+     * @param value der zu kodierende Wert
+     * @return der kodierte Wert
+     */
     private String urlEncode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Dekodiert einen URL-kodierten Wert.
+     *
+     * @param value der kodierte Wert
+     * @return der dekodierte Wert
+     */
     private String urlDecode(String value) {
         return URLDecoder.decode(value, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Erstellt das kleine Google-Logo für die Anmeldeschaltfläche.
+     *
+     * @return die Bildansicht des Logos
+     */
     private ImageView createGoogleLogo() {
         ImageView logo = new ImageView(new Image(GOOGLE_LOGO_URL, 20, 20, true, true, true));
         logo.setFitWidth(20);
@@ -432,6 +557,12 @@ public class LoginView {
         return logo;
     }
 
+    /**
+     * Zeigt eine Fehlermeldung in einem Dialog an.
+     *
+     * @param header  die Überschrift des Fehlers
+     * @param message der Fehlertext
+     */
     private void showError(String header, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -446,8 +577,18 @@ public class LoginView {
         alert.showAndWait();
     }
 
+    /**
+     * Funktionsschnittstelle für einen Anmeldevorgang, der eine
+     * {@link AuthResponse} liefert.
+     */
     @FunctionalInterface
     private interface AuthCall {
+        /**
+         * Führt den Anmeldevorgang aus.
+         *
+         * @return die Anmeldeantwort
+         * @throws ApiClientException wenn die Anmeldung fehlschlägt
+         */
         AuthResponse call() throws ApiClientException;
     }
 }

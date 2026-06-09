@@ -28,6 +28,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Steuert die Hauptoberfläche ({@link View}) und verbindet sie mit der
+ * Geschäftslogik.
+ * <p>
+ * Verarbeitet alle Aktions-, Maus- und Tastaturereignisse der Oberfläche
+ * (Aufgaben anlegen, ändern, löschen, abschließen, speichern und laden). Je
+ * nach Anmeldezustand werden die Aufgaben entweder lokal über den
+ * {@link UserService} oder über den Server (siehe {@link SessionStore})
+ * verwaltet.
+ */
 public class MainController implements EventHandler<Event>, ChangeListener<String> {
 
     final User user;
@@ -40,10 +50,24 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     private long cachedStatsNanos;
     private static final long STATS_CACHE_TTL_NANOS = 1_000_000_000L;
 
+    /**
+     * Erzeugt den Controller ohne Server-Anbindung (reiner Offline-Betrieb).
+     *
+     * @param simpleView  die zu steuernde Oberfläche
+     * @param userService der Dienst für die Benutzerdaten
+     */
     public MainController(View simpleView, UserService userService) {
         this(simpleView, userService, null);
     }
 
+    /**
+     * Erzeugt den Controller mit optionaler Server-Anbindung.
+     *
+     * @param simpleView   die zu steuernde Oberfläche
+     * @param userService  der Dienst für die Benutzerdaten
+     * @param sessionStore der Sitzungsspeicher oder {@code null} für den
+     *                     Offline-Betrieb
+     */
     public MainController(View simpleView, UserService userService, SessionStore sessionStore) {
         this.userService = userService;
         this.sessionStore = sessionStore;
@@ -51,6 +75,15 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         this.simpleView = simpleView;
     }
 
+    /**
+     * Berechnet einen Punktewert für eine Gewohnheit anhand von Kategorie,
+     * Dauer und Art.
+     *
+     * @param category die Kategorie (z.&nbsp;B. „Health“, „Fitness“)
+     * @param minutes  die Dauer in Minuten (auf 5–480 begrenzt)
+     * @param type     die Art der Aufgabe
+     * @return der berechnete Punktewert (mindestens 1)
+     */
     public static int calculateHabitPoints(String category, int minutes, String type) {
         int safeMinutes = Math.max(5, Math.min(480, minutes));
         double base = safeMinutes * 0.8;
@@ -69,6 +102,15 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         return Math.max(1, (int) Math.round(base * categoryMultiplier * typeMultiplier));
     }
 
+    /**
+     * Verarbeitet ein Aktionsereignis der Oberfläche (Navigation, Anlegen,
+     * Ändern, Löschen, Abschließen und Speichern von Aufgaben).
+     *
+     * @param event das ausgelöste Aktionsereignis
+     * @throws InvalidHabitException  wenn Aufgabendaten ungültig sind
+     * @throws HabitNotFoundException wenn eine Aufgabe nicht gefunden wird
+     * @throws IOException            bei einem Fehler beim Speichern
+     */
     public void handleActionEvent(ActionEvent event) throws InvalidHabitException, HabitNotFoundException, IOException {
         Object source = event.getSource();
 
@@ -285,6 +327,12 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         }
     }
 
+    /**
+     * Verarbeitet Mausereignisse der Oberfläche; ein Doppelklick auf die
+     * Aufgabenliste öffnet das Detailfenster.
+     *
+     * @param event das Mausereignis
+     */
     public void handleMouseEvent(MouseEvent event){
         Object source = event.getSource();
 
@@ -293,10 +341,22 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         }
     }
 
+    /**
+     * Verarbeitet Tastaturereignisse der Oberfläche (derzeit ohne weitere
+     * Aktion).
+     *
+     * @param event das Tastaturereignis
+     */
     public void handleKeyEvent(KeyEvent event){
         Object source = event.getSource();
     }
 
+    /**
+     * Liefert die anzuzeigenden Aufgaben – je nach Anmeldezustand vom Server
+     * oder aus den lokalen Daten.
+     *
+     * @return die Aufgaben in Textdarstellung
+     */
     public String[] getHabits() {
         if (useHostedTasks()) {
             return fetchHostedTasks();
@@ -304,30 +364,61 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         return user.getAllHabits();
     }
 
+    /**
+     * Zerlegt den aktuell in der Liste ausgewählten Eintrag in seine Felder.
+     *
+     * @return die Felder des ausgewählten Eintrags
+     */
     public String[] getInfo(){
         return simpleView.listViewTasks.getSelectionModel().getSelectedItem().toString().split(";");
     }
 
+    /**
+     * Speichert die Aufgabendaten.
+     *
+     * @throws IOException bei einem Schreibfehler
+     */
     public void saveData() throws IOException {
         userService.writeTaskData();
     }
 
+    /**
+     * Lädt die Aufgabendaten.
+     *
+     * @throws IOException bei einem Lesefehler
+     */
     public void readData() throws IOException {
         userService.readTaskData();
     }
 
+    /**
+     * Lädt die Benutzerdaten.
+     *
+     * @throws IOException bei einem Lesefehler
+     */
     public void readUserData() throws IOException {
         userService.readUserData();
     }
 
+    /**
+     * Speichert die Benutzerdaten.
+     *
+     * @throws IOException bei einem Schreibfehler
+     */
     public void saveUserData() throws IOException {
         userService.writeUserData();
     }
 
+    /**
+     * Speichert die Benutzerwerte im Hintergrund (ohne Ladeanzeige).
+     */
     private void persistUserStatsSafely() {
         saveUserDataAsync();
     }
 
+    /**
+     * Speichert Aufgaben- und Benutzerdaten im Hintergrund.
+     */
     private void persistAllDataSafely() {
         runFileTask("Saving data...", false, () -> {
             saveData();
@@ -335,16 +426,30 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         }, null);
     }
 
+    /**
+     * {@return der aktuelle Benutzer}
+     */
     public User getUser() {
         return user.getUser();
     }
 
+    /**
+     * Zieht dem Benutzer Gold ab und speichert die Daten.
+     *
+     * @param amount der auszugebende Betrag
+     */
     public void spendGoldAndPersist(int amount) {
         user.spendGold(amount);
         invalidateStatsCache();
         persistAllDataSafely();
     }
 
+    /**
+     * Liefert eine Momentaufnahme der Benutzerwerte. Im angemeldeten Zustand
+     * werden die Werte vom Server geholt, sonst kurzzeitig zwischengespeichert.
+     *
+     * @return die aktuelle Werte-Momentaufnahme
+     */
     public UserStatsSnapshot getCachedUserStats() {
         if (sessionStore != null && sessionStore.isAuthenticated()) {
             UserProfile profile = sessionStore.apiClient().me();
@@ -373,11 +478,21 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         return cachedStats;
     }
 
+    /**
+     * Verwirft die zwischengespeicherten Benutzerwerte, sodass sie neu
+     * ermittelt werden.
+     */
     private void invalidateStatsCache() {
         cachedStats = null;
         cachedStatsNanos = 0L;
     }
 
+    /**
+     * Lädt die Daten im Hintergrund und führt anschließend eine Aktion aus.
+     * Im angemeldeten Zustand entfällt das Laden lokaler Dateien.
+     *
+     * @param onSuccess die nach erfolgreichem Laden auszuführende Aktion
+     */
     public void loadDataAsync(Runnable onSuccess) {
         if (useHostedTasks()) {
             if (onSuccess != null) {
@@ -391,6 +506,12 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         }, onSuccess);
     }
 
+    /**
+     * Speichert alle Daten im Hintergrund und führt anschließend eine Aktion
+     * aus. Im angemeldeten Zustand entfällt das Speichern lokaler Dateien.
+     *
+     * @param onSuccess die nach erfolgreichem Speichern auszuführende Aktion
+     */
     public void saveAllAsync(Runnable onSuccess) {
         if (useHostedTasks()) {
             if (onSuccess != null) {
@@ -404,10 +525,23 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         }, onSuccess);
     }
 
+    /**
+     * Speichert die Benutzerwerte im Hintergrund (ohne Ladeanzeige).
+     */
     private void saveUserDataAsync() {
         runFileTask("Saving user stats...", false, this::saveUserData, null);
     }
 
+    /**
+     * Führt eine Datei-Operation in einem Hintergrund-Thread aus und zeigt bei
+     * Bedarf eine Ladeanzeige bzw. bei Fehlern einen Hinweis an.
+     *
+     * @param loadingMessage       die Meldung der Ladeanzeige
+     * @param showLoadingIndicator {@code true}, um eine Ladeanzeige zu zeigen
+     * @param action               die auszuführende Datei-Operation
+     * @param onSuccess            die nach Erfolg auszuführende Aktion (darf
+     *                             {@code null} sein)
+     */
     private void runFileTask(String loadingMessage, boolean showLoadingIndicator, IOAction action, Runnable onSuccess) {
         Task<Void> task = new Task<>() {
             @Override
@@ -448,15 +582,31 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         worker.start();
     }
 
+    /**
+     * Funktionsschnittstelle für eine Datei-Operation, die eine
+     * {@link IOException} auslösen kann.
+     */
     @FunctionalInterface
     private interface IOAction {
+        /**
+         * Führt die Datei-Operation aus.
+         *
+         * @throws IOException bei einem Ein-/Ausgabefehler
+         */
         void run() throws IOException;
     }
 
+    /**
+     * {@return {@code true}, wenn die Aufgaben über den Server verwaltet
+     * werden (angemeldet)}
+     */
     private boolean useHostedTasks() {
         return sessionStore != null && sessionStore.isAuthenticated();
     }
 
+    /**
+     * Legt eine Aufgabe über den Server an und aktualisiert die Anzeige.
+     */
     private void createHostedTask() {
         TaskType type = toTaskType(simpleView.comboBox.getSelectionModel().getSelectedItem());
         int points = Integer.parseInt(simpleView.pointsTF.getText());
@@ -474,6 +624,10 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         alert.showAndWait();
     }
 
+    /**
+     * Ändert die ausgewählte Aufgabe über den Server und aktualisiert die
+     * Anzeige.
+     */
     private void updateHostedTask() {
         UUID taskId = selectedHostedTaskId();
         if (taskId == null) {
@@ -493,6 +647,10 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         alert.showAndWait();
     }
 
+    /**
+     * Löscht die ausgewählte Aufgabe über den Server und aktualisiert die
+     * Anzeige.
+     */
     private void deleteHostedTask() {
         UUID taskId = selectedHostedTaskId();
         if (taskId == null) {
@@ -503,6 +661,10 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         simpleView.refreshDashboardData();
     }
 
+    /**
+     * Schließt die ausgewählte Aufgabe über den Server ab und aktualisiert die
+     * Anzeige.
+     */
     private void completeHostedTask() {
         UUID taskId = selectedHostedTaskId();
         if (taskId == null) {
@@ -517,15 +679,28 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         ((Stage) simpleView.completeButton.getScene().getWindow()).close();
     }
 
+    /**
+     * Ermittelt die Server-Kennung der aktuell ausgewählten Aufgabe.
+     *
+     * @return die Kennung oder {@code null}, wenn nichts ausgewählt ist
+     */
     private UUID selectedHostedTaskId() {
         String selectedItem = simpleView.listViewTasks.getSelectionModel().getSelectedItem();
         return selectedItem == null ? null : hostedTaskIds.get(selectedItem);
     }
 
+    /**
+     * Lädt die Aufgabenliste vom Server neu in die Anzeige.
+     */
     private void refreshHostedTaskList() {
         simpleView.itemsObservable.setAll(fetchHostedTasks());
     }
 
+    /**
+     * Holt die Aufgaben vom Server und wandelt sie in die Textdarstellung um.
+     *
+     * @return die Aufgaben in Textdarstellung
+     */
     private String[] fetchHostedTasks() {
         hostedTaskIds.clear();
         return sessionStore.apiClient().tasks().stream()
@@ -533,6 +708,13 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 .toArray(String[]::new);
     }
 
+    /**
+     * Wandelt eine Server-Aufgabe in die in der Liste verwendete
+     * Textdarstellung um und merkt sich deren Kennung.
+     *
+     * @param task die Server-Aufgabe
+     * @return die Textdarstellung
+     */
     private String toLegacyDisplay(TaskDto task) {
         String display = toLegacyType(task.type()) + ";" + task.title() + ";" + task.description() + ";" + task.points()
                 + ";" + task.completed() + ";" + task.streak();
@@ -540,6 +722,13 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         return display;
     }
 
+    /**
+     * Wandelt die in der Oberfläche gewählte Aufgabenart in den
+     * Server-Aufgabentyp um.
+     *
+     * @param selectedType die gewählte Art
+     * @return der entsprechende {@link TaskType}
+     */
     private TaskType toTaskType(String selectedType) {
         if ("Daily Habit".equals(selectedType)) {
             return TaskType.DAILY;
@@ -550,6 +739,13 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         return TaskType.TODO;
     }
 
+    /**
+     * Wandelt einen Server-Aufgabentyp in das in der Liste verwendete
+     * Typkürzel um.
+     *
+     * @param type der Aufgabentyp
+     * @return das Typkürzel („D“, „W“ oder „O“)
+     */
     private String toLegacyType(TaskType type) {
         return switch (type) {
             case DAILY -> "D";
@@ -558,8 +754,24 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         };
     }
 
+    /**
+     * Momentaufnahme der wichtigsten Benutzerwerte für die Anzeige.
+     *
+     * @param username   der Benutzername
+     * @param level      das Level
+     * @param title      der Titel
+     * @param experience die Erfahrungspunkte
+     * @param gold       das Gold
+     * @param health     die Lebenspunkte
+     */
     public record UserStatsSnapshot(String username, int level, String title, int experience, int gold, int health) {}
 
+    /**
+     * Verteilt ein eingehendes Ereignis je nach Typ an die passende
+     * Verarbeitungsmethode.
+     *
+     * @param event das eingehende Ereignis
+     */
     @Override
     public void handle(Event event){
         if(event instanceof ActionEvent) {
@@ -579,6 +791,14 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         }
     }
 
+    /**
+     * Reagiert auf eine Änderung der Auswahl in der Aufgabenliste und füllt
+     * die Eingabefelder mit den Werten des ausgewählten Eintrags.
+     *
+     * @param observable der beobachtete Wert
+     * @param oldValue   der bisherige Wert
+     * @param newValue   der neue Wert (der ausgewählte Listeneintrag)
+     */
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         if(newValue == null) return;

@@ -23,6 +23,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Begrüßungsdialog, in dem neue Benutzer ihren Avatar gestalten und ihre
+ * ersten Schwerpunkte auswählen.
+ * <p>
+ * Die Auswahl (Körper, Haut, Haare, Schwerpunkte) wird sofort in einer
+ * Vorschau dargestellt und beim Abschluss im {@link SessionStore} gespeichert.
+ */
 public class OnboardingDialog {
     private final Stage owner;
     private final SessionStore sessionStore;
@@ -30,16 +37,31 @@ public class OnboardingDialog {
     private final AvatarState avatarState;
     private final List<String> focusAreas = new ArrayList<>();
 
+    /**
+     * Erzeugt den Dialog ohne Sitzungsspeicher (z.&nbsp;B. zur Vorschau).
+     *
+     * @param owner das Eltern-Fenster
+     */
     public OnboardingDialog(Stage owner) {
         this(owner, null);
     }
 
+    /**
+     * Erzeugt den Dialog mit Zugriff auf die aktuelle Sitzung.
+     *
+     * @param owner        das Eltern-Fenster
+     * @param sessionStore der Sitzungsspeicher (darf {@code null} sein)
+     */
     public OnboardingDialog(Stage owner, SessionStore sessionStore) {
         this.owner = owner;
         this.sessionStore = sessionStore;
         this.avatarState = sessionStore == null ? AvatarState.defaults() : sessionStore.avatarState();
     }
 
+    /**
+     * Baut den Dialog auf und zeigt ihn modal an, bis der Benutzer ihn
+     * abschließt.
+     */
     public void show() {
         Stage dialog = new Stage();
         dialog.initOwner(owner);
@@ -91,6 +113,9 @@ public class OnboardingDialog {
         dialog.showAndWait();
     }
 
+    /**
+     * {@return der Inhalt des Reiters „Body“ (Körpergröße und Oberteilfarbe)}
+     */
     private VBox bodyContent() {
         VBox content = new VBox(16,
                 optionGrid("Choose your body size", "body", "Small", "Medium", "Tall"),
@@ -99,6 +124,9 @@ public class OnboardingDialog {
         return content;
     }
 
+    /**
+     * {@return der Inhalt des Reiters „Hair“ (Frisur und Haarfarbe)}
+     */
     private VBox hairContent() {
         VBox content = new VBox(16,
                 optionGrid("Choose your hair style", "hairStyle", "Short", "Long", "Bangs", "Spikes"),
@@ -107,6 +135,14 @@ public class OnboardingDialog {
         return content;
     }
 
+    /**
+     * Baut ein Raster aus Auswahlschaltflächen für eine Avatar-Eigenschaft.
+     *
+     * @param titleText die Überschrift des Rasters
+     * @param category  die Kategorie (z.&nbsp;B. „body“, „skin“)
+     * @param options   die möglichen Werte
+     * @return das aufgebaute Auswahlraster
+     */
     private GridPane optionGrid(String titleText, String category, String... options) {
         GridPane grid = new GridPane();
         grid.getStyleClass().add("onboarding-option-grid");
@@ -137,6 +173,11 @@ public class OnboardingDialog {
         return grid;
     }
 
+    /**
+     * Baut das Raster mit den auswählbaren Schwerpunkten (Mehrfachauswahl).
+     *
+     * @return das aufgebaute Schwerpunkt-Raster
+     */
     private GridPane focusGrid() {
         GridPane grid = new GridPane();
         grid.getStyleClass().add("onboarding-option-grid");
@@ -166,6 +207,13 @@ public class OnboardingDialog {
         return grid;
     }
 
+    /**
+     * Übernimmt eine Auswahl in den Avatar-Zustand.
+     *
+     * @param category die Kategorie der Auswahl
+     * @param option   der gewählte Wert
+     * @throws IllegalArgumentException bei einer unbekannten Kategorie
+     */
     private void setSelection(String category, String option) {
         switch (category) {
             case "body" -> avatarState.setBodySize(option);
@@ -180,6 +228,12 @@ public class OnboardingDialog {
         }
     }
 
+    /**
+     * Gibt die aktuell gewählte Option einer Kategorie zurück.
+     *
+     * @param category die Kategorie
+     * @return der aktuell gewählte Wert
+     */
     private String currentSelection(String category) {
         return switch (category) {
             case "body" -> avatarState.getBodySize();
@@ -191,6 +245,12 @@ public class OnboardingDialog {
         };
     }
 
+    /**
+     * Hebt die zur Auswahl passende Schaltfläche hervor.
+     *
+     * @param buttons        die Schaltflächen einer Kategorie
+     * @param selectedOption die aktuell gewählte Option
+     */
     private void updateSelectedButtons(List<Button> buttons, String selectedOption) {
         for (Button button : buttons) {
             button.getStyleClass().remove("selected");
@@ -200,10 +260,17 @@ public class OnboardingDialog {
         }
     }
 
+    /**
+     * Zeichnet die Avatar-Vorschau neu.
+     */
     private void renderAvatar() {
         AvatarPixelRenderer.render(avatar, avatarState);
     }
 
+    /**
+     * Speichert den gestalteten Avatar in der Sitzung. Schlägt das Speichern
+     * auf dem Server fehl, wird ein Hinweis angezeigt.
+     */
     private void saveAvatar() {
         if (sessionStore == null) {
             return;
