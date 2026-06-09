@@ -7,9 +7,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
+/**
+ * Speichert und lädt das Avatar-Aussehen lokal in einer Properties-Datei.
+ * <p>
+ * Wird verwendet, solange kein Benutzer angemeldet ist; im angemeldeten
+ * Zustand übernimmt der Server die Speicherung.
+ */
 public class AvatarProfileStore {
     private static final Path AVATAR_PATH = Path.of("data", "avatar-profile.properties");
 
+    /**
+     * Lädt den gespeicherten Avatar-Zustand. Fehlt die Datei oder ist sie
+     * nicht lesbar, werden Standardwerte zurückgegeben.
+     *
+     * @return der geladene oder voreingestellte Avatar-Zustand
+     */
     public AvatarState load() {
         AvatarState state = AvatarState.defaults();
         if (!Files.exists(AVATAR_PATH)) {
@@ -30,6 +42,12 @@ public class AvatarProfileStore {
         return state;
     }
 
+    /**
+     * Speichert den Avatar-Zustand in der lokalen Properties-Datei.
+     *
+     * @param state der zu speichernde Avatar-Zustand
+     * @throws IOException bei einem Schreibfehler
+     */
     public void save(AvatarState state) throws IOException {
         Files.createDirectories(AVATAR_PATH.getParent());
         Properties properties = new Properties();

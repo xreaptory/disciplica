@@ -4,14 +4,37 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Zeichnet den Avatar im Pixel-Stil auf eine JavaFX-{@link Canvas}.
+ * <p>
+ * Aus dem {@link AvatarState} (Körpergröße, Farben, Frisur, Extras) und einer
+ * optionalen {@link Equipment Ausrüstung} wird eine kleine Pixel-Figur
+ * zusammengesetzt. Die Klasse besteht ausschließlich aus statischen Methoden
+ * und kann nicht instanziiert werden.
+ */
 public final class AvatarPixelRenderer {
     private AvatarPixelRenderer() {
     }
 
+    /**
+     * Zeichnet den Avatar ohne Ausrüstung.
+     *
+     * @param canvas die Zeichenfläche
+     * @param state  das darzustellende Avatar-Aussehen
+     */
     public static void render(Canvas canvas, AvatarState state) {
         render(canvas, state, Equipment.none());
     }
 
+    /**
+     * Zeichnet den Avatar samt Ausrüstung. Berechnet die Pixelgröße passend
+     * zur Zeichenfläche und setzt die Figur aus Kopf, Körper, Armen, Beinen,
+     * Haaren, Extras und Ausrüstung zusammen.
+     *
+     * @param canvas    die Zeichenfläche
+     * @param state     das darzustellende Avatar-Aussehen
+     * @param equipment die anzulegende Ausrüstung
+     */
     public static void render(Canvas canvas, AvatarState state, Equipment equipment) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         double width = canvas.getWidth();
@@ -77,6 +100,9 @@ public final class AvatarPixelRenderer {
         drawEquipment(gc, originX, originY, pixel, equipment, torsoLeft, bodyTop, bodyHeight, skin);
     }
 
+    /**
+     * Zeichnet den Hintergrund (Bühne) hinter der Figur.
+     */
     private static void drawStage(GraphicsContext gc, double width, double height) {
         gc.setFill(Color.web("#d8ecff"));
         gc.fillRect(0, 0, width, height);
@@ -87,6 +113,9 @@ public final class AvatarPixelRenderer {
         gc.fillRect(width * 0.54, height * 0.2, width * 0.2, height * 0.05);
     }
 
+    /**
+     * Zeichnet die hinteren Haare (nur bei langer Frisur sichtbar).
+     */
     private static void drawBackHair(GraphicsContext gc, int ox, int oy, int p, AvatarState state, Color hair, int x, int y) {
         if ("Long".equals(state.getHairStyle())) {
             rect(gc, ox, oy, x - 2, y - 2, 12, 12, p, Color.web("#201738"));
@@ -95,6 +124,9 @@ public final class AvatarPixelRenderer {
         }
     }
 
+    /**
+     * Zeichnet die vorderen Haare je nach Frisur und Pony.
+     */
     private static void drawFrontHair(GraphicsContext gc, int ox, int oy, int p, AvatarState state, Color hair, int x, int y) {
         String style = state.getHairStyle();
         if ("Spikes".equals(style)) {
@@ -112,6 +144,9 @@ public final class AvatarPixelRenderer {
         }
     }
 
+    /**
+     * Zeichnet einen Arm samt Hand (links oder rechts).
+     */
     private static void drawArm(GraphicsContext gc, int ox, int oy, int p, int x, int y,
                                 Color skin, Color shirt, Color outline, boolean right) {
         rect(gc, ox, oy, x, y, 4, 8, p, outline);
@@ -119,6 +154,9 @@ public final class AvatarPixelRenderer {
         rect(gc, ox, oy, x + (right ? 2 : 1), y + 6, 2, 2, p, skin);
     }
 
+    /**
+     * Zeichnet ein zusätzliches Gesichtsmerkmal (z.&nbsp;B. eine Brille).
+     */
     private static void drawExtra(GraphicsContext gc, int ox, int oy, int p, String extra, int headLeft, int headTop) {
         if ("Glasses".equals(extra)) {
             rect(gc, ox, oy, headLeft + 1, headTop + 2, 3, 2, p, Color.web("#51466f"));
@@ -127,6 +165,9 @@ public final class AvatarPixelRenderer {
         }
     }
 
+    /**
+     * Zeichnet einen Rollstuhl unter bzw. um die Figur.
+     */
     private static void drawWheelchair(GraphicsContext gc, int ox, int oy, int p,
                                        int torsoLeft, int bodyTop, int bodyHeight, Color outline) {
         Color frame = Color.web("#6f7893");
@@ -153,6 +194,9 @@ public final class AvatarPixelRenderer {
         rect(gc, ox, oy, torsoLeft + 14, seatY + 6, 3, 1, p, frame);
     }
 
+    /**
+     * Zeichnet ein einzelnes Rollstuhl-Rad.
+     */
     private static void drawWheel(GraphicsContext gc, int ox, int oy, int p, int x, int y,
                                   Color wheel, Color wheelLight, Color outline) {
         rect(gc, ox, oy, x + 1, y, 5, 1, p, outline);
@@ -162,6 +206,9 @@ public final class AvatarPixelRenderer {
         rect(gc, ox, oy, x + 1, y + 6, 5, 1, p, outline);
     }
 
+    /**
+     * Zeichnet die Ausrüstung: Rüstung, Kopfbedeckung und Waffe.
+     */
     private static void drawEquipment(GraphicsContext gc, int ox, int oy, int p, Equipment equipment,
                                       int torsoLeft, int bodyTop, int bodyHeight, Color skin) {
         if ("Armor".equals(equipment.armor())) {
@@ -198,6 +245,12 @@ public final class AvatarPixelRenderer {
         rect(gc, ox, oy, handX, handY, 2, 2, p, skin);
     }
 
+    /**
+     * Ordnet einem Hautfarben-Namen die zugehörige Farbe zu.
+     *
+     * @param value der Name der Hautfarbe
+     * @return die entsprechende Farbe
+     */
     private static Color skinColor(String value) {
         return switch (value) {
             case "Tan" -> Color.web("#d79055");
@@ -208,6 +261,12 @@ public final class AvatarPixelRenderer {
         };
     }
 
+    /**
+     * Ordnet einem Haarfarben-Namen die zugehörige Farbe zu.
+     *
+     * @param value der Name der Haarfarbe
+     * @return die entsprechende Farbe
+     */
     private static Color hairColor(String value) {
         return switch (value) {
             case "Black" -> Color.web("#20242a");
@@ -218,6 +277,12 @@ public final class AvatarPixelRenderer {
         };
     }
 
+    /**
+     * Ordnet einem Oberteil-Farbnamen die zugehörige Farbe zu.
+     *
+     * @param value der Name der Farbe
+     * @return die entsprechende Farbe
+     */
     private static Color shirtColor(String value) {
         return switch (value) {
             case "Green" -> Color.web("#42b95a");
@@ -228,6 +293,13 @@ public final class AvatarPixelRenderer {
         };
     }
 
+    /**
+     * Verdunkelt oder erhellt eine Farbe um den angegebenen Faktor.
+     *
+     * @param color  die Ausgangsfarbe
+     * @param factor der Faktor (kleiner 1 verdunkelt, größer 1 erhellt)
+     * @return die abgewandelte Farbe
+     */
     private static Color shade(Color color, double factor) {
         return Color.color(
                 clamp(color.getRed() * factor),
@@ -237,15 +309,27 @@ public final class AvatarPixelRenderer {
         );
     }
 
+    /**
+     * Begrenzt einen Wert auf den Bereich 0 bis 1.
+     *
+     * @param value der zu begrenzende Wert
+     * @return der begrenzte Wert
+     */
     private static double clamp(double value) {
         return Math.max(0, Math.min(1, value));
     }
 
+    /**
+     * Zeichnet ein Rechteck im Pixelraster.
+     */
     private static void rect(GraphicsContext gc, int ox, int oy, int x, int y, int w, int h, int p, Color color) {
         gc.setFill(color);
         gc.fillRect(ox + x * p, oy + y * p, w * p, h * p);
     }
 
+    /**
+     * Zeichnet ein Dreieck im Pixelraster (z.&nbsp;B. für Haarspitzen).
+     */
     private static void triangle(GraphicsContext gc, int ox, int oy, int x1, int y1, int x2, int y2, int x3, int y3, int p, Color color) {
         gc.setFill(color);
         gc.fillPolygon(
@@ -255,7 +339,17 @@ public final class AvatarPixelRenderer {
         );
     }
 
+    /**
+     * Die Ausrüstung eines Avatars.
+     *
+     * @param weapon   die Waffe
+     * @param armor    die Rüstung
+     * @param headgear die Kopfbedeckung
+     */
     public record Equipment(String weapon, String armor, String headgear) {
+        /**
+         * {@return eine Ausrüstung ohne Gegenstände}
+         */
         public static Equipment none() {
             return new Equipment("None", "None", "None");
         }

@@ -29,6 +29,13 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * HTTP-Client für die Kommunikation des Clients mit dem Server.
+ * <p>
+ * Kapselt alle REST-Aufrufe (Anmeldung, Aufgaben, Gruppen, Avatar) als
+ * Java-Methoden, kümmert sich um die JSON-Umwandlung und hängt bei
+ * geschützten Aufrufen das Access-Token als {@code Authorization}-Header an.
+ */
 public class ApiClient {
     private final URI baseUri;
     private final HttpClient httpClient;
@@ -36,108 +43,254 @@ public class ApiClient {
     private String accessToken;
     private String refreshToken;
 
+    /**
+     * Erzeugt den Client für eine bestimmte Server-Adresse.
+     *
+     * @param baseUrl die Basis-Adresse des Servers
+     */
     public ApiClient(String baseUrl) {
         this.baseUri = URI.create(baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl);
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
 
+    /**
+     * Registriert ein neues Benutzerkonto.
+     *
+     * @param request die Registrierungsdaten
+     * @return die Anmeldeantwort mit Tokens und Profil
+     */
     public AuthResponse register(RegisterRequest request) {
         return post("/auth/register", request, AuthResponse.class, false);
     }
 
+    /**
+     * Meldet einen Benutzer mit E-Mail und Passwort an.
+     *
+     * @param request die Anmeldedaten
+     * @return die Anmeldeantwort mit Tokens und Profil
+     */
     public AuthResponse login(LoginRequest request) {
         return post("/auth/login", request, AuthResponse.class, false);
     }
 
+    /**
+     * Meldet einen Benutzer über ein Google-ID-Token an.
+     *
+     * @param idToken das Google-ID-Token
+     * @return die Anmeldeantwort mit Tokens und Profil
+     */
     public AuthResponse google(String idToken) {
         return post("/auth/google", new GoogleLoginRequest(idToken), AuthResponse.class, false);
     }
 
+    /**
+     * Schließt die Google-Anmeldung der Desktop-Anwendung mit dem
+     * Zwischencode ab.
+     *
+     * @param code der Zwischencode
+     * @return die Anmeldeantwort mit Tokens und Profil
+     */
     public AuthResponse googleDesktopComplete(String code) {
         return post("/auth/google/desktop/complete", new GoogleDesktopCompleteRequest(code), AuthResponse.class, false);
     }
 
+    /**
+     * {@return das Profil des angemeldeten Benutzers}
+     */
     public UserProfile me() {
         return get("/me", UserProfile.class);
     }
 
+    /**
+     * Aktualisiert das Avatar-Aussehen des angemeldeten Benutzers.
+     *
+     * @param request die neuen Avatar-Merkmale
+     * @return das aktualisierte Profil
+     */
     public UserProfile updateAvatar(UpdateAvatarProfileRequest request) {
         return patch("/me/avatar", request, UserProfile.class);
     }
 
+    /**
+     * {@return alle Aufgaben des angemeldeten Benutzers}
+     */
     public List<TaskDto> tasks() {
         return get("/tasks", new TypeReference<>() {
         });
     }
 
+    /**
+     * Legt eine neue Aufgabe an.
+     *
+     * @param request die Daten der neuen Aufgabe
+     * @return die angelegte Aufgabe
+     */
     public TaskDto createTask(CreateTaskRequest request) {
         return post("/tasks", request, TaskDto.class, true);
     }
 
+    /**
+     * Ändert eine bestehende Aufgabe.
+     *
+     * @param taskId  die Kennung der Aufgabe
+     * @param request die zu ändernden Felder
+     * @return die aktualisierte Aufgabe
+     */
     public TaskDto updateTask(UUID taskId, UpdateTaskRequest request) {
         return patch("/tasks/" + taskId, request, TaskDto.class);
     }
 
+    /**
+     * Schließt eine Aufgabe ab.
+     *
+     * @param taskId die Kennung der Aufgabe
+     * @return die abgeschlossene Aufgabe
+     */
     public TaskDto completeTask(UUID taskId) {
         return post("/tasks/" + taskId + "/complete", null, TaskDto.class, true);
     }
 
+    /**
+     * Löscht eine Aufgabe.
+     *
+     * @param taskId die Kennung der Aufgabe
+     */
     public void deleteTask(UUID taskId) {
         send(request("/tasks/" + taskId).DELETE().build(), Void.class);
     }
 
+    /**
+     * Erstellt eine neue Gruppe.
+     *
+     * @param name der Name der Gruppe
+     * @return die erstellte Gruppe
+     */
     public PartyDto createParty(String name) {
         return post("/parties", new CreatePartyRequest(name), PartyDto.class, true);
     }
 
+    /**
+     * {@return die aktuelle Gruppe des angemeldeten Benutzers}
+     */
     public PartyDto currentParty() {
         return get("/parties/current", PartyDto.class);
     }
 
+    /**
+     * Lädt einen Benutzer in die aktuelle Gruppe ein.
+     *
+     * @param usernameOrEmail Benutzername oder E-Mail der einzuladenden Person
+     * @return die erstellte Einladung
+     */
     public PartyInviteDto invite(String usernameOrEmail) {
         return post("/parties/current/invites", new InvitePartyRequest(usernameOrEmail), PartyInviteDto.class, true);
     }
 
+    /**
+     * {@return die Chat-Nachrichten der aktuellen Gruppe}
+     */
     public List<ChatMessageDto> partyMessages() {
         return get("/parties/current/messages", new TypeReference<>() {
         });
     }
 
+    /**
+     * Sendet eine Chat-Nachricht in die aktuelle Gruppe.
+     *
+     * @param message der Nachrichtentext
+     * @return die gespeicherte Chat-Nachricht
+     */
     public ChatMessageDto sendPartyMessage(String message) {
         return post("/parties/current/messages", new SendChatMessageRequest(message), ChatMessageDto.class, true);
     }
 
+    /**
+     * Übernimmt die Tokens einer Anmeldeantwort für nachfolgende Aufrufe.
+     *
+     * @param response die Anmeldeantwort
+     */
     public void store(AuthResponse response) {
         this.accessToken = response.accessToken();
         this.refreshToken = response.refreshToken();
     }
 
+    /**
+     * {@return das aktuelle Access-Token}
+     */
     public String accessToken() {
         return accessToken;
     }
 
+    /**
+     * {@return das aktuelle Refresh-Token}
+     */
     public String refreshToken() {
         return refreshToken;
     }
 
+    /**
+     * Führt einen GET-Aufruf aus und wandelt die Antwort in den angegebenen
+     * Typ um.
+     *
+     * @param path         der Pfad des Endpunkts
+     * @param responseType der erwartete Antworttyp
+     * @param <T>          der Antworttyp
+     * @return die umgewandelte Antwort
+     */
     private <T> T get(String path, Class<T> responseType) {
         return send(request(path).GET().build(), responseType);
     }
 
+    /**
+     * Wie {@link #get(String, Class)}, jedoch für generische Typen (z.&nbsp;B.
+     * Listen).
+     *
+     * @param path         der Pfad des Endpunkts
+     * @param responseType die Typreferenz der erwarteten Antwort
+     * @param <T>          der Antworttyp
+     * @return die umgewandelte Antwort
+     */
     private <T> T get(String path, TypeReference<T> responseType) {
         return send(request(path).GET().build(), responseType);
     }
 
+    /**
+     * Führt einen POST-Aufruf aus.
+     *
+     * @param path          der Pfad des Endpunkts
+     * @param body          der zu sendende Rumpf (darf {@code null} sein)
+     * @param responseType  der erwartete Antworttyp
+     * @param authenticated {@code true}, wenn der Aufruf das Access-Token
+     *                      benötigt
+     * @param <T>           der Antworttyp
+     * @return die umgewandelte Antwort
+     */
     private <T> T post(String path, Object body, Class<T> responseType, boolean authenticated) {
         HttpRequest.Builder builder = authenticated ? request(path) : unauthenticatedRequest(path);
         return send(builder.POST(bodyPublisher(body)).build(), responseType);
     }
 
+    /**
+     * Führt einen PATCH-Aufruf aus.
+     *
+     * @param path         der Pfad des Endpunkts
+     * @param body         der zu sendende Rumpf
+     * @param responseType der erwartete Antworttyp
+     * @param <T>          der Antworttyp
+     * @return die umgewandelte Antwort
+     */
     private <T> T patch(String path, Object body, Class<T> responseType) {
         return send(request(path).method("PATCH", bodyPublisher(body)).build(), responseType);
     }
 
+    /**
+     * Erstellt einen Anfrage-Baukasten und hängt – falls vorhanden – das
+     * Access-Token an.
+     *
+     * @param path der Pfad des Endpunkts
+     * @return der vorbereitete Anfrage-Baukasten
+     */
     private HttpRequest.Builder request(String path) {
         HttpRequest.Builder builder = unauthenticatedRequest(path);
         if (accessToken != null && !accessToken.isBlank()) {
@@ -146,12 +299,26 @@ public class ApiClient {
         return builder;
     }
 
+    /**
+     * Erstellt einen Anfrage-Baukasten ohne Anmeldung mit den
+     * Standard-Headern.
+     *
+     * @param path der Pfad des Endpunkts
+     * @return der vorbereitete Anfrage-Baukasten
+     */
     private HttpRequest.Builder unauthenticatedRequest(String path) {
         return HttpRequest.newBuilder(baseUri.resolve(path))
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json");
     }
 
+    /**
+     * Wandelt ein Objekt in einen JSON-Anfragerumpf um.
+     *
+     * @param body das umzuwandelnde Objekt (darf {@code null} sein)
+     * @return der Anfragerumpf
+     * @throws ApiClientException wenn die Umwandlung fehlschlägt
+     */
     private HttpRequest.BodyPublisher bodyPublisher(Object body) {
         try {
             return HttpRequest.BodyPublishers.ofString(body == null ? "" : objectMapper.writeValueAsString(body));
@@ -160,6 +327,15 @@ public class ApiClient {
         }
     }
 
+    /**
+     * Sendet eine Anfrage und wandelt die Antwort in den angegebenen Typ um.
+     *
+     * @param request      die zu sendende Anfrage
+     * @param responseType der erwartete Antworttyp
+     * @param <T>          der Antworttyp
+     * @return die umgewandelte Antwort oder {@code null} bei leerer Antwort
+     * @throws ApiClientException bei einem Fehler der Kommunikation
+     */
     private <T> T send(HttpRequest request, Class<T> responseType) {
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -176,6 +352,15 @@ public class ApiClient {
         }
     }
 
+    /**
+     * Wie {@link #send(HttpRequest, Class)}, jedoch für generische Typen.
+     *
+     * @param request      die zu sendende Anfrage
+     * @param responseType die Typreferenz der erwarteten Antwort
+     * @param <T>          der Antworttyp
+     * @return die umgewandelte Antwort
+     * @throws ApiClientException bei einem Fehler der Kommunikation
+     */
     private <T> T send(HttpRequest request, TypeReference<T> responseType) {
         try {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -189,12 +374,24 @@ public class ApiClient {
         }
     }
 
+    /**
+     * Prüft, ob die Antwort einen Erfolgsstatuscode hat.
+     *
+     * @param response die zu prüfende Antwort
+     * @throws ApiClientException wenn der Statuscode keinen Erfolg anzeigt
+     */
     private void ensureSuccess(HttpResponse<String> response) {
         if (response.statusCode() < 200 || response.statusCode() >= 300) {
             throw new ApiClientException("Server returned " + response.statusCode() + ": " + errorMessage(response.body()));
         }
     }
 
+    /**
+     * Liest die Fehlermeldung aus dem Antwortrumpf (Feld {@code error}) aus.
+     *
+     * @param body der Antwortrumpf
+     * @return die Fehlermeldung oder der gesamte Rumpf
+     */
     private String errorMessage(String body) {
         if (body == null || body.isBlank()) {
             return "No error details returned.";
