@@ -42,6 +42,13 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 
+/**
+ * Dienst mit der gesamten Anmeldelogik: Registrierung, Anmeldung mit
+ * Passwort oder Google, Token-Erneuerung, Abmeldung und Profilpflege.
+ * <p>
+ * Greift direkt über {@link JdbcTemplate} auf die Datenbank zu und stellt
+ * Access- sowie Refresh-Tokens aus.
+ */
 @Service
 public class AuthService {
     private static final String GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
@@ -56,6 +63,19 @@ public class AuthService {
     private final HashingService hashingService;
     private final ObjectMapper objectMapper;
 
+    /**
+     * Erzeugt den Dienst mit allen benötigten Abhängigkeiten.
+     *
+     * @param jdbcTemplate     direkter Datenbankzugriff
+     * @param passwordEncoder  Encoder zum Hashen und Prüfen von Passwörtern
+     * @param userRepository   Zugriff auf die Benutzertabelle
+     * @param userMapper       wandelt Datenbankzeilen in Profile um
+     * @param jwtService       erstellt Access-Tokens
+     * @param jwtProperties    JWT-Konfiguration (Gültigkeitsdauern)
+     * @param googleProperties Google-OAuth-Konfiguration
+     * @param hashingService   erzeugt Tokens und Hashwerte
+     * @param objectMapper     liest JSON-Antworten von Google
+     */
     public AuthService(JdbcTemplate jdbcTemplate,
                        PasswordEncoder passwordEncoder,
                        UserRepository userRepository,
@@ -76,6 +96,13 @@ public class AuthService {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * Legt einen neuen Benutzer samt Zugangsdaten und leerem Avatar an.
+     *
+     * @param request die Registrierungsdaten
+     * @return die ausgestellten Tokens und das Profil
+     * @throws ApiException wenn Benutzername oder E-Mail bereits vergeben sind
+     */
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         try {
@@ -89,6 +116,13 @@ public class AuthService {
         }
     }
 
+    /**
+     * Meldet einen Benutzer mit E-Mail und Passwort an.
+     *
+     * @param request die Anmeldedaten
+     * @return die ausgestellten Tokens und das Profil
+     * @throws ApiException wenn die Zugangsdaten ungültig sind
+     */
     @Transactional
     public AuthResponse login(LoginRequest request) {
         UserRow user = userRepository.findByEmail(request.email())
@@ -105,6 +139,14 @@ public class AuthService {
         return issueTokens(user);
     }
 
+    /**
+     * Stellt mit einem gültigen Refresh-Token neue Tokens aus und macht das
+     * bisherige Refresh-Token ungültig (Rotation).
+     *
+     * @param request das vorhandene Refresh-Token
+     * @return die erneuerten Tokens und das Profil
+     * @throws ApiException wenn das Refresh-Token ungültig oder abgelaufen ist
+     */
     @Transactional
     public AuthResponse refresh(RefreshTokenRequest request) {
         String tokenHash = hashingService.sha256(request.refreshToken());
@@ -121,22 +163,48 @@ public class AuthService {
         return issueTokens(user);
     }
 
+    /**
+     * Macht das angegebene Refresh-Token ungültig (Abmeldung).
+     *
+     * @param request das abzumeldende Refresh-Token
+     */
     @Transactional
     public void logout(RefreshTokenRequest request) {
         jdbcTemplate.update("UPDATE refresh_tokens SET revoked_at = now() WHERE token_hash = ?",
                 hashingService.sha256(request.refreshToken()));
     }
 
+    /**
+     * Meldet einen Benutzer anhand eines Google-ID-Tokens an.
+     *
+     * @param request das Google-ID-Token
+     * @return die ausgestellten Tokens und das Profil
+     */
     @Transactional
     public AuthResponse google(GoogleLoginRequest request) {
         return googleIdToken(request.idToken());
     }
 
+    /**
+     * Tauscht einen Google-Autorisierungscode gegen ein ID-Token und meldet
+     * den Benutzer damit an.
+     *
+     * @param code        der Autorisierungscode von Google
+     * @param redirectUri die bei Google hinterlegte Rückleitungsadresse
+     * @return die ausgestellten Tokens und das Profil
+     */
     @Transactional
     public AuthResponse googleAuthorizationCode(String code, String redirectUri) {
         return googleIdToken(exchangeGoogleCode(code, redirectUri));
     }
 
+    /**
+     * Prüft ein Google-ID-Token, legt bei Bedarf ein Konto an bzw. verknüpft
+     * es und stellt anschließend Tokens aus.
+     *
+     * @param idToken das zu prüfende Google-ID-Token
+     * @return die ausgestellten Tokens und das Profil
+     */
     private AuthResponse googleIdToken(String idToken) {
         GoogleIdToken.Payload payload = verifyGoogleIdToken(idToken);
         String subject = payload.getSubject();
@@ -162,11 +230,25 @@ public class AuthService {
         return issueTokens(user);
     }
 
+    /**
+     * Lädt das Profil eines Benutzers anhand seiner Kennung.
+     *
+     * @param userId die Kennung des Benutzers
+     * @return das Profil des Benutzers
+     * @throws ApiException wenn kein Benutzer mit dieser Kennung existiert
+     */
     public UserProfile me(UUID userId) {
         return userMapper.toProfile(userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "User not found")));
     }
 
+    /**
+     * Speichert das Avatar-Aussehen eines Benutzers (legt es bei Bedarf an).
+     *
+     * @param userId  die Kennung des Benutzers
+     * @param request die neuen Avatar-Merkmale
+     * @return das aktualisierte Profil des Benutzers
+     */
     @Transactional
     public UserProfile updateAvatar(UUID userId, UpdateAvatarProfileRequest request) {
         jdbcTemplate.update("""
@@ -185,6 +267,13 @@ public class AuthService {
         return me(userId);
     }
 
+    /**
+     * Erstellt Access- und Refresh-Token für einen Benutzer und speichert das
+     * Refresh-Token (als Hash) in der Datenbank.
+     *
+     * @param user die Datenbankzeile des Benutzers
+     * @return die ausgestellten Tokens samt Profil
+     */
     private AuthResponse issueTokens(UserRow user) {
         String accessToken = jwtService.createAccessToken(user.id(), user.username());
         String refreshToken = hashingService.newOpaqueToken();
@@ -196,6 +285,14 @@ public class AuthService {
         return new AuthResponse(accessToken, refreshToken, userMapper.toProfile(user));
     }
 
+    /**
+     * Prüft die Signatur und Gültigkeit eines Google-ID-Tokens.
+     *
+     * @param idToken das zu prüfende ID-Token
+     * @return die enthaltenen Nutzdaten (z.&nbsp;B. E-Mail, Subjekt)
+     * @throws ApiException wenn Google nicht konfiguriert oder das Token
+     *                      ungültig ist
+     */
     private GoogleIdToken.Payload verifyGoogleIdToken(String idToken) {
         if (googleProperties.clientId() == null || googleProperties.clientId().isBlank()) {
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "Google login is not configured");
@@ -215,6 +312,15 @@ public class AuthService {
         }
     }
 
+    /**
+     * Tauscht einen Google-Autorisierungscode bei Google gegen ein ID-Token.
+     *
+     * @param code        der Autorisierungscode
+     * @param redirectUri die bei Google hinterlegte Rückleitungsadresse
+     * @return das von Google zurückgegebene ID-Token
+     * @throws ApiException wenn Google nicht konfiguriert ist oder der Tausch
+     *                      fehlschlägt
+     */
     private String exchangeGoogleCode(String code, String redirectUri) {
         if (googleProperties.clientId() == null || googleProperties.clientId().isBlank()
                 || googleProperties.clientSecret() == null || googleProperties.clientSecret().isBlank()) {
@@ -248,10 +354,24 @@ public class AuthService {
         }
     }
 
+    /**
+     * Kodiert einen Wert für die Verwendung in einer URL bzw. einem
+     * Formular-Body.
+     *
+     * @param value der zu kodierende Wert
+     * @return der URL-kodierte Wert
+     */
     private String urlEncode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Leitet aus einer E-Mail-Adresse einen freien, gültigen Benutzernamen ab
+     * und hängt bei Bedarf eine Zahl an, um Eindeutigkeit sicherzustellen.
+     *
+     * @param email die E-Mail-Adresse des Benutzers
+     * @return ein noch nicht vergebener Benutzername
+     */
     private String deriveUsername(String email) {
         String base = email == null ? "player" : email.split("@")[0].replaceAll("[^A-Za-z0-9_]", "");
         if (base.length() < 3) {

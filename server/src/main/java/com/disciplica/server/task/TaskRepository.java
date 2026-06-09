@@ -14,14 +14,29 @@ import com.disciplica.shared.task.TaskDto;
 import com.disciplica.shared.task.TaskType;
 import com.disciplica.shared.task.UpdateTaskRequest;
 
+/**
+ * Datenbankzugriff auf die Aufgabentabelle: Suchen, Anlegen, Ändern, Löschen
+ * und Abschließen von Aufgaben.
+ */
 @Repository
 public class TaskRepository {
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * Erzeugt das Repository mit dem Datenbankzugriff.
+     *
+     * @param jdbcTemplate der Datenbankzugriff
+     */
     public TaskRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Liefert alle Aufgaben eines Benutzers, neueste zuerst.
+     *
+     * @param userId die Kennung des Benutzers
+     * @return die Liste der Aufgaben
+     */
     public List<TaskDto> findByUser(UUID userId) {
         return jdbcTemplate.query("""
                 SELECT id, type, title, description, points, streak, completed, category, created_at, updated_at
@@ -29,6 +44,14 @@ public class TaskRepository {
                 """, (rs, rowNum) -> map(rs), userId);
     }
 
+    /**
+     * Sucht eine bestimmte Aufgabe eines Benutzers.
+     *
+     * @param userId die Kennung des Benutzers
+     * @param taskId die Kennung der Aufgabe
+     * @return die Aufgabe oder ein leeres {@link Optional}, falls nicht
+     *         vorhanden
+     */
     public Optional<TaskDto> findByUserAndId(UUID userId, UUID taskId) {
         return jdbcTemplate.query("""
                 SELECT id, type, title, description, points, streak, completed, category, created_at, updated_at
@@ -36,6 +59,14 @@ public class TaskRepository {
                 """, (rs, rowNum) -> map(rs), userId, taskId).stream().findFirst();
     }
 
+    /**
+     * Legt eine neue Aufgabe an und setzt sinnvolle Standardwerte für leere
+     * Felder.
+     *
+     * @param userId  die Kennung des Benutzers
+     * @param request die Daten der neuen Aufgabe
+     * @return die angelegte Aufgabe
+     */
     public TaskDto create(UUID userId, CreateTaskRequest request) {
         return jdbcTemplate.queryForObject("""
                 INSERT INTO tasks (user_id, type, title, description, points, category)
@@ -50,6 +81,16 @@ public class TaskRepository {
                 request.category() == null || request.category().isBlank() ? "General" : request.category());
     }
 
+    /**
+     * Aktualisiert die übergebenen Felder einer Aufgabe. Nicht gesetzte Werte
+     * ({@code null}) bleiben unverändert.
+     *
+     * @param userId  die Kennung des Benutzers
+     * @param taskId  die Kennung der Aufgabe
+     * @param request die zu ändernden Felder
+     * @return die aktualisierte Aufgabe oder ein leeres {@link Optional},
+     *         falls keine passende Aufgabe existiert
+     */
     public Optional<TaskDto> update(UUID userId, UUID taskId, UpdateTaskRequest request) {
         return jdbcTemplate.query("""
                 UPDATE tasks SET
@@ -71,10 +112,27 @@ public class TaskRepository {
                 taskId).stream().findFirst();
     }
 
+    /**
+     * Löscht eine Aufgabe eines Benutzers.
+     *
+     * @param userId die Kennung des Benutzers
+     * @param taskId die Kennung der Aufgabe
+     * @return {@code true}, wenn eine Aufgabe gelöscht wurde
+     */
     public boolean delete(UUID userId, UUID taskId) {
         return jdbcTemplate.update("DELETE FROM tasks WHERE user_id = ? AND id = ?", userId, taskId) > 0;
     }
 
+    /**
+     * Markiert eine Aufgabe als erledigt, erhöht bei Gewohnheiten und Dailies
+     * die Serie und schreibt dem Benutzer in einem Schritt Erfahrungspunkte
+     * und Gold gut.
+     *
+     * @param userId die Kennung des Benutzers
+     * @param taskId die Kennung der Aufgabe
+     * @return die abgeschlossene Aufgabe oder ein leeres {@link Optional},
+     *         falls keine passende Aufgabe existiert
+     */
     public Optional<TaskDto> complete(UUID userId, UUID taskId) {
         return jdbcTemplate.query("""
                 WITH updated AS (
@@ -98,6 +156,14 @@ public class TaskRepository {
                 """, (rs, rowNum) -> map(rs), userId, taskId, userId, userId).stream().findFirst();
     }
 
+    /**
+     * Wandelt die aktuelle Zeile eines Datenbankergebnisses in ein
+     * {@link TaskDto} um.
+     *
+     * @param rs das Datenbankergebnis, positioniert auf der zu lesenden Zeile
+     * @return die gelesene Aufgabe
+     * @throws SQLException bei einem Fehler beim Auslesen der Spalten
+     */
     private TaskDto map(ResultSet rs) throws SQLException {
         return new TaskDto(
                 rs.getObject("id", UUID.class),

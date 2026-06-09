@@ -14,17 +14,37 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Zentrale Fehlerbehandlung für alle REST-Controller.
+ * <p>
+ * Wandelt geworfene Ausnahmen in einheitliche JSON-Fehlerantworten um, statt
+ * die Standard-HTML-Fehlerseite von Spring Boot auszuliefern.
+ */
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
+    /**
+     * Behandelt bewusst geworfene {@link ApiException}en und gibt sie mit dem
+     * hinterlegten HTTP-Status zurück.
+     *
+     * @param exception der aufgetretene Anwendungsfehler
+     * @return eine JSON-Antwort mit Fehlermeldung und passendem Status
+     */
     @ExceptionHandler(ApiException.class)
     ResponseEntity<Map<String, String>> handleApiException(ApiException exception) {
         return ResponseEntity.status(exception.status())
                 .body(Map.of("error", exception.getMessage() != null ? exception.getMessage() : "error"));
     }
 
+    /**
+     * Behandelt Validierungsfehler (z.&nbsp;B. ungültige Eingabefelder) und
+     * fasst die einzelnen Feldfehler zu einer Meldung zusammen.
+     *
+     * @param exception die Validierungs-Ausnahme
+     * @return eine JSON-Antwort mit Status {@code 400 Bad Request}
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException exception) {
         String message = exception.getBindingResult().getFieldErrors().stream()
@@ -40,9 +60,12 @@ public class ApiExceptionHandler {
     }
 
     /**
-     * Catch-all for any exception not handled above.
-     * Returns a JSON error body instead of Spring Boot's whitelabel HTML page.
-     * The full stack trace is logged so it appears in Render logs.
+     * Auffangbehandlung für alle nicht eigens behandelten Ausnahmen. Gibt
+     * eine JSON-Fehlerantwort statt der Standard-HTML-Seite zurück; der
+     * vollständige Stacktrace wird protokolliert.
+     *
+     * @param exception die unerwartete Ausnahme
+     * @return eine JSON-Antwort mit Status {@code 500 Internal Server Error}
      */
     @ExceptionHandler(Exception.class)
     ResponseEntity<Map<String, Object>> handleUnexpected(Exception exception) {

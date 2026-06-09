@@ -14,14 +14,30 @@ import com.disciplica.shared.party.PartyDto;
 import com.disciplica.shared.party.PartyInviteDto;
 import com.disciplica.shared.party.PartyMemberDto;
 
+/**
+ * Datenbankzugriff rund um Gruppen (Parties): Gruppen, Mitglieder,
+ * Einladungen und Chat-Nachrichten.
+ */
 @Repository
 public class PartyRepository {
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * Erzeugt das Repository mit dem Datenbankzugriff.
+     *
+     * @param jdbcTemplate der Datenbankzugriff
+     */
     public PartyRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Legt eine neue Gruppe an und trägt den Ersteller als Leiter ein.
+     *
+     * @param leaderId die Kennung des Gruppenleiters
+     * @param name     der Name der Gruppe
+     * @return die angelegte Gruppe
+     */
     public PartyDto create(UUID leaderId, String name) {
         UUID partyId = jdbcTemplate.queryForObject(
                 "INSERT INTO parties (name, leader_id) VALUES (?, ?) RETURNING id",
@@ -31,6 +47,13 @@ public class PartyRepository {
         return findById(partyId).orElseThrow();
     }
 
+    /**
+     * Ermittelt die zuletzt beigetretene Gruppe eines Benutzers.
+     *
+     * @param userId die Kennung des Benutzers
+     * @return die Gruppe oder ein leeres {@link Optional}, falls der Benutzer
+     *         in keiner Gruppe ist
+     */
     public Optional<PartyDto> findCurrentForUser(UUID userId) {
         return jdbcTemplate.query("""
                 SELECT p.id, p.name, p.leader_id
@@ -42,12 +65,26 @@ public class PartyRepository {
                 """, (rs, rowNum) -> mapParty(rs), userId).stream().findFirst();
     }
 
+    /**
+     * Sucht eine Gruppe anhand ihrer Kennung.
+     *
+     * @param partyId die Kennung der Gruppe
+     * @return die Gruppe oder ein leeres {@link Optional}, falls nicht
+     *         vorhanden
+     */
     public Optional<PartyDto> findById(UUID partyId) {
         return jdbcTemplate.query("""
                 SELECT id, name, leader_id FROM parties WHERE id = ?
                 """, (rs, rowNum) -> mapParty(rs), partyId).stream().findFirst();
     }
 
+    /**
+     * Prüft, ob ein Benutzer Mitglied einer Gruppe ist.
+     *
+     * @param partyId die Kennung der Gruppe
+     * @param userId  die Kennung des Benutzers
+     * @return {@code true}, wenn der Benutzer Mitglied ist
+     */
     public boolean isMember(UUID partyId, UUID userId) {
         Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM party_members WHERE party_id = ? AND user_id = ?",
@@ -55,6 +92,13 @@ public class PartyRepository {
         return count != null && count > 0;
     }
 
+    /**
+     * Prüft, ob ein Benutzer der Leiter einer Gruppe ist.
+     *
+     * @param partyId die Kennung der Gruppe
+     * @param userId  die Kennung des Benutzers
+     * @return {@code true}, wenn der Benutzer Leiter ist
+     */
     public boolean isLeader(UUID partyId, UUID userId) {
         Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM party_members WHERE party_id = ? AND user_id = ? AND role = 'LEADER'",
@@ -62,6 +106,15 @@ public class PartyRepository {
         return count != null && count > 0;
     }
 
+    /**
+     * Erstellt eine Einladung in eine Gruppe. Eine bereits bestehende
+     * Einladung für dieselbe Person wird wieder auf „offen“ gesetzt.
+     *
+     * @param partyId         die Kennung der Gruppe
+     * @param invitedUserId   die Kennung der eingeladenen Person
+     * @param invitedByUserId die Kennung des einladenden Benutzers
+     * @return die erstellte bzw. aufgefrischte Einladung
+     */
     public PartyInviteDto invite(UUID partyId, UUID invitedUserId, UUID invitedByUserId) {
         return jdbcTemplate.queryForObject("""
                 INSERT INTO party_invites (party_id, invited_user_id, invited_by_user_id)
@@ -72,6 +125,14 @@ public class PartyRepository {
                 """, (rs, rowNum) -> mapInvite(rs), partyId, invitedUserId, invitedByUserId);
     }
 
+    /**
+     * Sucht eine Einladung, die an einen bestimmten Benutzer gerichtet ist.
+     *
+     * @param inviteId      die Kennung der Einladung
+     * @param invitedUserId die Kennung der eingeladenen Person
+     * @return die Einladung oder ein leeres {@link Optional}, falls nicht
+     *         vorhanden
+     */
     public Optional<PartyInviteDto> findInvite(UUID inviteId, UUID invitedUserId) {
         return jdbcTemplate.query("""
                 SELECT id, party_id, invited_user_id, status, created_at
@@ -79,6 +140,13 @@ public class PartyRepository {
                 """, (rs, rowNum) -> mapInvite(rs), inviteId, invitedUserId).stream().findFirst();
     }
 
+    /**
+     * Setzt den Status einer Einladung (z.&nbsp;B. angenommen oder abgelehnt).
+     *
+     * @param inviteId die Kennung der Einladung
+     * @param status   der neue Status
+     * @return die aktualisierte Einladung
+     */
     public PartyInviteDto setInviteStatus(UUID inviteId, String status) {
         return jdbcTemplate.queryForObject("""
                 UPDATE party_invites SET status = ?, responded_at = now()
@@ -87,6 +155,12 @@ public class PartyRepository {
                 """, (rs, rowNum) -> mapInvite(rs), status, inviteId);
     }
 
+    /**
+     * Fügt einen Benutzer als einfaches Mitglied zu einer Gruppe hinzu.
+     *
+     * @param partyId die Kennung der Gruppe
+     * @param userId  die Kennung des Benutzers
+     */
     public void addMember(UUID partyId, UUID userId) {
         jdbcTemplate.update("""
                 INSERT INTO party_members (party_id, user_id, role)
@@ -95,6 +169,13 @@ public class PartyRepository {
                 """, partyId, userId);
     }
 
+    /**
+     * Lädt die letzten (höchstens 200) Chat-Nachrichten einer Gruppe,
+     * älteste zuerst.
+     *
+     * @param partyId die Kennung der Gruppe
+     * @return die Liste der Chat-Nachrichten
+     */
     public List<ChatMessageDto> messages(UUID partyId) {
         return jdbcTemplate.query("""
                 SELECT pm.id, pm.party_id, pm.sender_id, u.username, pm.message, pm.created_at
@@ -106,6 +187,15 @@ public class PartyRepository {
                 """, (rs, rowNum) -> mapMessage(rs), partyId);
     }
 
+    /**
+     * Speichert eine neue Chat-Nachricht und gibt sie inklusive Absendernamen
+     * zurück.
+     *
+     * @param partyId  die Kennung der Gruppe
+     * @param senderId die Kennung des Absenders
+     * @param message  der Nachrichtentext
+     * @return die gespeicherte Chat-Nachricht
+     */
     public ChatMessageDto addMessage(UUID partyId, UUID senderId, String message) {
         return jdbcTemplate.queryForObject("""
                 INSERT INTO party_messages (party_id, sender_id, message)
@@ -125,6 +215,14 @@ public class PartyRepository {
         }, partyId, senderId, message);
     }
 
+    /**
+     * Wandelt eine Gruppen-Zeile in ein {@link PartyDto} um und lädt dabei die
+     * Mitgliederliste nach.
+     *
+     * @param rs das Datenbankergebnis, positioniert auf der Gruppen-Zeile
+     * @return die zusammengesetzte Gruppe
+     * @throws SQLException bei einem Fehler beim Auslesen der Spalten
+     */
     private PartyDto mapParty(ResultSet rs) throws SQLException {
         UUID partyId = rs.getObject("id", UUID.class);
         List<PartyMemberDto> members = jdbcTemplate.query("""
@@ -147,6 +245,14 @@ public class PartyRepository {
         );
     }
 
+    /**
+     * Wandelt eine Einladungs-Zeile in ein {@link PartyInviteDto} um und lädt
+     * dabei den Gruppennamen nach.
+     *
+     * @param rs das Datenbankergebnis, positioniert auf der Einladungs-Zeile
+     * @return die zusammengesetzte Einladung
+     * @throws SQLException bei einem Fehler beim Auslesen der Spalten
+     */
     private PartyInviteDto mapInvite(ResultSet rs) throws SQLException {
         UUID partyId = rs.getObject("party_id", UUID.class);
         String partyName = jdbcTemplate.queryForObject("SELECT name FROM parties WHERE id = ?", String.class, partyId);
@@ -160,6 +266,13 @@ public class PartyRepository {
         );
     }
 
+    /**
+     * Wandelt eine Nachrichten-Zeile in ein {@link ChatMessageDto} um.
+     *
+     * @param rs das Datenbankergebnis, positioniert auf der Nachrichten-Zeile
+     * @return die gelesene Chat-Nachricht
+     * @throws SQLException bei einem Fehler beim Auslesen der Spalten
+     */
     private ChatMessageDto mapMessage(ResultSet rs) throws SQLException {
         return new ChatMessageDto(
                 rs.getObject("id", UUID.class),

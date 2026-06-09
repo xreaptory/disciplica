@@ -6,14 +6,31 @@ import org.springframework.stereotype.Component;
 import com.disciplica.shared.user.AvatarProfileDto;
 import com.disciplica.shared.user.UserProfile;
 
+/**
+ * Wandelt eine Benutzer-Datenbankzeile ({@link UserRow}) in ein für den
+ * Client bestimmtes {@link UserProfile} um und lädt dabei das zugehörige
+ * Avatar-Aussehen nach.
+ */
 @Component
 public class UserMapper {
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * Erzeugt den Mapper mit dem Datenbankzugriff.
+     *
+     * @param jdbcTemplate der Datenbankzugriff zum Nachladen des Avatars
+     */
     public UserMapper(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Baut aus einer Benutzerzeile das vollständige Profil samt Avatar. Ist
+     * kein Avatar gespeichert, werden Standardwerte verwendet.
+     *
+     * @param user die Datenbankzeile des Benutzers
+     * @return das zusammengesetzte Benutzerprofil
+     */
     public UserProfile toProfile(UserRow user) {
         AvatarProfileDto avatar = jdbcTemplate.query("""
                 SELECT body_size, shirt_color, skin_color, hair_color, hair_bangs, hair_style, extra

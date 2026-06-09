@@ -11,10 +11,29 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Wandelt die von der Hosting-Plattform Render bereitgestellte
+ * Datenbank-Adresse in ein für Spring nutzbares Format um.
+ * <p>
+ * Render stellt die Verbindung als {@code DATABASE_URL} im Format
+ * {@code postgres://benutzer:passwort@host:port/datenbank} bereit. Spring
+ * erwartet jedoch eine {@code jdbc:postgresql://}-Adresse sowie getrennte
+ * Felder für Benutzername und Passwort. Dieser Post-Processor erkennt eine
+ * solche Adresse vor dem Start und ergänzt die passenden Spring-Eigenschaften.
+ */
 public class RenderDatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
     private static final String PROPERTY_SOURCE_NAME = "renderDatabaseUrl";
 
+    /**
+     * Liest die Datenbank-Adresse aus der Umgebung, zerlegt sie und ergänzt
+     * daraus die Spring-Datenquellen-Eigenschaften. Ist keine
+     * Postgres-Adresse vorhanden, geschieht nichts.
+     *
+     * @param environment die Spring-Umgebung, deren Eigenschaften ergänzt
+     *                    werden
+     * @param application die startende Anwendung (hier nicht verwendet)
+     */
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         String databaseUrl = firstPresent(
@@ -41,10 +60,22 @@ public class RenderDatabaseUrlEnvironmentPostProcessor implements EnvironmentPos
         environment.getPropertySources().addFirst(new MapPropertySource(PROPERTY_SOURCE_NAME, properties));
     }
 
+    /**
+     * Prüft, ob die angegebene Adresse auf eine PostgreSQL-Datenbank verweist.
+     *
+     * @param value die zu prüfende Adresse
+     * @return {@code true}, wenn es sich um eine Postgres-Adresse handelt
+     */
     private static boolean isPostgresUrl(String value) {
         return value.startsWith("postgres://") || value.startsWith("postgresql://");
     }
 
+    /**
+     * Baut aus einer Postgres-Adresse die entsprechende JDBC-Adresse zusammen.
+     *
+     * @param uri die zerlegte Datenbank-Adresse
+     * @return die {@code jdbc:postgresql://}-Adresse für Spring
+     */
     private static String toJdbcUrl(URI uri) {
         StringBuilder jdbcUrl = new StringBuilder("jdbc:postgresql://");
         jdbcUrl.append(uri.getHost());
@@ -58,6 +89,13 @@ public class RenderDatabaseUrlEnvironmentPostProcessor implements EnvironmentPos
         return jdbcUrl.toString();
     }
 
+    /**
+     * Liest Benutzername und Passwort aus dem Benutzer-Teil der Adresse aus.
+     *
+     * @param uri die zerlegte Datenbank-Adresse
+     * @return die gefundenen Zugangsdaten; beide Felder sind {@code null},
+     *         wenn keine Angaben vorhanden sind
+     */
     private static Credentials credentials(URI uri) {
         String userInfo = uri.getRawUserInfo();
         if (userInfo == null || userInfo.isBlank()) {
@@ -70,10 +108,25 @@ public class RenderDatabaseUrlEnvironmentPostProcessor implements EnvironmentPos
         return new Credentials(username, password);
     }
 
+    /**
+     * Dekodiert einen URL-kodierten Wert (z.&nbsp;B. ein Passwort mit
+     * Sonderzeichen).
+     *
+     * @param value der kodierte Wert
+     * @return der dekodierte Klartext
+     */
     private static String decode(String value) {
         return URLDecoder.decode(value, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Gibt den ersten der beiden Werte zurück, der nicht leer ist.
+     *
+     * @param first  bevorzugter Wert
+     * @param second Ausweichwert
+     * @return den ersten nicht-leeren Wert oder {@code null}, wenn beide
+     *         leer sind
+     */
     private static String firstPresent(String first, String second) {
         if (first != null && !first.isBlank()) {
             return first;
@@ -84,6 +137,12 @@ public class RenderDatabaseUrlEnvironmentPostProcessor implements EnvironmentPos
         return null;
     }
 
+    /**
+     * Zugangsdaten (Benutzername und Passwort) aus der Datenbank-Adresse.
+     *
+     * @param username der Benutzername oder {@code null}
+     * @param password das Passwort oder {@code null}
+     */
     private record Credentials(String username, String password) {
     }
 }

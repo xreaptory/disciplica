@@ -12,26 +12,35 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
- * Spring MVC interceptor that enforces authentication on protected endpoints.
+ * Spring-MVC-Interceptor, der die Anmeldung auf geschützten Endpunkten
+ * erzwingt.
  *
- * <p>This runs AFTER the {@code DispatcherServlet} receives the request, completely
- * outside Spring Security's filter chain.  Public paths are whitelisted by URI prefix;
- * all other paths require a valid JWT (placed in the SecurityContext by
- * {@link JwtAuthFilter}).
+ * <p>Er läuft, NACHDEM das {@code DispatcherServlet} die Anfrage erhalten hat,
+ * also vollständig außerhalb der Filterkette von Spring Security. Öffentliche
+ * Pfade werden anhand ihres URI-Präfixes freigegeben; alle anderen Pfade
+ * erfordern ein gültiges JWT (das vom {@link JwtAuthFilter} in den
+ * SecurityContext gelegt wird).
  */
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(AuthInterceptor.class);
 
+    /**
+     * Prüft, ob ein Pfad ohne Anmeldung erreichbar sein soll.
+     *
+     * @param uri der angefragte Pfad
+     * @return {@code true}, wenn der Pfad öffentlich ist
+     */
     private static boolean isPublicUri(String uri) {
         return uri == null
                 || uri.equals("/")
                 || uri.equals("/status")
                 || uri.equals("/healthz")
                 || uri.equals("/actuator/health")
-                // Spring Boot's error dispatch — must be public so the real error response
-                // reaches the client instead of being swallowed by this interceptor.
+                // Fehler-Weiterleitung von Spring Boot — muss öffentlich sein, damit die
+                // echte Fehlerantwort den Client erreicht und nicht von diesem Interceptor
+                // verschluckt wird.
                 || uri.equals("/error")
                 || uri.startsWith("/error/")
                 || uri.equals("/auth")
@@ -40,6 +49,19 @@ public class AuthInterceptor implements HandlerInterceptor {
                 || uri.startsWith("/ws/");
     }
 
+    /**
+     * Wird vor jeder Controller-Methode aufgerufen und entscheidet, ob die
+     * Anfrage weiterverarbeitet werden darf. Öffentliche Pfade werden
+     * durchgelassen; für geschützte Pfade muss ein gültiges JWT vorliegen,
+     * andernfalls wird die Antwort {@code 401 Unauthorized} gesendet.
+     *
+     * @param request  die eingehende HTTP-Anfrage
+     * @param response die HTTP-Antwort
+     * @param handler  die Ziel-Controller-Methode (hier nicht verwendet)
+     * @return {@code true}, wenn die Anfrage weiterverarbeitet werden darf,
+     *         sonst {@code false}
+     * @throws Exception wenn das Schreiben der Fehlerantwort fehlschlägt
+     */
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response,
@@ -49,8 +71,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         String pathInfo    = request.getPathInfo();
         String contextPath = request.getContextPath();
 
-        // Determine the effective path for matching.
-        // Prefer servletPath because it strips the context-path prefix.
+        // Den für den Abgleich maßgeblichen Pfad bestimmen.
+        // servletPath wird bevorzugt, da es das Kontextpfad-Präfix entfernt.
         String effectivePath = (servletPath != null && !servletPath.isEmpty()) ? servletPath : requestUri;
 
         log.info("[AuthInterceptor] method={} requestURI={} servletPath={} pathInfo={} contextPath={} effectivePath={}",
