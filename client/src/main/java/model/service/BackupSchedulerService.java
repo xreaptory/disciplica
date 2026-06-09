@@ -21,6 +21,13 @@ import java.time.LocalTime;
 import java.util.Properties;
 import java.util.prefs.Preferences;
 
+/**
+ * Dienst, der automatische Sicherungen der Benutzerdaten plant.
+ * <p>
+ * Über einen Quartz-Scheduler wird – täglich oder wöchentlich zur
+ * eingestellten Uhrzeit – eine verschlüsselte Sicherung im
+ * Synchronisierungsordner erstellt.
+ */
 @Singleton
 public class BackupSchedulerService {
     private static final Logger logger = LoggerFactory.getLogger(BackupSchedulerService.class);
@@ -31,11 +38,20 @@ public class BackupSchedulerService {
     private final Preferences preferences = Preferences.userNodeForPackage(BackupSchedulerService.class);
     private Scheduler scheduler;
 
+    /**
+     * Erzeugt den Dienst mit dem für die Sicherung zuständigen Dienst.
+     *
+     * @param portabilityService der Dienst zum Erstellen der Sicherungen
+     */
     @Inject
     public BackupSchedulerService(DataPortabilityService portabilityService) {
         this.portabilityService = portabilityService;
     }
 
+    /**
+     * Startet den Scheduler und plant die Sicherung gemäß den gespeicherten
+     * Einstellungen.
+     */
     public synchronized void start() {
         try {
             scheduler = new StdSchedulerFactory(quartzProps("DisciplicaBackupScheduler")).getScheduler();
@@ -46,6 +62,9 @@ public class BackupSchedulerService {
         }
     }
 
+    /**
+     * Stoppt den Scheduler.
+     */
     public synchronized void stop() {
         try {
             if (scheduler != null && !scheduler.isShutdown()) {
@@ -56,6 +75,13 @@ public class BackupSchedulerService {
         }
     }
 
+    /**
+     * Stellt Häufigkeit und Uhrzeit der Sicherung ein und plant sie bei
+     * laufendem Dienst neu.
+     *
+     * @param frequency die Häufigkeit (täglich oder wöchentlich)
+     * @param time      die Uhrzeit der Sicherung
+     */
     public synchronized void configure(BackupFrequency frequency, LocalTime time) {
         preferences.put(PREF_FREQUENCY, frequency.name());
         preferences.put(PREF_TIME, time.toString());
@@ -68,15 +94,29 @@ public class BackupSchedulerService {
         }
     }
 
+    /**
+     * {@return die eingestellte Sicherungshäufigkeit}
+     */
     public BackupFrequency getFrequency() {
         String value = preferences.get(PREF_FREQUENCY, BackupFrequency.DAILY.name());
         return BackupFrequency.valueOf(value);
     }
 
+    /**
+     * {@return die eingestellte Uhrzeit der Sicherung}
+     */
     public LocalTime getTime() {
         return LocalTime.parse(preferences.get(PREF_TIME, "02:00"));
     }
 
+    /**
+     * Plant den Sicherungs-Job gemäß Häufigkeit und Uhrzeit (ersetzt eine
+     * bestehende Planung).
+     *
+     * @param frequency die Häufigkeit
+     * @param time      die Uhrzeit
+     * @throws SchedulerException bei einem Fehler des Schedulers
+     */
     private void schedule(BackupFrequency frequency, LocalTime time) throws SchedulerException {
         if (scheduler == null) {
             return;
@@ -103,6 +143,13 @@ public class BackupSchedulerService {
         logger.info("Configured {} backup at {}", frequency, time);
     }
 
+    /**
+     * Erstellt die Konfiguration für den Quartz-Scheduler (im Speicher,
+     * ein Thread).
+     *
+     * @param instanceName der Name der Scheduler-Instanz
+     * @return die Konfigurationseigenschaften
+     */
     private Properties quartzProps(String instanceName) {
         Properties properties = new Properties();
         properties.setProperty("org.quartz.scheduler.instanceName", instanceName);
@@ -112,16 +159,33 @@ public class BackupSchedulerService {
         return properties;
     }
 
+    /**
+     * Erstellt sofort eine verschlüsselte Sicherung im Synchronisierungsordner.
+     */
     void runBackupNow() {
         portabilityService.createTimestampedEncryptedBackupInSyncFolder();
     }
 
+    /**
+     * Mögliche Häufigkeiten für automatische Sicherungen.
+     */
     public enum BackupFrequency {
+        /** Tägliche Sicherung. */
         DAILY,
+        /** Wöchentliche Sicherung (montags). */
         WEEKLY
     }
 
+    /**
+     * Quartz-Job, der zur geplanten Zeit eine Sicherung auslöst.
+     */
     public static class BackupJob implements Job {
+        /**
+         * Löst die Sicherung des hinterlegten Dienstes aus.
+         *
+         * @param context der Ausführungskontext mit dem Sicherungsdienst
+         * @throws JobExecutionException wenn der Dienst im Kontext fehlt
+         */
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {
             BackupSchedulerService service =

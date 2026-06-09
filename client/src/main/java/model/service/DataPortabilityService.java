@@ -32,6 +32,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Dienst für den Im- und Export der Benutzerdaten.
+ * <p>
+ * Erstellt verschlüsselte JSON-Sicherungen (AES/GCM mit aus einem Passwort
+ * abgeleitetem Schlüssel), liest sie wieder ein, exportiert die Gewohnheiten
+ * als CSV und bereitet einen Ordner für die Cloud-Synchronisierung vor.
+ */
 @Singleton
 public class DataPortabilityService {
     private static final Logger logger = LoggerFactory.getLogger(DataPortabilityService.class);
@@ -47,12 +54,24 @@ public class DataPortabilityService {
     private final ObjectMapper objectMapper;
     private final SecureRandom secureRandom = new SecureRandom();
 
+    /**
+     * Erzeugt den Dienst mit Zugriff auf die Benutzerdaten.
+     *
+     * @param userService der Benutzerdienst (liefert die zu sichernden Daten)
+     */
     @Inject
     public DataPortabilityService(UserService userService) {
         this.userService = userService;
         this.objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
     }
 
+    /**
+     * Exportiert die Benutzerdaten als verschlüsselte JSON-Sicherung.
+     *
+     * @param outputFile die Zieldatei
+     * @return der Pfad der erstellten Sicherung
+     * @throws IllegalStateException wenn der Export fehlschlägt
+     */
     public Path exportEncryptedJson(Path outputFile) {
         try {
             User user = userService.getUser();
@@ -67,6 +86,13 @@ public class DataPortabilityService {
         }
     }
 
+    /**
+     * Liest eine verschlüsselte JSON-Sicherung ein, übernimmt deren Inhalt in
+     * den Benutzer und speichert die Daten anschließend.
+     *
+     * @param encryptedBackupFile die Sicherungsdatei
+     * @throws IllegalStateException wenn der Import fehlschlägt
+     */
     public void importEncryptedJson(Path encryptedBackupFile) {
         try {
             EncryptedPayload encrypted = objectMapper.readValue(encryptedBackupFile.toFile(), EncryptedPayload.class);
@@ -80,6 +106,13 @@ public class DataPortabilityService {
         }
     }
 
+    /**
+     * Exportiert die Gewohnheiten des Benutzers als CSV-Datei.
+     *
+     * @param outputFile die Zieldatei
+     * @return der Pfad der erstellten CSV-Datei
+     * @throws IllegalStateException wenn der Export fehlschlägt
+     */
     public Path exportCsv(Path outputFile) {
         try {
             User user = userService.getUser();
@@ -110,6 +143,12 @@ public class DataPortabilityService {
         }
     }
 
+    /**
+     * Stellt sicher, dass der Ordner für die Cloud-Synchronisierung existiert.
+     *
+     * @return der Pfad des vorbereiteten Ordners
+     * @throws IllegalStateException wenn der Ordner nicht angelegt werden kann
+     */
     public Path ensureCloudSyncPreparationPath() {
         try {
             Path syncPath = Path.of("data", "cloud-sync", "dropbox-ready").toAbsolutePath();
@@ -120,12 +159,24 @@ public class DataPortabilityService {
         }
     }
 
+    /**
+     * Erstellt eine verschlüsselte Sicherung mit Zeitstempel im
+     * Synchronisierungsordner.
+     *
+     * @return der Pfad der erstellten Sicherung
+     */
     public Path createTimestampedEncryptedBackupInSyncFolder() {
         Path folder = ensureCloudSyncPreparationPath();
         Path output = folder.resolve("disciplica-backup-" + LocalDateTime.now().format(FILE_TS) + ".json.enc");
         return exportEncryptedJson(output);
     }
 
+    /**
+     * Baut aus dem aktuellen Benutzer das zu sichernde Datenpaket.
+     *
+     * @param user der Benutzer
+     * @return das gefüllte Sicherungspaket
+     */
     private BackupPayload buildPayload(User user) {
         List<TaskRecord> taskRecords = new ArrayList<>();
         for (AbstractTask task : user.getTasks()) {
@@ -148,6 +199,12 @@ public class DataPortabilityService {
         );
     }
 
+    /**
+     * Übernimmt ein eingelesenes Sicherungspaket in den aktuellen Benutzer.
+     *
+     * @param payload das eingelesene Sicherungspaket
+     * @throws InvalidHabitException wenn eine enthaltene Aufgabe ungültig ist
+     */
     private void applyPayload(BackupPayload payload) throws InvalidHabitException {
         List<AbstractTask> tasks = new ArrayList<>();
         for (TaskRecord record : payload.tasks()) {
@@ -179,6 +236,15 @@ public class DataPortabilityService {
         );
     }
 
+    /**
+     * Verschlüsselt einen Klartext mit AES/GCM und einem aus dem Passwort
+     * abgeleiteten Schlüssel.
+     *
+     * @param plaintext der zu verschlüsselnde Text
+     * @param password  das Passwort zur Schlüsselableitung
+     * @return das verschlüsselte Paket (Salt, IV und Geheimtext)
+     * @throws Exception bei einem Fehler der Verschlüsselung
+     */
     private EncryptedPayload encrypt(String plaintext, String password) throws Exception {
         byte[] salt = new byte[SALT_BYTES];
         secureRandom.nextBytes(salt);
@@ -196,6 +262,14 @@ public class DataPortabilityService {
         );
     }
 
+    /**
+     * Entschlüsselt ein zuvor verschlüsseltes Paket.
+     *
+     * @param payload  das verschlüsselte Paket
+     * @param password das Passwort zur Schlüsselableitung
+     * @return der entschlüsselte Klartext
+     * @throws Exception bei einem Fehler der Entschlüsselung
+     */
     private String decrypt(EncryptedPayload payload, String password) throws Exception {
         byte[] salt = Base64.getDecoder().decode(payload.saltBase64());
         byte[] iv = Base64.getDecoder().decode(payload.ivBase64());
@@ -207,6 +281,14 @@ public class DataPortabilityService {
         return new String(plain, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Leitet aus Passwort und Salt mittels PBKDF2 einen AES-Schlüssel ab.
+     *
+     * @param password das Passwort
+     * @param salt     das Salt
+     * @return der abgeleitete Schlüssel
+     * @throws Exception bei einem Fehler der Schlüsselableitung
+     */
     private SecretKeySpec deriveKey(String password, byte[] salt) throws Exception {
         PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, KEY_BITS);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
@@ -214,6 +296,13 @@ public class DataPortabilityService {
         return new SecretKeySpec(key, "AES");
     }
 
+    /**
+     * Ermittelt das Passwort für die Sicherungs-Verschlüsselung aus der
+     * Umgebungsvariablen {@code DISCIPLICA_BACKUP_KEY} oder weicht auf einen
+     * Entwicklungsschlüssel aus.
+     *
+     * @return das zu verwendende Passwort
+     */
     private String resolveEncryptionPassword() {
         String env = System.getenv("DISCIPLICA_BACKUP_KEY");
         if (env != null && !env.isBlank()) {
@@ -223,14 +312,46 @@ public class DataPortabilityService {
         return "disciplica-dev-key-change-me";
     }
 
+    /**
+     * Bereitet einen Wert für die CSV-Ausgabe auf (in Anführungszeichen,
+     * Anführungszeichen verdoppelt).
+     *
+     * @param value der Ausgangswert
+     * @return der CSV-sichere Wert
+     */
     private String csv(String value) {
         String safe = value == null ? "" : value.replace("\"", "\"\"");
         return "\"" + safe + "\"";
     }
 
+    /**
+     * Ein einzelner Aufgaben-Datensatz innerhalb einer Sicherung.
+     *
+     * @param type        die Art der Aufgabe
+     * @param name        der Name
+     * @param description die Beschreibung
+     * @param points      der Punktewert
+     * @param completed   der Erledigt-Status
+     * @param streak      die Serie
+     */
     public record TaskRecord(String type, String name, String description, int points, boolean completed, int streak) {
     }
 
+    /**
+     * Das gesamte Datenpaket einer Sicherung.
+     *
+     * @param schemaVersion     die Version des Sicherungsformats
+     * @param exportedAt        der Zeitpunkt des Exports
+     * @param username          der Benutzername
+     * @param level             das Level
+     * @param experience        die Erfahrungspunkte
+     * @param gold              das Gold
+     * @param health            die Lebenspunkte
+     * @param title             der Titel
+     * @param tasks             die Aufgaben
+     * @param completionsByDate die Erledigungen je Tag
+     * @param xpHistory         der XP-Verlauf
+     */
     public record BackupPayload(String schemaVersion,
                                 String exportedAt,
                                 String username,
@@ -244,6 +365,14 @@ public class DataPortabilityService {
                                 List<Integer> xpHistory) {
     }
 
+    /**
+     * Ein verschlüsseltes Sicherungspaket.
+     *
+     * @param algorithm        der verwendete Algorithmus
+     * @param saltBase64        das Salt (Base64-kodiert)
+     * @param ivBase64          der Initialisierungsvektor (Base64-kodiert)
+     * @param cipherTextBase64  der verschlüsselte Inhalt (Base64-kodiert)
+     */
     public record EncryptedPayload(String algorithm, String saltBase64, String ivBase64, String cipherTextBase64) {
     }
 }
