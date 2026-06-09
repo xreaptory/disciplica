@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Disciplica Client (Application)" type="Application" factoryName="Application">
+    <envs>
+      <env name="DISCIPLICA_API_BASE_URL" value="http://localhost:8080" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.disciplica.client.ClientApplication" />
+    <option name="PROGRAM_PARAMETERS" value="$MAVEN_REPOSITORY$" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/client" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

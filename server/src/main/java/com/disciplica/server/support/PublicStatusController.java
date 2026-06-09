@@ -12,7 +12,11 @@ import java.util.Map;
  */
 @RestController
 public class PublicStatusController {
+<<<<<<< HEAD
+    private static final String BUILD_MARKER = "fix-parameters-v1";
+=======
     private static final String BUILD_MARKER = "fix-500-v1";
+>>>>>>> 25093ff917d7ffc71f81bfbbb7d8f1fc752561ca
 
     /**
      * Antwort auf die Startseite {@code /}; liefert denselben Status wie
