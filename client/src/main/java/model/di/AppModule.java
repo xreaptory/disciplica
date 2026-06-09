@@ -13,7 +13,19 @@ import model.service.ReminderService;
 import model.service.UserService;
 import View.api.SessionStore;
 
+/**
+ * Konfiguration des Abhängigkeits-Containers (Guice).
+ * <p>
+ * Legt fest, welche konkrete Umsetzung jeweils für eine Schnittstelle
+ * verwendet wird und welche Komponenten als Singleton (nur einmal pro
+ * Anwendung) erzeugt werden.
+ */
 public class AppModule extends AbstractModule {
+
+    /**
+     * Verknüpft die Schnittstellen mit ihren konkreten Umsetzungen und legt
+     * deren Lebensdauer (Singleton) fest.
+     */
     @Override
     protected void configure() {
         bind(HabitRepository.class).to(SQLiteHabitRepository.class).in(Singleton.class);
@@ -24,6 +36,11 @@ public class AppModule extends AbstractModule {
         bind(SessionStore.class).in(Singleton.class);
     }
 
+    /**
+     * Stellt den aktuellen Benutzer als Singleton bereit.
+     *
+     * @return der für die Anwendung verwendete Benutzer
+     */
     @Provides
     @Singleton
     User provideUser() {

@@ -6,20 +6,32 @@ import javafx.scene.text.Font;
 import java.io.InputStream;
 import java.net.URL;
 
+/**
+ * Zentrale Sammlung von Oberflächen-Konstanten (Farben, Schriftart und
+ * Anwendungssymbol), die an mehreren Stellen der Benutzeroberfläche verwendet
+ * werden.
+ * <p>
+ * Die Ressourcen (Symbol und Schriftart) werden einmalig beim Laden der
+ * Klasse aus dem Klassenpfad geladen.
+ */
 public class Properties {
+    /** Farbe zur Hervorhebung eines mit der Maus ausgewählten Elements. */
     public static Color MouseSelectedColor=Color.BLUEVIOLET;
+    /** Farbe zur Hervorhebung des Elements, das den Eingabefokus besitzt. */
     public static Color FocusOnComponentColor=Color.BLUE;
+    /** Hintergrundfarbe für Schaltflächen. */
     public static Color ButtonBackgroundColor=Color.web("rgb(179,179,179)");
+    /** Sieben-Segment-Schriftart für zahlenartige Anzeigen. */
     public static Font sevenSegmentFont;
 
+    /** Hintergrundfarbe des Hauptbereichs. */
     public static Color ERMBackgroundColor = Color.GRAY;
 
-    // images
+    /** Anwendungssymbol, das im Fenstertitel angezeigt wird. */
     public static Image applicationImageIconAsICO;
 
-    // statischer Initialisierungsblock wird beim Laden der Klasse ausgeführt
-    // sinnvoll wenn die Resource immer geladen werden soll
-    // wenn man selbst kontrollieren möchte, kann man über einen Konstruktor steuern
+    // Statischer Initialisierungsblock: wird beim Laden der Klasse ausgeführt
+    // und lädt die benötigten Ressourcen ein.
     static {
         URL iconUrl = Properties.class.getResource("/images/erdlogo.png");
         if (iconUrl != null) {
@@ -34,13 +46,5 @@ public class Properties {
             sevenSegmentFont = Font.font("System", 15);
         }
     }
-
-    /*
-    public Properties(){
-        applicationImageIconAsICO = new Image(getClass().getResource("/images/erdlogo.png").toExternalForm());
-        // load used Font
-        sevenSegmentFont = Font.loadFont(getClass().getResourceAsStream("/fonts/DSEG7Classic-Regular.ttf"), 15);
-    }
-    */
 
 }

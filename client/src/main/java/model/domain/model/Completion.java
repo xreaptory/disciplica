@@ -13,6 +13,14 @@ import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
+/**
+ * Eine einzelne Erfüllung einer {@link Habit Gewohnheit} zu einem bestimmten
+ * Zeitpunkt.
+ * <p>
+ * Hält fest, wann die Gewohnheit erfüllt wurde, mit welcher Qualität und
+ * wie viele Erfahrungspunkte dabei verdient wurden. Bildet die Tabelle
+ * {@code completions} ab.
+ */
 @Entity
 @Table(name = "completions")
 @NamedQuery(
@@ -37,41 +45,77 @@ public class Completion {
     @Column(name = "xp_earned", nullable = false)
     private int xpEarned;
 
+    /**
+     * Erzeugt eine leere Erfüllung (wird von der Persistenzschicht benötigt).
+     */
     protected Completion() {
     }
 
+    /**
+     * Erzeugt eine Erfüllung ohne verdiente Erfahrungspunkte.
+     *
+     * @param completedAt Zeitpunkt der Erfüllung
+     * @param quality     Qualität der Erfüllung
+     */
     public Completion(LocalDateTime completedAt, int quality) {
         this.completedAt = completedAt;
         this.quality = quality;
         this.xpEarned = 0;
     }
 
+    /**
+     * Erzeugt eine Erfüllung mit verdienten Erfahrungspunkten.
+     *
+     * @param completedAt Zeitpunkt der Erfüllung
+     * @param quality     Qualität der Erfüllung
+     * @param xpEarned    verdiente Erfahrungspunkte
+     */
     public Completion(LocalDateTime completedAt, int quality, int xpEarned) {
         this.completedAt = completedAt;
         this.quality = quality;
         this.xpEarned = xpEarned;
     }
 
+    /**
+     * {@return die Datenbank-Kennung der Erfüllung}
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * {@return die Gewohnheit, zu der diese Erfüllung gehört}
+     */
     public Habit getHabit() {
         return habit;
     }
 
+    /**
+     * Ordnet die Erfüllung einer Gewohnheit zu.
+     *
+     * @param habit die zugehörige Gewohnheit
+     */
     public void setHabit(Habit habit) {
         this.habit = habit;
     }
 
+    /**
+     * {@return der Zeitpunkt der Erfüllung}
+     */
     public LocalDateTime getCompletedAt() {
         return completedAt;
     }
 
+    /**
+     * {@return die Qualität der Erfüllung}
+     */
     public int getQuality() {
         return quality;
     }
 
+    /**
+     * {@return die bei dieser Erfüllung verdienten Erfahrungspunkte}
+     */
     public int getXpEarned() {
         return xpEarned;
     }
