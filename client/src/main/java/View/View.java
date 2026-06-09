@@ -64,6 +64,15 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * Das Hauptfenster der Anwendung.
+ * <p>
+ * Baut die gesamte Benutzeroberfläche auf – Navigationsleiste, Dashboard,
+ * Gewohnheitsverwaltung, Statistiken, Avatar samt Shop und den Gruppenbereich
+ * (Party) – und verbindet sie mit dem {@link MainController}. Die Klasse
+ * erweitert {@link Stage} und stellt zahlreiche Hilfsmethoden zum Erzeugen und
+ * Gestalten der einzelnen Oberflächenbestandteile bereit.
+ */
 public class View extends Stage {
 
     final Button dashboardBTN = new Button();
@@ -123,14 +132,32 @@ public class View extends Stage {
     private String equippedHeadgear = "None";
     private final ResourceBundle bundle;
 
+    /**
+     * {@return die Listenansicht der Aufgaben}
+     */
     public ListView<String> getListViewTasks() {
         return listViewTasks;
     }
 
+    /**
+     * Standardkonstruktor, der nicht verwendet werden darf – die Klasse
+     * benötigt den Abhängigkeits-Container.
+     *
+     * @throws IllegalStateException immer; bitte den Konstruktor mit
+     *                               {@link Injector} verwenden
+     */
     public View() {
         throw new IllegalStateException("Use DI-enabled constructor");
     }
 
+    /**
+     * Baut das Hauptfenster vollständig auf: lädt die Texte, erzeugt die
+     * Navigationsleiste, verbindet die Oberfläche mit dem {@link MainController},
+     * zeigt das Dashboard an und lädt im Hintergrund die Daten.
+     *
+     * @param injector der Abhängigkeits-Container, der die benötigten Dienste
+     *                 bereitstellt
+     */
     public View(Injector injector) {
         this.bundle = loadBundle();
         dashboardBTN.setText(t("nav.dashboard"));
@@ -202,6 +229,12 @@ public class View extends Stage {
         mainController.loadDataAsync(this::refreshDashboardData);
     }
 
+    /**
+     * Öffnet die Gewohnheitsverwaltung mit Eingabefeldern und der
+     * Aufgabenliste zum Anlegen, Ändern und Löschen von Aufgaben.
+     *
+     * @throws IOException bei einem Fehler beim Laden der Daten
+     */
     public void openHabitMenu() throws IOException {
 
         GridPane gridPane = new GridPane();
@@ -389,12 +422,24 @@ public class View extends Stage {
         applyAccessibility(stackPane);
     }
 
+    /**
+     * Erzeugt eine gestaltete Seitenüberschrift.
+     *
+     * @param text der Text der Überschrift
+     * @return die fertige Beschriftung
+     */
     private Label createPageTitle(String text) {
         Label label = new Label(text);
         label.getStyleClass().add("page-title");
         return label;
     }
 
+    /**
+     * Erzeugt eine gestaltete Unterüberschrift.
+     *
+     * @param text der Text der Unterüberschrift
+     * @return die fertige Beschriftung
+     */
     private Label createPageSubtitle(String text) {
         Label label = new Label(text);
         label.getStyleClass().add("page-subtitle");
@@ -402,18 +447,37 @@ public class View extends Stage {
         return label;
     }
 
+    /**
+     * Erzeugt eine gestaltete Abschnittsüberschrift.
+     *
+     * @param text der Text der Überschrift
+     * @return die fertige Beschriftung
+     */
     private Label createSectionTitle(String text) {
         Label label = new Label(text);
         label.getStyleClass().add("section-title");
         return label;
     }
 
+    /**
+     * Erzeugt eine Beschriftung für ein Eingabefeld.
+     *
+     * @param text der Text der Beschriftung
+     * @return die fertige Beschriftung
+     */
     private Label createFieldLabel(String text) {
         Label label = new Label(text);
         label.getStyleClass().add("field-label");
         return label;
     }
 
+    /**
+     * Erzeugt den Grundrahmen einer Seite mit Überschrift und Unterüberschrift.
+     *
+     * @param title    die Seitenüberschrift
+     * @param subtitle die Unterüberschrift
+     * @return der Seitenrahmen
+     */
     private VBox createPageFrame(String title, String subtitle) {
         VBox page = new VBox(18);
         page.getStyleClass().add("page-frame");
@@ -425,18 +489,39 @@ public class View extends Stage {
         return page;
     }
 
+    /**
+     * Erzeugt eine umrahmte Tafel mit Titel und beliebigem Inhalt.
+     *
+     * @param title   der Titel der Tafel
+     * @param content der anzuzeigende Inhalt
+     * @return die fertige Tafel
+     */
     private VBox createPanel(String title, Node content) {
         VBox panel = new VBox(14, createSectionTitle(title), content);
         panel.getStyleClass().add("habitica-panel");
         return panel;
     }
 
+    /**
+     * Versieht ein Textfeld mit dem einheitlichen Stil und einer Breite.
+     *
+     * @param field das zu gestaltende Textfeld
+     * @param width die gewünschte Breite
+     */
     private void configureHabiticaField(TextField field, double width) {
         field.getStyleClass().add("habitica-field");
         field.setPrefHeight(40);
         field.setPrefWidth(width);
     }
 
+    /**
+     * Versieht eine Schaltfläche mit dem einheitlichen Stil, einer Variante
+     * und einer Breite.
+     *
+     * @param button  die zu gestaltende Schaltfläche
+     * @param variant die Stilvariante (z.&nbsp;B. „success“)
+     * @param width   die gewünschte Breite
+     */
     private void configureHabiticaButton(Button button, String variant, double width) {
         button.getStyleClass().removeAll("habitica-button", "success", "danger", "info", "secondary");
         button.getStyleClass().add("habitica-button");
@@ -450,6 +535,11 @@ public class View extends Stage {
         button.setOnMouseExited(event -> animateDropdown(button, false));
     }
 
+    /**
+     * Zeigt eine Ladeanzeige mit einer Meldung über dem Inhalt an.
+     *
+     * @param message die anzuzeigende Meldung
+     */
     public void showLoading(String message) {
         if (loadingLabel != null) {
             loadingLabel.setText(message == null || message.isBlank() ? "Loading..." : message);
@@ -460,12 +550,18 @@ public class View extends Stage {
         }
     }
 
+    /**
+     * Blendet die Ladeanzeige wieder aus.
+     */
     public void hideLoading() {
         if (loadingOverlay != null) {
             stackPane.getChildren().remove(loadingOverlay);
         }
     }
 
+    /**
+     * Richtet die (zunächst unsichtbare) Ladeanzeige über dem Inhalt ein.
+     */
     private void initializeLoadingOverlay() {
         ProgressIndicator indicator = new ProgressIndicator();
         loadingLabel = new Label("Loading...");
@@ -482,6 +578,10 @@ public class View extends Stage {
         loadingOverlay.prefHeightProperty().bind(stackPane.heightProperty());
     }
 
+    /**
+     * Zeigt das Dashboard mit den Diagrammen (Erfüllungsquote, Kategorien,
+     * Serien und XP-Verlauf) und dem Zeitraum-Auswahlfeld an.
+     */
     public void openDashboard(){
         stackPane.getChildren().clear();
         VBox container = createPageFrame(t("nav.dashboard"), t("dashboard.subtitle"));
@@ -590,6 +690,10 @@ public class View extends Stage {
         applyAccessibility(stackPane);
     }
 
+    /**
+     * Zeigt die Statistikseite mit den Benutzerwerten (Level, Erfahrung,
+     * Gold, Lebenspunkte) an.
+     */
     public void openStats(){
         stackPane.getChildren().clear();
         HBox statsLayout = new HBox(22);
@@ -659,6 +763,10 @@ public class View extends Stage {
         applyAccessibility(stackPane);
     }
 
+    /**
+     * Zeigt den Gruppenbereich (Party) mit Mitgliederliste, Chat und
+     * Einladungsmöglichkeit an.
+     */
     public void openParty() {
         stackPane.getChildren().clear();
         VBox page = createPageFrame("Party", "Invite friends, coordinate quests, and chat together");
@@ -738,10 +846,22 @@ public class View extends Stage {
         applyAccessibility(stackPane);
     }
 
+    /**
+     * Formatiert eine Chat-Nachricht für die Anzeige (Absender und Text).
+     *
+     * @param message die Chat-Nachricht
+     * @return die formatierte Zeile
+     */
     private String formatChatMessage(ChatMessageDto message) {
         return message.senderUsername() + ": " + message.message();
     }
 
+    /**
+     * Gestaltet eine Navigationsschaltfläche je nach aktivem Zustand.
+     *
+     * @param button die Schaltfläche
+     * @param active {@code true}, wenn die zugehörige Seite gerade aktiv ist
+     */
     private void styleNavButton(Button button, boolean active) {
         button.getStyleClass().removeAll("habitica-nav-button", "active");
         button.getStyleClass().add("habitica-nav-button");
@@ -750,12 +870,21 @@ public class View extends Stage {
         }
     }
 
+    /**
+     * Hebt die angegebene Navigationsschaltfläche als aktiv hervor und setzt
+     * die übrigen zurück.
+     *
+     * @param activeButton die aktive Schaltfläche
+     */
     private void setActiveNav(Button activeButton) {
         for (Button button : buttonsLMenu) {
             styleNavButton(button, button == activeButton);
         }
     }
 
+    /**
+     * Aktualisiert die auf der Statistikseite angezeigten Benutzerwerte.
+     */
     public void refreshStatsData() {
         if (usernameTF == null || levelTF == null || titelTF == null || expirienceTF == null) {
             return;
@@ -781,6 +910,12 @@ public class View extends Stage {
         lastKnownLevel = currentLevel;
     }
 
+    /**
+     * Erzeugt die Tafel zur Avatar-Gestaltung samt Vorschau und
+     * Auswahlfeldern.
+     *
+     * @return die Avatar-Tafel
+     */
     private VBox createAvatarPanel() {
         Label title = createSectionTitle(t("stats.avatar"));
 
@@ -852,6 +987,12 @@ public class View extends Stage {
         return panel;
     }
 
+    /**
+     * Erzeugt ein Auswahlfeld für eine Avatar-Eigenschaft.
+     *
+     * @param values die auswählbaren Werte
+     * @return das gefüllte Auswahlfeld
+     */
     private ComboBox<String> createAvatarCombo(String... values) {
         ComboBox<String> combo = new ComboBox<>();
         combo.getItems().addAll(values);
@@ -859,6 +1000,13 @@ public class View extends Stage {
         return combo;
     }
 
+    /**
+     * Versieht ein Auswahlfeld mit dem einheitlichen Stil, Animationen und
+     * einer Breite.
+     *
+     * @param combo das zu gestaltende Auswahlfeld
+     * @param width die gewünschte Breite
+     */
     private void configureHabiticaDropdown(ComboBox<String> combo, double width) {
         if (!combo.getStyleClass().contains("habitica-combo")) {
             combo.getStyleClass().add("habitica-combo");
@@ -900,6 +1048,12 @@ public class View extends Stage {
         });
     }
 
+    /**
+     * Animiert ein Bedienelement leicht nach oben oder zurück (Hover-Effekt).
+     *
+     * @param node   das zu animierende Element
+     * @param raised {@code true}, um das Element anzuheben
+     */
     private void animateDropdown(Node node, boolean raised) {
         ScaleTransition scale = new ScaleTransition(Duration.millis(140), node);
         scale.setInterpolator(Interpolator.EASE_BOTH);
@@ -913,6 +1067,11 @@ public class View extends Stage {
         new ParallelTransition(scale, lift).play();
     }
 
+    /**
+     * Spielt eine kurze Animation beim Öffnen eines Auswahlfeldes ab.
+     *
+     * @param node das betroffene Element
+     */
     private void playDropdownOpenCue(Node node) {
         ScaleTransition pulse = new ScaleTransition(Duration.millis(110), node);
         pulse.setInterpolator(Interpolator.EASE_OUT);
@@ -925,6 +1084,12 @@ public class View extends Stage {
         pulse.play();
     }
 
+    /**
+     * Animiert einen einzelnen Eintrag eines Auswahlfeldes beim Einblenden.
+     *
+     * @param node   der Eintrag
+     * @param offset der anfängliche Versatz
+     */
     private void animateDropdownCell(Node node, double offset) {
         TranslateTransition slide = new TranslateTransition(Duration.millis(120), node);
         slide.setInterpolator(Interpolator.EASE_BOTH);
@@ -932,6 +1097,11 @@ public class View extends Stage {
         slide.play();
     }
 
+    /**
+     * Erzeugt die Tafel des Ausrüstungs-Shops.
+     *
+     * @return die Shop-Tafel
+     */
     private VBox createShopPanel() {
         Label title = createSectionTitle(t("stats.shop"));
 
@@ -971,12 +1141,26 @@ public class View extends Stage {
         return panel;
     }
 
+    /**
+     * Erzeugt eine Kaufschaltfläche für den Shop.
+     *
+     * @param text die Beschriftung der Schaltfläche
+     * @return die fertige Schaltfläche
+     */
     private Button createShopButton(String text) {
         Button button = new Button(text);
         configureHabiticaButton(button, "secondary", 190);
         return button;
     }
 
+    /**
+     * Kauft einen Ausrüstungsgegenstand, zieht das Gold ab und legt den
+     * Gegenstand an.
+     *
+     * @param slot     der Ausrüstungsplatz (z.&nbsp;B. Waffe, Rüstung)
+     * @param item     der zu kaufende Gegenstand
+     * @param goldCost die Kosten in Gold
+     */
     private void purchaseEquipment(String slot, String item, int goldCost) {
         try {
             mainController.spendGoldAndPersist(goldCost);
@@ -999,6 +1183,10 @@ public class View extends Stage {
         }
     }
 
+    /**
+     * Aktualisiert die Darstellung des Avatars nach einer Änderung von
+     * Aussehen oder Ausrüstung.
+     */
     private void updateAvatarLayers() {
         if (avatarPixelCanvas == null) {
             return;
@@ -1006,6 +1194,9 @@ public class View extends Stage {
         renderAvatarPixelArt();
     }
 
+    /**
+     * Speichert den aktuellen Avatar-Zustand (über die Sitzung bzw. lokal).
+     */
     private void persistAvatarProfile() {
         try {
             sessionStore.updateAvatar(sessionStore.avatarState());
@@ -1016,6 +1207,9 @@ public class View extends Stage {
         }
     }
 
+    /**
+     * Zeichnet die Avatar-Vorschau im Pixel-Stil neu.
+     */
     private void renderAvatarPixelArt() {
         if (avatarPixelCanvas == null) {
             return;
@@ -1024,6 +1218,9 @@ public class View extends Stage {
                 new AvatarPixelRenderer.Equipment(equippedWeapon, equippedArmor, equippedHeadgear));
     }
 
+    /**
+     * Spielt eine Animation ab, wenn der Benutzer ein neues Level erreicht.
+     */
     private void playLevelUpEffect() {
         Random random = new Random();
         for (int i = 0; i < 16; i++) {
@@ -1047,6 +1244,11 @@ public class View extends Stage {
         }
     }
 
+    /**
+     * Versieht ein Diagramm mit dem einheitlichen Stil.
+     *
+     * @param chart das zu gestaltende Diagramm
+     */
     private void styleHabiticaChart(javafx.scene.chart.Chart chart) {
         chart.getStyleClass().add("habitica-chart-card");
         Platform.runLater(() -> {
@@ -1057,6 +1259,9 @@ public class View extends Stage {
         });
     }
 
+    /**
+     * Weist den Datenreihen der Dashboard-Diagramme die vorgesehenen Farben zu.
+     */
     private void applyHabiticaSeriesColors() {
         Platform.runLater(() -> {
             if (dashboardCompletionRateSeries != null && dashboardCompletionRateSeries.getChart() != null) {
@@ -1085,6 +1290,11 @@ public class View extends Stage {
         });
     }
 
+    /**
+     * Ermittelt den im Dashboard gewählten Zeitraum in Tagen.
+     *
+     * @return die Anzahl der Tage
+     */
     private int getSelectedRangeDays() {
         if (dashboardRangeSelector == null) {
             return 7;
@@ -1099,6 +1309,12 @@ public class View extends Stage {
         return 7;
     }
 
+    /**
+     * Erzeugt die Daten für das Erfüllungsquoten-Diagramm.
+     *
+     * @param days der betrachtete Zeitraum in Tagen
+     * @return die Diagrammdaten (Beschriftung zu Wert)
+     */
     private Map<String, Integer> createCompletionRateData(int days) {
         Map<String, Integer> data = new LinkedHashMap<>();
         int totalHabits = Math.max(1, mainController.getUser().getTasks().size());
@@ -1112,6 +1328,11 @@ public class View extends Stage {
         return data;
     }
 
+    /**
+     * Erzeugt die Daten für das Kategorien-Stärke-Diagramm.
+     *
+     * @return die Diagrammdaten (Kategorie zu Wert)
+     */
     private Map<String, Integer> createCategoryStrengthData() {
         int dailyStrength = 0;
         int weeklyStrength = 0;
@@ -1132,6 +1353,11 @@ public class View extends Stage {
         return data;
     }
 
+    /**
+     * Erzeugt die Daten für das Serien-Diagramm.
+     *
+     * @return die Diagrammdaten (Gewohnheit zu Serie)
+     */
     private Map<String, Integer> createStreakData() {
         Map<String, Integer> data = new LinkedHashMap<>();
         int limit = 10;
@@ -1148,6 +1374,9 @@ public class View extends Stage {
         return data;
     }
 
+    /**
+     * Startet die regelmäßige automatische Aktualisierung des Dashboards.
+     */
     private void startLiveDashboardRefresh() {
         if (dashboardRefreshTimeline != null) {
             dashboardRefreshTimeline.stop();
@@ -1158,6 +1387,9 @@ public class View extends Stage {
         dashboardRefreshTimeline.play();
     }
 
+    /**
+     * Aktualisiert die Dashboard-Daten (auf dem JavaFX-Thread).
+     */
     public void refreshDashboardData() {
         if (dashboardCompletionRateSeries == null
                 || dashboardCategoryStrengthSeries == null
@@ -1170,6 +1402,9 @@ public class View extends Stage {
         refreshStatsData();
     }
 
+    /**
+     * Berechnet und setzt die Diagrammdaten des Dashboards neu.
+     */
     private void refreshDashboardDataInternal() {
         int days = getSelectedRangeDays();
         Map<String, Integer> completionRateData = createCompletionRateData(days);
@@ -1202,6 +1437,9 @@ public class View extends Stage {
         applyHabiticaSeriesColors();
     }
 
+    /**
+     * Exportiert das aktuelle Dashboard als Bilddatei.
+     */
     private void exportDashboardAsImage() {
         if (dashboardContainer == null) {
             return;
@@ -1228,6 +1466,10 @@ public class View extends Stage {
         }
     }
 
+    /**
+     * Öffnet ein Detailfenster für die ausgewählte Aufgabe (z.&nbsp;B. zum
+     * Abschließen).
+     */
     public void openNewWindow() {
         Stage subStage = new Stage();
         subStage.setTitle(t("info.window"));
@@ -1321,6 +1563,12 @@ public class View extends Stage {
         subStage.show();
     }
 
+    /**
+     * Lädt die Sprachressourcen (Texte) für die Oberfläche.
+     *
+     * @return das geladene Ressourcenbündel oder {@code null}, falls keines
+     *         gefunden wird
+     */
     private ResourceBundle loadBundle() {
         try {
             return ResourceBundle.getBundle("i18n.messages", Locale.getDefault());
@@ -1329,6 +1577,13 @@ public class View extends Stage {
         }
     }
 
+    /**
+     * Liefert den übersetzten Text zu einem Schlüssel; fehlt der Schlüssel,
+     * wird er selbst zurückgegeben.
+     *
+     * @param key der Textschlüssel
+     * @return der übersetzte Text
+     */
     private String t(String key) {
         try {
             return bundle.getString(key);
@@ -1337,6 +1592,11 @@ public class View extends Stage {
         }
     }
 
+    /**
+     * Richtet die globalen Tastenkürzel des Fensters ein.
+     *
+     * @param scene die Szene, für die die Kürzel gelten
+     */
     private void configureGlobalKeyboardShortcuts(Scene scene) {
         scene.getAccelerators().put(new KeyCodeCombination(KeyCode.D, KeyCombination.CONTROL_DOWN), dashboardBTN::fire);
         scene.getAccelerators().put(new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN), habitsBTN::fire);
@@ -1363,6 +1623,12 @@ public class View extends Stage {
         });
     }
 
+    /**
+     * Setzt rekursiv Hilfen zur Barrierefreiheit (z.&nbsp;B. beschreibende
+     * Texte) für einen Knoten und alle seine Kindelemente.
+     *
+     * @param root der Wurzelknoten, ab dem die Hilfen gesetzt werden
+     */
     private void applyAccessibility(Node root) {
         if (root == null) {
             return;
