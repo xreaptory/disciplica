@@ -1,0 +1,576 @@
+@startuml disciplica-class-diagram
+'==================================================================
+' Disciplica - Vollstaendiges UML-Klassendiagramm
+' Module: shared (DTOs) | server (Spring Boot) | client (JavaFX)
+'
+' Rendern ohne Graphviz dank Smetana-Layout:
+'   java -jar plantuml.jar -tsvg docs/uml/disciplica-class-diagram.puml
+' oder in IntelliJ ueber das PlantUML-Plugin oeffnen.
+'==================================================================
+!pragma layout smetana
+
+title Disciplica – Klassendiagramm (Gesamtuebersicht)
+
+skinparam linetype ortho
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam class {
+  BackgroundColor #FDFDFF
+  BorderColor #5B5B8A
+  ArrowColor #5B5B8A
+}
+
+'==================================================================
+' MODUL: shared  (gemeinsame Datentransfer-Objekte, meist records)
+'==================================================================
+package "shared" #EEF3FF {
+
+  package "shared.auth" {
+    class RegisterRequest <<record>> {
+      +username : String
+      +email : String
+      +password : String
+    }
+    class LoginRequest <<record>> {
+      +email : String
+      +password : String
+    }
+    class GoogleLoginRequest <<record>> {
+      +idToken : String
+    }
+    class GoogleDesktopCompleteRequest <<record>> {
+      +code : String
+    }
+    class RefreshTokenRequest <<record>> {
+      +refreshToken : String
+    }
+    class AuthResponse <<record>> {
+      +accessToken : String
+      +refreshToken : String
+      +user : UserProfile
+    }
+  }
+
+  package "shared.user" {
+    class UserProfile <<record>> {
+      +id : UUID
+      +username : String
+      +email : String
+      +level : int
+      +xp : int
+      +health : int
+      +gold : int
+      +avatar : AvatarProfileDto
+    }
+    class AvatarProfileDto <<record>> {
+      +bodySize : String
+      +shirtColor : String
+      +skinColor : String
+      +hairColor : String
+      +hairBangs : String
+      +hairStyle : String
+      +extra : String
+    }
+    class UpdateAvatarProfileRequest <<record>>
+  }
+
+  package "shared.task" {
+    enum TaskType {
+      HABIT
+      DAILY
+      TODO
+      REWARD
+    }
+    class TaskDto <<record>> {
+      +id : UUID
+      +type : TaskType
+      +title : String
+      +description : String
+      +points : int
+      +streak : int
+      +completed : boolean
+      +category : String
+      +createdAt : Instant
+      +updatedAt : Instant
+    }
+    class CreateTaskRequest <<record>>
+    class UpdateTaskRequest <<record>>
+  }
+
+  package "shared.party" {
+    class PartyDto <<record>> {
+      +id : UUID
+      +name : String
+      +leaderId : UUID
+      +members : List<PartyMemberDto>
+    }
+    class PartyMemberDto <<record>>
+    class PartyInviteDto <<record>>
+    class ChatMessageDto <<record>>
+    class CreatePartyRequest <<record>>
+    class InvitePartyRequest <<record>>
+    class SendChatMessageRequest <<record>>
+  }
+}
+
+AuthResponse --> UserProfile
+UserProfile --> AvatarProfileDto
+TaskDto --> TaskType
+PartyDto "1" o--> "*" PartyMemberDto
+
+'==================================================================
+' MODUL: server  (Spring Boot REST-/WebSocket-Backend)
+'==================================================================
+package "server" #EFFBEF {
+
+  class DisciplicaServerApplication <<@SpringBootApplication>>
+
+  package "server.config" {
+    class SecurityConfig <<@Configuration>> {
+      +securityFilterChain() : SecurityFilterChain
+      +passwordEncoder() : PasswordEncoder
+      +jwtEncoder() : JwtEncoder
+      +jwtDecoder() : JwtDecoder
+    }
+    class WebMvcConfig <<@Configuration>>
+    class WebSocketConfig <<@Configuration>>
+    class JwtProperties <<record>>
+    class GoogleProperties <<record>>
+    class RenderDatabaseUrlEnvironmentPostProcessor <<EnvironmentPostProcessor>>
+  }
+
+  package "server.security" {
+    class AuthInterceptor <<@Component>> {
+      +preHandle() : boolean
+    }
+    class CurrentUser <<@Component>> {
+      +requireUserId(auth) : UUID
+    }
+    class HashingService <<@Service>> {
+      +newOpaqueToken() : String
+      +sha256(value) : String
+    }
+    class JwtService <<@Service>> {
+      +createAccessToken(userId, username) : String
+    }
+    class JwtAuthFilter <<OncePerRequestFilter>> {
+      +doFilterInternal()
+    }
+  }
+
+  package "server.support" {
+    class ApiException <<RuntimeException>> {
+      -status : HttpStatus
+      +status() : HttpStatus
+    }
+    class ApiExceptionHandler <<@RestControllerAdvice>>
+    class PublicStatusController <<@RestController>>
+  }
+
+  package "server.auth" {
+    class AuthController <<@RestController>> {
+      +register(req) : AuthResponse
+      +login(req) : AuthResponse
+      +google(req) : AuthResponse
+      +googleDesktopStart()
+      +googleDesktopCallback()
+      +me(auth) : UserProfile
+      +updateAvatar(auth, req) : UserProfile
+    }
+    class AuthService <<@Service>> {
+      +register(req) : AuthResponse
+      +login(req) : AuthResponse
+      +refresh(req) : AuthResponse
+      +logout(req)
+      +google(req) : AuthResponse
+      +me(userId) : UserProfile
+      +updateAvatar(userId, req) : UserProfile
+    }
+  }
+
+  package "server.task" {
+    class TaskController <<@RestController>> {
+      +list(auth) : List<TaskDto>
+      +create(auth, req) : TaskDto
+      +update(auth, id, req) : TaskDto
+      +delete(auth, id)
+      +complete(auth, id) : TaskDto
+    }
+    class TaskService <<@Service>>
+    class TaskRepository <<@Repository>>
+  }
+
+  package "server.party" {
+    class PartyController <<@RestController>>
+    class PartyService <<@Service>>
+    class PartyRepository <<@Repository>>
+    class PartyWebSocketController <<@Controller>>
+  }
+
+  package "server.user" {
+    class UserMapper <<@Component>> {
+      +toProfile(row) : UserProfile
+    }
+    class UserRepository <<@Repository>> {
+      +create(username, email) : UserRow
+      +findById(id) : Optional<UserRow>
+      +findByEmail(email) : Optional<UserRow>
+      +findByUsernameOrEmail(v) : Optional<UserRow>
+    }
+    class UserRow <<record>>
+  }
+}
+
+' --- Server-Beziehungen ---
+SecurityConfig ..> JwtAuthFilter
+SecurityConfig ..> JwtProperties
+SecurityConfig ..> GoogleProperties
+WebMvcConfig --> AuthInterceptor
+AuthController --> AuthService
+AuthController --> CurrentUser
+AuthController --> GoogleProperties
+AuthService --> UserRepository
+AuthService --> UserMapper
+AuthService --> JwtService
+AuthService --> HashingService
+AuthService ..> ApiException
+JwtService --> JwtProperties
+TaskController --> TaskService
+TaskController --> CurrentUser
+TaskService --> TaskRepository
+PartyController --> PartyService
+PartyController --> CurrentUser
+PartyWebSocketController --> PartyService
+PartyService --> PartyRepository
+PartyService --> UserRepository
+UserMapper ..> UserRow
+UserRepository ..> UserRow
+ApiExceptionHandler ..> ApiException
+
+'==================================================================
+' MODUL: client  (JavaFX-Desktop-Anwendung, MVC)
+'==================================================================
+package "client" #FFF6E8 {
+
+  '------------------------- Start / DI -------------------------
+  package "bootstrap & di" {
+    class ClientApplication {
+      +{static} main(args)
+    }
+    class Main {
+      +{static} main(args)
+    }
+    class HabitTrackerApp <<Application>> {
+      +start(stage)
+      +stop()
+    }
+    class AppModule <<Guice Module>> {
+      +configure()
+      +provideUser() : User
+    }
+    class Properties
+  }
+
+  '------------------------- Domain-Modell -------------------------
+  package "model.domain" {
+    interface Trackable {
+      +getName() : String
+      +getProgress() : int
+      +getStreak() : int
+    }
+    interface Completable {
+      +complete() : boolean
+      +getReward() : Reward
+    }
+
+    abstract class AbstractTask {
+      -id : Long
+      -name : String
+      -description : String
+      -isCompleted : boolean
+      -points : int
+      +complete() : boolean
+      +{abstract} calculatePoints() : int
+    }
+    abstract class Task
+    class DailyHabit {
+      -streak : int
+      +calculatePoints() : int
+    }
+    class WeeklyHabit {
+      -streak : int
+      +calculatePoints() : int
+    }
+    class OneTimeTask {
+      +calculatePoints() : int
+    }
+
+    class Habit {
+      -id : Long
+      -name : String
+      -streak : int
+      -completed : boolean
+      +complete() : boolean
+      +getReward() : Reward
+      +resetStreak()
+      +enableVacationFreeze()
+    }
+    class Completion {
+      -completedAt : LocalDateTime
+      -quality : int
+      -xpEarned : int
+    }
+    class Reward {
+      -name : String
+      -pointsRequired : int
+    }
+    class User {
+      -id : Long
+      -username : String
+      -level : int
+      -experience : int
+      -gold : int
+      -health : int
+      +addTask(t) : boolean
+      +completeTask(t) : boolean
+      +awardXpAndGold(xp, gold)
+      +spendGold(amount)
+    }
+
+    class HabitNotFoundException <<Exception>>
+    class InvalidHabitException <<Exception>>
+  }
+
+  '------------------------- Persistenz (JDBC/JPA) -------------------------
+  package "model.persistence" {
+    interface HabitRepository {
+      +save(h)
+      +findById(id) : Optional<Habit>
+      +findByUser(u) : List<Habit>
+      +update(h)
+      +delete(id)
+      +findAll() : List<Habit>
+      +completeHabit(id, q, xp, gold)
+    }
+    class InMemoryHabitRepository
+    class SQLiteHabitRepository {
+      +searchHabitsByDescription()
+      +rankHabitsByCompletionRate()
+      +backupDatabase(path) : Path
+    }
+    class DatabaseConnection <<AutoCloseable>> {
+      +getConnection() : Connection
+      +close()
+    }
+    class DatabaseException <<RuntimeException>>
+    class DatabaseMigration {
+      +{static} migrateOnStartup()
+    }
+    class HabitQueryLayer
+    class JpaEntityManagerHelper
+  }
+
+  '------------------------- Services -------------------------
+  package "model.service" {
+    interface UserService {
+      +getUser() : User
+      +readTaskData()
+      +writeTaskData()
+      +exportEncryptedJsonBackup(p) : Path
+    }
+    class DefaultUserService
+    class DataPortabilityService {
+      +exportEncryptedJson(p) : Path
+      +importEncryptedJson(p)
+      +exportCsv(p) : Path
+    }
+    class BackupSchedulerService {
+      +start()
+      +stop()
+    }
+    class ReminderService {
+      +start()
+      +stop()
+      +runReminderCheck()
+    }
+    class GamificationEngine {
+      +calculateRewards() : RewardResult
+      +calculateMissPenalty() : PenaltyResult
+    }
+    class LevelCalculator {
+      +calculateLevel(xp) : int
+      +xpToNextLevel(xp) : int
+    }
+    class MemoryDiagnosticsService
+  }
+
+  '------------------------- Spring-Data-Variante -------------------------
+  package "model.springdata" {
+    class SpringDataJpaConfig <<@Configuration>>
+    interface HabitRepositoryCustom
+    interface "HabitRepository (SD)" as SDHabitRepository <<JpaRepository>>
+    class HabitRepositoryImpl
+    interface UserSpringRepository <<JpaRepository>>
+    interface CompletionRepository <<JpaRepository>>
+    interface HabitService {
+      +completeHabit(id, quality) : Habit
+    }
+    class HabitServiceImpl <<@Service>>
+    class HabitServiceException <<RuntimeException>>
+  }
+
+  '------------------------- View / Controller -------------------------
+  package "View" {
+    class View <<Stage>> {
+      +openDashboard()
+      +openHabitMenu()
+      +openStats()
+      +openParty()
+      +refreshDashboardData()
+    }
+    class MainController {
+      +handle(event)
+      +handleActionEvent(e)
+      +getCachedUserStats() : UserStatsSnapshot
+    }
+    class LoginView {
+      -apiClient : ApiClient
+      +submit()
+    }
+    class OnboardingDialog {
+      +show()
+    }
+  }
+
+  package "View.api" {
+    class ApiClient {
+      +login(req) : AuthResponse
+      +register(req) : AuthResponse
+      +tasks() : List<TaskDto>
+      +createTask(req) : TaskDto
+      +currentParty() : PartyDto
+      +updateAvatar(req) : UserProfile
+    }
+    class SessionStore {
+      +authenticate(client, profile)
+      +isAuthenticated() : boolean
+      +updateAvatar(state)
+    }
+    class ApiClientException <<RuntimeException>>
+  }
+
+  package "View.avatar" {
+    class AvatarState {
+      +toDto() : AvatarProfileDto
+      +toUpdateRequest() : UpdateAvatarProfileRequest
+    }
+    class AvatarProfileStore {
+      +load() : AvatarState
+      +save(state)
+    }
+    class AvatarPixelRenderer {
+      +{static} render(canvas, state)
+    }
+  }
+}
+
+'==================== Client: Vererbung / Realisierung ====================
+Trackable <|.. AbstractTask
+Trackable <|.. Habit
+Trackable <|.. Reward
+Trackable <|.. User
+Completable <|.. Habit
+AbstractTask <|-- Task
+Task <|-- DailyHabit
+Task <|-- WeeklyHabit
+Task <|-- OneTimeTask
+
+HabitRepository <|.. InMemoryHabitRepository
+HabitRepository <|.. SQLiteHabitRepository
+
+UserService <|.. DefaultUserService
+
+SDHabitRepository --|> HabitRepositoryCustom
+HabitRepositoryCustom <|.. HabitRepositoryImpl
+HabitService <|.. HabitServiceImpl
+
+'==================== Client: Assoziationen / Komposition ====================
+ClientApplication ..> Main
+Main ..> HabitTrackerApp
+HabitTrackerApp --> AppModule
+HabitTrackerApp --> View
+HabitTrackerApp --> LoginView
+HabitTrackerApp --> ReminderService
+HabitTrackerApp --> BackupSchedulerService
+AppModule ..> SQLiteHabitRepository
+AppModule ..> DefaultUserService
+AppModule ..> User
+
+User "1" o--> "*" AbstractTask
+User "1" o--> "*" Habit
+Habit "1" *--> "*" Completion
+Habit --> User
+Habit ..> Reward
+Completion --> Habit
+
+SQLiteHabitRepository --> DatabaseConnection
+SQLiteHabitRepository ..> Habit
+DatabaseConnection ..> DatabaseException
+HabitQueryLayer ..> Habit
+HabitQueryLayer ..> Completion
+
+DefaultUserService --> User
+DefaultUserService --> DataPortabilityService
+DataPortabilityService --> UserService
+BackupSchedulerService --> DataPortabilityService
+ReminderService --> UserService
+GamificationEngine --> LevelCalculator
+
+HabitServiceImpl --> SDHabitRepository
+HabitServiceImpl --> UserSpringRepository
+HabitServiceImpl --> CompletionRepository
+HabitServiceImpl ..> HabitServiceException
+
+View --|> javafx.stage.Stage
+View --> MainController
+View --> SessionStore
+View ..> AvatarPixelRenderer
+MainController --> View
+MainController --> UserService
+MainController --> SessionStore
+MainController --> User
+LoginView --> ApiClient
+LoginView --> SessionStore
+OnboardingDialog --> SessionStore
+OnboardingDialog --> AvatarState
+SessionStore --> ApiClient
+SessionStore --> AvatarProfileStore
+SessionStore --> AvatarState
+AvatarProfileStore --> AvatarState
+AvatarPixelRenderer ..> AvatarState
+
+'==================== Modul-uebergreifend (HTTP / JSON) ====================
+ApiClient ..> AuthResponse : HTTP
+ApiClient ..> TaskDto : HTTP
+ApiClient ..> PartyDto : HTTP
+ApiClient ..> UserProfile : HTTP
+AvatarState ..> AvatarProfileDto
+AvatarState ..> UpdateAvatarProfileRequest
+AuthController ..> AuthResponse
+TaskController ..> TaskDto
+PartyController ..> PartyDto
+
+note as N1
+  <b>Architektur</b>
+  • <b>shared</b>: gemeinsame DTOs (records) fuer die
+    JSON-Kommunikation zwischen Client und Server.
+  • <b>server</b>: Spring-Boot-REST-/WebSocket-Backend
+    (Controller → Service → Repository, JWT-Sicherheit).
+  • <b>client</b>: JavaFX-MVC-App. Offline ueber lokale
+    SQLite-DB (model.persistence) ODER online ueber den
+    Server (View.api.ApiClient). Guice (AppModule) verdrahtet
+    die Abhaengigkeiten.
+end note
+
+@enduml
