@@ -35,7 +35,7 @@ The app is distributed as an **executable JAR**. No installer is required.
 
 ### Windows-specific steps
 
-1. Install **Java 17+** (for example Temurin/OpenJDK).
+1. Install **Java 17+** (e.g. Temurin/OpenJDK).
 2. Open **PowerShell** in the folder containing the JAR.
 3. Run:
 
@@ -65,7 +65,7 @@ After startup, the login window offers three options:
 **Registration input rules:**
 
 - Username: 3 to 32 characters
-- Email: valid format (for example `name@example.com`)
+- Email: valid format (e.g. `name@example.com`)
 - Password: 10 to 128 characters
 
 ---
