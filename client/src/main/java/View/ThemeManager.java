@@ -9,9 +9,9 @@ import javafx.scene.Scene;
  * <p>
  * Jedes Theme besteht aus der gemeinsamen Basis-Stilvorlage
  * {@code habitica-theme.css} und – außer beim klassischen Theme – einer
- * zusätzlichen Datei, die nur die Farbvariablen und die Schriftart
- * überschreibt. Die Auswahl wird über {@link Preferences} dauerhaft
- * gespeichert und gilt damit auch nach einem Neustart.
+ * zusätzlichen Datei, die nur die Farbvariablen überschreibt. Die Schriftart
+ * ist themenübergreifend einheitlich. Die Auswahl wird über {@link Preferences}
+ * dauerhaft gespeichert und gilt damit auch nach einem Neustart.
  */
 public final class ThemeManager {
 

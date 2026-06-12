@@ -1,7 +1,7 @@
 /*
  * Theme "Black" – echtes Dunkeldesign (nahezu schwarz) mit blauem Akzent.
  * Wird zusaetzlich zu habitica-theme.css geladen und ueberschreibt nur die
- * Farbvariablen sowie die Schriftart.
+ * Farbvariablen. Die Schriftart bleibt themenuebergreifend einheitlich.
  */
 .root {
     -c-app-bg: #0d0d0f;
@@ -31,6 +31,4 @@
     -c-brand: #f2f2f4;
     -c-grid: #2a2a30;
     -c-avatar-bg: #141417;
-
-    -fx-font-family: "Trebuchet MS", "Segoe UI", sans-serif;
 }
