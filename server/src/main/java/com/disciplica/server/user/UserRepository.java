@@ -85,6 +85,16 @@ public class UserRepository {
     }
 
     /**
+     * Setzt das Level eines Benutzers.
+     *
+     * @param id    die Kennung des Benutzers
+     * @param level das neue Level
+     */
+    public void updateLevel(UUID id, int level) {
+        jdbcTemplate.update("UPDATE users SET level = ?, updated_at = now() WHERE id = ?", level, id);
+    }
+
+    /**
      * Wandelt die aktuelle Zeile eines Datenbankergebnisses in eine
      * {@link UserRow} um.
      *

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.disciplica.server.support.ApiException;
+import com.disciplica.server.user.LevelCalculator;
+import com.disciplica.server.user.UserRepository;
 import com.disciplica.shared.task.CreateTaskRequest;
 import com.disciplica.shared.task.TaskDto;
 import com.disciplica.shared.task.UpdateTaskRequest;
@@ -20,14 +22,22 @@ import com.disciplica.shared.task.UpdateTaskRequest;
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
+    private final LevelCalculator levelCalculator;
 
     /**
-     * Erzeugt den Dienst mit dem Aufgaben-Repository.
+     * Erzeugt den Dienst mit seinen Abhängigkeiten.
      *
-     * @param taskRepository der Datenbankzugriff auf Aufgaben
+     * @param taskRepository  der Datenbankzugriff auf Aufgaben
+     * @param userRepository  der Datenbankzugriff auf Benutzer (für Level)
+     * @param levelCalculator berechnet das Level aus den Erfahrungspunkten
      */
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository,
+                       UserRepository userRepository,
+                       LevelCalculator levelCalculator) {
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+        this.levelCalculator = levelCalculator;
     }
 
     /**
@@ -91,7 +101,25 @@ public class TaskService {
      */
     @Transactional
     public TaskDto complete(UUID userId, UUID taskId) {
-        return taskRepository.complete(userId, taskId)
+        TaskDto task = taskRepository.complete(userId, taskId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Task not found"));
+        recomputeLevel(userId);
+        return task;
+    }
+
+    /**
+     * Leitet das Level des Benutzers aus seinen aktuellen Erfahrungspunkten ab
+     * und speichert es, falls es sich geändert hat (z.&nbsp;B. ein Levelaufstieg
+     * nach dem Abschließen einer Aufgabe).
+     *
+     * @param userId die Kennung des Benutzers
+     */
+    private void recomputeLevel(UUID userId) {
+        userRepository.findById(userId).ifPresent(user -> {
+            int level = levelCalculator.calculateLevel(user.xp());
+            if (level != user.level()) {
+                userRepository.updateLevel(userId, level);
+            }
+        });
     }
 }
