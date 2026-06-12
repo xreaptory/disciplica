@@ -20,13 +20,16 @@ $JdkFeature = '17'
 
 function Test-IsJdk17 {
     param([string]$JavaHome)
-    if (-not $JavaHome) { return $false }
-    $javaExe = Join-Path $JavaHome 'bin\java.exe'
-    if (-not (Test-Path $javaExe)) { return $false }
-    # `java -version` writes to STDERR. Lower the error preference locally so that
-    # merging native stderr with 2>&1 does NOT become a terminating error under the
-    # script-wide $ErrorActionPreference = 'Stop'.
+    # Lower the error preference for the whole function: a stray JAVA_HOME and
+    # `java -version` writing to STDERR must never become terminating errors under
+    # the script-wide $ErrorActionPreference = 'Stop'.
     $ErrorActionPreference = 'SilentlyContinue'
+    if ([string]::IsNullOrWhiteSpace($JavaHome)) { return $false }
+    # Guard against a malformed JAVA_HOME containing characters illegal in paths
+    # (e.g. '<', '>'), which would make Test-Path/Join-Path throw.
+    if ($JavaHome.IndexOfAny([System.IO.Path]::GetInvalidPathChars()) -ge 0) { return $false }
+    $javaExe = Join-Path $JavaHome 'bin\java.exe'
+    if (-not (Test-Path -LiteralPath $javaExe)) { return $false }
     $out = & $javaExe '-version' 2>&1 | Out-String
     return ($out -match 'version "17' -or $out -match '"17\.')
 }
@@ -82,11 +85,25 @@ $javaHome = Get-JavaHome
 $env:JAVA_HOME = $javaHome
 $env:PATH = (Join-Path $javaHome 'bin') + ';' + $env:PATH
 
-$mvnw = Join-Path $RepoRoot 'mvnw.cmd'
-if (-not (Test-Path $mvnw)) { throw "Maven Wrapper not found at $mvnw" }
+$wrapperJar = Join-Path $RepoRoot '.mvn\wrapper\maven-wrapper.jar'
+if (-not (Test-Path $wrapperJar)) {
+    throw "Maven Wrapper jar not found at $wrapperJar (is this the full project folder?)."
+}
+$javaExe = Join-Path $javaHome 'bin\java.exe'
 
 Write-Host "Running the Maven Wrapper (downloads Maven on first run, skips tests)..." -ForegroundColor Cyan
-& $mvnw '-B' '-ntp' '-pl' 'client' '-am' '-DskipTests' 'package'
+# Build the project that lives next to THIS script, regardless of the directory the
+# script was launched from. Maven resolves which pom.xml to build from the current
+# working directory, so pin it to the project root.
+Set-Location -LiteralPath $RepoRoot
+# Invoke the wrapper's Java launcher directly instead of mvnw.cmd. The .cmd batch
+# script breaks when the project path contains parentheses -- e.g. a browser-numbered
+# "disciplica-main (3)" download folder -- because cmd.exe mis-parses the parens.
+# Calling java straight from PowerShell sidesteps cmd.exe entirely; Java handles such
+# paths fine. This mirrors exactly what mvnw.cmd does internally.
+& $javaExe '-classpath' $wrapperJar "-Dmaven.multiModuleProjectDirectory=$RepoRoot" `
+    'org.apache.maven.wrapper.MavenWrapperMain' `
+    '-B' '-ntp' '-pl' 'client' '-am' '-DskipTests' 'package'
 if ($LASTEXITCODE -ne 0) {
     throw "Maven build failed with exit code $LASTEXITCODE."
 }
