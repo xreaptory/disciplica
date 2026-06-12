@@ -1,14 +1,51 @@
+/*
+ * Basis-Stilvorlage (Struktur) der Anwendung.
+ *
+ * Alle umschaltbaren Farben sind als "looked-up colors" auf .root definiert.
+ * Die Standardwerte hier entsprechen dem klassischen (lila) Erscheinungsbild.
+ * Die Theme-Dateien (theme-black.css, theme-light.css) ueberschreiben diese
+ * Variablen und werden zusaetzlich zu dieser Datei geladen.
+ */
 .root {
-    -fx-background-color: #19142b;
+    /* Klassische (Standard-)Palette */
+    -c-app-bg: #19142b;
+    -c-content-bg: #24183b;
+    -c-nav-bg: #17122a;
+    -c-panel-bg: #2e2250;
+    -c-panel-border: #4f3f7e;
+    -c-card-bg: #33275a;
+    -c-card-bg-hover: #3c2d68;
+    -c-card-border: #4f3f7e;
+    -c-card-border-hover: #7f63df;
+    -c-input-bg: #1f1835;
+    -c-input-border: #4f3f7e;
+    -c-navbtn-bg: #241d41;
+    -c-navbtn-bg-hover: #302654;
+    -c-navbtn-border: #3d3366;
+    -c-navbtn-text: #cfc1ff;
+    -c-text: #ffffff;
+    -c-text-muted: #c9b9ea;
+    -c-text-soft: #d8cff2;
+    -c-prompt: #a99cc9;
+    -c-accent: #6133b4;
+    -c-accent-2: #7c5ee6;
+    -c-accent-2-hover: #8e6bff;
+    -c-accent-border: #a88cff;
+    -c-gold: #fed605;
+    -c-brand: #fed605;
+    -c-grid: #3a2d5f;
+    -c-avatar-bg: #19142b;
+
+    -fx-background-color: -c-app-bg;
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
 }
 
 .app-shell {
-    -fx-background-color: #19142b;
+    -fx-background-color: -c-app-bg;
 }
 
 .app-content {
-    -fx-background-color: #24183b;
+    -fx-background-color: -c-content-bg;
 }
 
 .page-scroll,
@@ -17,7 +54,7 @@
 }
 
 .page-frame {
-    -fx-background-color: #24183b;
+    -fx-background-color: -c-content-bg;
 }
 
 .page-header {
@@ -25,48 +62,48 @@
 }
 
 .page-title {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -c-text;
     -fx-font-size: 32px;
     -fx-font-weight: bold;
 }
 
 .page-subtitle {
-    -fx-text-fill: #c9b9ea;
+    -fx-text-fill: -c-text-muted;
     -fx-font-size: 14px;
 }
 
 .section-title {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -c-text;
     -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
 
 .field-label {
-    -fx-text-fill: #d8cff2;
+    -fx-text-fill: -c-text-soft;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
 
 .brand-title {
-    -fx-text-fill: #fed605;
+    -fx-text-fill: -c-brand;
     -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-padding: 4 0 18 0;
 }
 
 .habitica-nav {
-    -fx-background-color: #17122a;
-    -fx-border-color: transparent #3d3366 transparent transparent;
+    -fx-background-color: -c-nav-bg;
+    -fx-border-color: transparent -c-navbtn-border transparent transparent;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.34), 18, 0.2, 4, 0);
 }
 
 .habitica-nav-button {
-    -fx-background-color: #241d41;
+    -fx-background-color: -c-navbtn-bg;
     -fx-background-radius: 9;
-    -fx-border-color: #3d3366;
+    -fx-border-color: -c-navbtn-border;
     -fx-border-radius: 9;
     -fx-border-width: 1;
-    -fx-text-fill: #cfc1ff;
+    -fx-text-fill: -c-navbtn-text;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-alignment: center-left;
@@ -74,23 +111,23 @@
 }
 
 .habitica-nav-button:hover {
-    -fx-background-color: #302654;
-    -fx-border-color: #6f57c9;
-    -fx-text-fill: #ffffff;
+    -fx-background-color: -c-navbtn-bg-hover;
+    -fx-border-color: -c-accent;
+    -fx-text-fill: -c-text;
 }
 
 .habitica-nav-button.active {
-    -fx-background-color: #6133b4;
-    -fx-border-color: #fed605;
+    -fx-background-color: -c-accent;
+    -fx-border-color: -c-gold;
     -fx-text-fill: #ffffff;
     -fx-effect: dropshadow(gaussian, rgba(254, 214, 5, 0.26), 14, 0.22, 0, 3);
 }
 
 .habitica-panel,
 .toolbar-panel {
-    -fx-background-color: #2e2250;
+    -fx-background-color: -c-panel-bg;
     -fx-background-radius: 10;
-    -fx-border-color: #4f3f7e;
+    -fx-border-color: -c-panel-border;
     -fx-border-radius: 10;
     -fx-border-width: 1;
     -fx-padding: 18;
@@ -102,28 +139,28 @@
 }
 
 .habitica-card {
-    -fx-background-color: #33275a;
+    -fx-background-color: -c-card-bg;
     -fx-background-radius: 8;
-    -fx-border-color: #4f3f7e;
+    -fx-border-color: -c-card-border;
     -fx-border-radius: 8;
     -fx-padding: 10 12 10 10;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.22), 12, 0.16, 0, 2);
 }
 
 .habitica-card:hover {
-    -fx-background-color: #3c2d68;
-    -fx-border-color: #7f63df;
+    -fx-background-color: -c-card-bg-hover;
+    -fx-border-color: -c-card-border-hover;
     -fx-effect: dropshadow(gaussian, rgba(154, 98, 255, 0.28), 14, 0.2, 0, 3);
 }
 
 .task-title {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -c-text;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
 .task-subtitle {
-    -fx-text-fill: #c9b9ea;
+    -fx-text-fill: -c-text-muted;
     -fx-font-size: 12px;
 }
 
@@ -160,20 +197,20 @@
 }
 
 .list-cell:selected .habitica-card {
-    -fx-border-color: #fed605;
-    -fx-background-color: #44306f;
+    -fx-border-color: -c-gold;
+    -fx-background-color: -c-card-bg-hover;
 }
 
 .habitica-field,
 .text-field,
 .text-area {
-    -fx-background-color: #1f1835;
+    -fx-background-color: -c-input-bg;
     -fx-background-radius: 8;
-    -fx-border-color: #4f3f7e;
+    -fx-border-color: -c-input-border;
     -fx-border-radius: 8;
     -fx-border-width: 1.5;
-    -fx-text-fill: #ffffff;
-    -fx-prompt-text-fill: #a99cc9;
+    -fx-text-fill: -c-text;
+    -fx-prompt-text-fill: -c-prompt;
     -fx-font-size: 14px;
     -fx-padding: 8 10 8 10;
 }
@@ -181,19 +218,19 @@
 .habitica-field:focused,
 .text-field:focused,
 .text-area:focused {
-    -fx-border-color: #fed605;
+    -fx-border-color: -c-gold;
     -fx-effect: dropshadow(gaussian, rgba(254, 214, 5, 0.26), 10, 0.22, 0, 2);
 }
 
 .text-field .text,
 .text-area .text {
-    -fx-fill: #ffffff;
+    -fx-fill: -c-text;
 }
 
 .habitica-spinner {
-    -fx-background-color: #1f1835;
+    -fx-background-color: -c-input-bg;
     -fx-background-radius: 8;
-    -fx-border-color: #4f3f7e;
+    -fx-border-color: -c-input-border;
     -fx-border-radius: 8;
     -fx-border-width: 1.5;
 }
@@ -209,9 +246,9 @@
 }
 
 .habitica-button {
-    -fx-background-color: #7c5ee6;
+    -fx-background-color: -c-accent-2;
     -fx-background-radius: 8;
-    -fx-border-color: #a88cff;
+    -fx-border-color: -c-accent-border;
     -fx-border-radius: 8;
     -fx-border-width: 1;
     -fx-text-fill: #ffffff;
@@ -222,7 +259,7 @@
 }
 
 .habitica-button:hover {
-    -fx-background-color: #8e6bff;
+    -fx-background-color: -c-accent-2-hover;
     -fx-effect: dropshadow(gaussian, rgba(154, 98, 255, 0.44), 16, 0.28, 0, 4);
 }
 
@@ -242,8 +279,8 @@
 }
 
 .habitica-button.secondary {
-    -fx-background-color: #6133b4;
-    -fx-border-color: #9a78f2;
+    -fx-background-color: -c-accent;
+    -fx-border-color: -c-accent-border;
 }
 
 .habitica-button.google-button {
@@ -280,8 +317,8 @@
 }
 
 .habitica-button.avatar-option-button.selected {
-    -fx-background-color: #6133b4;
-    -fx-border-color: #fed605;
+    -fx-background-color: -c-accent;
+    -fx-border-color: -c-gold;
     -fx-border-width: 2;
     -fx-effect: dropshadow(gaussian, rgba(254, 214, 5, 0.42), 16, 0.28, 0, 4);
 }
@@ -359,9 +396,9 @@
 
 .habitica-chart-card,
 .chart {
-    -fx-background-color: #2e2250;
+    -fx-background-color: -c-panel-bg;
     -fx-background-radius: 10;
-    -fx-border-color: #4f3f7e;
+    -fx-border-color: -c-panel-border;
     -fx-border-radius: 10;
     -fx-border-width: 1;
     -fx-padding: 14;
@@ -369,39 +406,39 @@
 }
 
 .chart-plot-background {
-    -fx-background-color: #24183b;
+    -fx-background-color: -c-content-bg;
     -fx-background-radius: 8;
 }
 
 .chart-title {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -c-text;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
 
 .axis {
-    -fx-tick-label-fill: #c9b9ea;
+    -fx-tick-label-fill: -c-text-muted;
 }
 
 .axis-label {
-    -fx-text-fill: #d8cff2;
+    -fx-text-fill: -c-text-soft;
 }
 
 .chart-vertical-grid-lines,
 .chart-horizontal-grid-lines {
-    -fx-stroke: #3a2d5f;
+    -fx-stroke: -c-grid;
 }
 
 .habitica-progress {
-    -fx-background-color: #1f1835;
+    -fx-background-color: -c-input-bg;
     -fx-background-radius: 8;
-    -fx-border-color: #4f3f7e;
+    -fx-border-color: -c-panel-border;
     -fx-border-radius: 8;
     -fx-border-width: 1;
 }
 
 .habitica-progress > .track {
-    -fx-background-color: #1f1835;
+    -fx-background-color: -c-input-bg;
     -fx-background-radius: 8;
 }
 
@@ -419,9 +456,9 @@
 }
 
 .avatar-stage {
-    -fx-background-color: #19142b;
+    -fx-background-color: -c-avatar-bg;
     -fx-background-radius: 12;
-    -fx-border-color: #5a478f;
+    -fx-border-color: -c-panel-border;
     -fx-border-radius: 12;
     -fx-border-width: 1.5;
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.42), 16, 0.2, 0, 2);
@@ -429,7 +466,7 @@
 
 .habitica-checkbox,
 .onboarding-checkbox {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -c-text;
     -fx-font-size: 14px;
 }
 
@@ -443,6 +480,7 @@
     -fx-text-fill: #6133b4;
 }
 
+/* Das Onboarding bleibt absichtlich auf dem dunklen Assistenten-Look. */
 .onboarding-card {
     -fx-background-color: #24183b;
     -fx-background-radius: 14;
@@ -496,6 +534,7 @@
     -fx-font-weight: bold;
 }
 
+/* ── Anmeldebildschirm (bleibt eigenstaendig gebrandet) ── */
 .auth-root {
     -fx-background-color: linear-gradient(to bottom, #2a1850 0%, #3b236a 55%, #4a2878 100%);
 }
@@ -581,4 +620,11 @@
 /* Override the old brand label rule — now handled by auth-brand-name */
 .auth-brand .label {
     -fx-text-fill: #fed605;
+}
+
+/* ── Theme-Umschalter in der Navigationsleiste ── */
+.theme-switch-label {
+    -fx-text-fill: -c-text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
 }

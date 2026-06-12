@@ -1,0 +1,36 @@
+/*
+ * Theme "Black" – echtes Dunkeldesign (nahezu schwarz) mit blauem Akzent.
+ * Wird zusaetzlich zu habitica-theme.css geladen und ueberschreibt nur die
+ * Farbvariablen sowie die Schriftart.
+ */
+.root {
+    -c-app-bg: #0d0d0f;
+    -c-content-bg: #141417;
+    -c-nav-bg: #08080a;
+    -c-panel-bg: #1b1b1f;
+    -c-panel-border: #2c2c33;
+    -c-card-bg: #202025;
+    -c-card-bg-hover: #2a2a30;
+    -c-card-border: #2c2c33;
+    -c-card-border-hover: #4a4a55;
+    -c-input-bg: #161619;
+    -c-input-border: #33333b;
+    -c-navbtn-bg: #18181c;
+    -c-navbtn-bg-hover: #26262c;
+    -c-navbtn-border: #2c2c33;
+    -c-navbtn-text: #c8c8d0;
+    -c-text: #f2f2f4;
+    -c-text-muted: #9a9aa6;
+    -c-text-soft: #b4b4c0;
+    -c-prompt: #6e6e7a;
+    -c-accent: #3d7bf0;
+    -c-accent-2: #4f8cff;
+    -c-accent-2-hover: #6aa0ff;
+    -c-accent-border: #6aa0ff;
+    -c-gold: #f2c200;
+    -c-brand: #f2f2f4;
+    -c-grid: #2a2a30;
+    -c-avatar-bg: #141417;
+
+    -fx-font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}

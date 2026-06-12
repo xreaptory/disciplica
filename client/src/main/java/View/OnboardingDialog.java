@@ -105,10 +105,9 @@ public class OnboardingDialog {
         card.getStyleClass().add("onboarding-card");
 
         Scene scene = new Scene(card, 780, 760);
-        var css = getClass().getResource("/css/habitica-theme.css");
-        if (css != null) {
-            scene.getStylesheets().add(css.toExternalForm());
-        }
+        // Der Onboarding-Assistent ist bewusst immer dunkel gehalten, damit der
+        // helle Begrüßungstext auf der dunklen Karte lesbar bleibt.
+        ThemeManager.apply(scene, ThemeManager.Theme.CLASSIC);
         dialog.setScene(scene);
         dialog.showAndWait();
     }

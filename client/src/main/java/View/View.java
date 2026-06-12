@@ -116,6 +116,7 @@ public class View extends Stage {
     private Timeline dashboardRefreshTimeline;
     private Timeline inviteNotificationTimeline;
     private final Set<UUID> seenInviteIds = ConcurrentHashMap.newKeySet();
+    private Scene scene;
     private XYChart.Series<String, Number> dashboardCompletionRateSeries;
     private XYChart.Series<String, Number> dashboardCategoryStrengthSeries;
     private XYChart.Series<Number, String> dashboardStreakSeries;
@@ -177,11 +178,8 @@ public class View extends Stage {
         sessionStore = injector.getInstance(SessionStore.class);
         mainController = new MainController(this, userService, sessionStore);
 
-        Scene scene = new Scene(hbox, 1180, 720);
-        var css = getClass().getResource("/css/habitica-theme.css");
-        if (css != null) {
-            scene.getStylesheets().add(css.toExternalForm());
-        }
+        scene = new Scene(hbox, 1180, 720);
+        ThemeManager.apply(scene);
         hbox.getStyleClass().add("app-shell");
         HBox.setHgrow(stackPane, Priority.ALWAYS);
         stackPane.getStyleClass().add("app-content");
@@ -214,7 +212,10 @@ public class View extends Stage {
         habitsBTN.setTooltip(new Tooltip("Habits"));
         statsBTN.setTooltip(new Tooltip("Stats"));
         partyBTN.setTooltip(new Tooltip("Party"));
-        leftMenu.getChildren().addAll(navTitle, dashboardBTN, habitsBTN, statsBTN, partyBTN);
+        Region navSpacer = new Region();
+        VBox.setVgrow(navSpacer, Priority.ALWAYS);
+        leftMenu.getChildren().addAll(navTitle, dashboardBTN, habitsBTN, statsBTN, partyBTN,
+                navSpacer, buildThemeSwitcher());
 
         hbox.getChildren().add(leftMenu);
 
@@ -298,6 +299,34 @@ public class View extends Stage {
         alert.setContentText("Invited to: " + parties
                 + "\nOpen the Party tab to accept or decline.");
         alert.show();
+    }
+
+    /**
+     * Baut den Theme-Umschalter für die Navigationsleiste. Die Auswahl wird
+     * sofort angewendet und dauerhaft gespeichert.
+     *
+     * @return der Bereich mit Beschriftung und Auswahlfeld
+     */
+    private VBox buildThemeSwitcher() {
+        Label themeLabel = new Label("Theme");
+        themeLabel.getStyleClass().add("theme-switch-label");
+
+        ComboBox<String> themeCombo = new ComboBox<>();
+        themeCombo.getStyleClass().add("habitica-combo");
+        for (ThemeManager.Theme theme : ThemeManager.Theme.values()) {
+            themeCombo.getItems().add(theme.label());
+        }
+        themeCombo.setValue(ThemeManager.current().label());
+        themeCombo.setMaxWidth(Double.MAX_VALUE);
+        themeCombo.setFocusTraversable(false);
+        themeCombo.setOnAction(event -> {
+            ThemeManager.Theme selected = ThemeManager.Theme.fromLabel(themeCombo.getValue());
+            ThemeManager.setCurrent(selected);
+            ThemeManager.apply(scene, selected);
+        });
+
+        VBox box = new VBox(6, themeLabel, themeCombo);
+        return box;
     }
 
     /**
@@ -1698,14 +1727,9 @@ public class View extends Stage {
 
         VBox vbox = createPanel(t("info.window"), gridPane);
         vbox.setPadding(new Insets(20));
-        Scene scene = new Scene(vbox, 390, 430);
-        var css = getClass().getResource("/css/habitica-theme.css");
-        if (css != null) {
-            scene.getStylesheets().add(css.toExternalForm());
-        }
-
-
-        subStage.setScene(scene);
+        Scene subScene = new Scene(vbox, 390, 430);
+        ThemeManager.apply(subScene);
+        subStage.setScene(subScene);
         applyAccessibility(vbox);
         subStage.show();
     }

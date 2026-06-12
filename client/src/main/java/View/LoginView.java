@@ -167,10 +167,7 @@ public class LoginView {
         root.getStyleClass().add("auth-root");
 
         Scene scene = new Scene(root, 760, 680);
-        var css = getClass().getResource("/css/habitica-theme.css");
-        if (css != null) {
-            scene.getStylesheets().add(css.toExternalForm());
-        }
+        ThemeManager.apply(scene);
         stage.setTitle("Disciplica Login");
         stage.setScene(scene);
         stage.show();

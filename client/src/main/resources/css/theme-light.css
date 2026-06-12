@@ -1,0 +1,36 @@
+/*
+ * Theme "Light" – helles Design mit dunkler Schrift und lila Akzent.
+ * Wird zusaetzlich zu habitica-theme.css geladen und ueberschreibt nur die
+ * Farbvariablen sowie die Schriftart.
+ */
+.root {
+    -c-app-bg: #f4f5f8;
+    -c-content-bg: #ffffff;
+    -c-nav-bg: #ece9f5;
+    -c-panel-bg: #ffffff;
+    -c-panel-border: #e0dced;
+    -c-card-bg: #f7f6fb;
+    -c-card-bg-hover: #efecf8;
+    -c-card-border: #e0dced;
+    -c-card-border-hover: #b9a8e6;
+    -c-input-bg: #ffffff;
+    -c-input-border: #d6cfe6;
+    -c-navbtn-bg: #ffffff;
+    -c-navbtn-bg-hover: #f0ecfa;
+    -c-navbtn-border: #ddd6ec;
+    -c-navbtn-text: #4a3f63;
+    -c-text: #211b33;
+    -c-text-muted: #6a6280;
+    -c-text-soft: #514a66;
+    -c-prompt: #9a92ab;
+    -c-accent: #6133b4;
+    -c-accent-2: #7c5ee6;
+    -c-accent-2-hover: #8e6bff;
+    -c-accent-border: #a88cff;
+    -c-gold: #e0a800;
+    -c-brand: #6133b4;
+    -c-grid: #e6e1f2;
+    -c-avatar-bg: #f0eef8;
+
+    -fx-font-family: "Georgia", "Cambria", serif;
+}
