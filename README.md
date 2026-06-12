@@ -6,6 +6,30 @@ Optionally, data can be shared through a server (groups, chat).
 
 ---
 
+## 0. Quick start on Windows — nothing to install
+
+No Java, Maven, or IDE? You don't need them. Two one-click scripts in this folder do
+everything, using a **portable** Java that is downloaded into a local `.tools\` folder.
+Nothing is installed system-wide — your PATH and registry are left untouched, and you
+can delete `.tools\` anytime to reclaim the space.
+
+| To…                          | Double-click    | What happens |
+|------------------------------|-----------------|--------------|
+| **Build** the runnable JAR   | `build-jar.bat` | Downloads a portable JDK 17 + Maven, then builds `client\target\disciplica-client-1.0-SNAPSHOT-consumer.jar`. |
+| **Run** the app              | `run-app.bat`   | Builds it first if needed, then launches the app window. |
+
+- **First run** needs internet (to fetch Java ≈190 MB, Maven, and dependencies) and takes
+  a few minutes. Later runs are fast. You'll see `=== BUILD SUCCEEDED ===` when the JAR is ready.
+- **Run on another PC with nothing installed (offline):** build once here, then copy this
+  **whole project folder** — it now contains `.tools\` (the portable Java) and the built
+  JAR — to the other Windows PC and double-click `run-app.bat`. No download, no install needed.
+- A folder name with parentheses (e.g. a browser download like `disciplica-main (3)`) works
+  fine — the scripts handle it.
+
+Prefer the command line, or already have the JAR? See sections 1–2 below.
+
+---
+
 ## 1. System Requirements
 
 - **Operating system:** Windows, macOS, or Linux
