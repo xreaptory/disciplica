@@ -25,8 +25,10 @@ import View.api.SessionStore;
  */
 public class HabitTrackerApp extends Application {
     private Injector injector;
+    private Stage primaryStage;
     private ReminderService reminderService;
     private BackupSchedulerService backupSchedulerService;
+    private boolean backgroundServicesStarted;
 
     /**
      * Baut die Anwendung auf und zeigt das Anmeldefenster an. Nach der
@@ -37,16 +39,33 @@ public class HabitTrackerApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         DatabaseMigration.migrateOnStartup();
         injector = Guice.createInjector(new AppModule());
         reminderService = injector.getInstance(ReminderService.class);
         backupSchedulerService = injector.getInstance(BackupSchedulerService.class);
+        showLogin();
+    }
+
+    /**
+     * Zeigt das Anmeldefenster an. Wird sowohl beim Start als auch nach einer
+     * Abmeldung verwendet.
+     */
+    private void showLogin() {
         SessionStore sessionStore = injector.getInstance(SessionStore.class);
-        new LoginView(primaryStage, sessionStore, () -> {
-            new OnboardingDialog(primaryStage, sessionStore).show();
-            new View(injector);
-            lazyInitializeBackgroundServices();
-        });
+        new LoginView(primaryStage, sessionStore, this::onAuthenticated);
+    }
+
+    /**
+     * Wird nach erfolgreicher Anmeldung aufgerufen: zeigt das Hauptfenster und
+     * startet einmalig die Hintergrunddienste. Bei der Abmeldung kehrt die
+     * Anwendung über {@link #showLogin()} wieder zum Anmeldefenster zurück.
+     */
+    private void onAuthenticated() {
+        SessionStore sessionStore = injector.getInstance(SessionStore.class);
+        new OnboardingDialog(primaryStage, sessionStore).show();
+        new View(injector, this::showLogin);
+        lazyInitializeBackgroundServices();
     }
 
     /**
@@ -55,6 +74,10 @@ public class HabitTrackerApp extends Application {
      * Hauptfenster sofort bedienbar bleibt.
      */
     private void lazyInitializeBackgroundServices() {
+        if (backgroundServicesStarted) {
+            return;
+        }
+        backgroundServicesStarted = true;
         PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
         delay.setOnFinished(event -> {
             Thread initThread = new Thread(() -> {

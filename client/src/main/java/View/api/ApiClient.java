@@ -9,6 +9,7 @@ import com.disciplica.shared.auth.RegisterRequest;
 import com.disciplica.shared.party.ChatMessageDto;
 import com.disciplica.shared.party.CreatePartyRequest;
 import com.disciplica.shared.party.InvitePartyRequest;
+import com.disciplica.shared.party.LeaderboardEntryDto;
 import com.disciplica.shared.party.PartyDto;
 import com.disciplica.shared.party.PartyInviteDto;
 import com.disciplica.shared.party.SendChatMessageRequest;
@@ -228,6 +229,14 @@ public class ApiClient {
     }
 
     /**
+     * {@return die Bestenliste der aktuellen Gruppe (nach Level sortiert)}
+     */
+    public List<LeaderboardEntryDto> partyLeaderboard() {
+        return get("/parties/current/leaderboard", new TypeReference<>() {
+        });
+    }
+
+    /**
      * {@return die Chat-Nachrichten der aktuellen Gruppe}
      */
     public List<ChatMessageDto> partyMessages() {
@@ -243,6 +252,17 @@ public class ApiClient {
      */
     public ChatMessageDto sendPartyMessage(String message) {
         return post("/parties/current/messages", new SendChatMessageRequest(message), ChatMessageDto.class, true);
+    }
+
+    /**
+     * Meldet den Benutzer ab und macht das Refresh-Token serverseitig ungültig.
+     * Ohne Refresh-Token (z.&nbsp;B. Offline-Sitzung) passiert nichts.
+     */
+    public void logout() {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return;
+        }
+        post("/auth/logout", new RefreshTokenRequest(refreshToken), Void.class, true);
     }
 
     /**

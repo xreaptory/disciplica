@@ -17,6 +17,7 @@ import com.disciplica.server.security.CurrentUser;
 import com.disciplica.shared.party.ChatMessageDto;
 import com.disciplica.shared.party.CreatePartyRequest;
 import com.disciplica.shared.party.InvitePartyRequest;
+import com.disciplica.shared.party.LeaderboardEntryDto;
 import com.disciplica.shared.party.PartyDto;
 import com.disciplica.shared.party.PartyInviteDto;
 import com.disciplica.shared.party.SendChatMessageRequest;
@@ -114,6 +115,17 @@ public class PartyController {
     @PostMapping("/party-invites/{id}/decline")
     public PartyInviteDto decline(Authentication authentication, @PathVariable UUID id) {
         return partyService.decline(currentUser.requireUserId(authentication), id);
+    }
+
+    /**
+     * Gibt die Bestenliste der aktuellen Gruppe zurück (nach Level sortiert).
+     *
+     * @param authentication der Anmeldekontext der Anfrage
+     * @return die Bestenliste in Platzierungsreihenfolge
+     */
+    @GetMapping("/parties/current/leaderboard")
+    public List<LeaderboardEntryDto> leaderboard(Authentication authentication) {
+        return partyService.leaderboard(currentUser.requireUserId(authentication));
     }
 
     /**

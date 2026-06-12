@@ -13,6 +13,7 @@ import com.disciplica.server.user.UserRepository;
 import com.disciplica.shared.party.ChatMessageDto;
 import com.disciplica.shared.party.CreatePartyRequest;
 import com.disciplica.shared.party.InvitePartyRequest;
+import com.disciplica.shared.party.LeaderboardEntryDto;
 import com.disciplica.shared.party.PartyDto;
 import com.disciplica.shared.party.PartyInviteDto;
 import com.disciplica.shared.party.SendChatMessageRequest;
@@ -139,6 +140,17 @@ public class PartyService {
             throw new ApiException(HttpStatus.CONFLICT, "Invite is not pending");
         }
         return partyRepository.setInviteStatus(inviteId, "DECLINED");
+    }
+
+    /**
+     * Gibt die Bestenliste der aktuellen Gruppe des Benutzers zurück.
+     *
+     * @param userId die Kennung des Benutzers
+     * @return die Bestenliste in Platzierungsreihenfolge
+     */
+    public List<LeaderboardEntryDto> leaderboard(UUID userId) {
+        PartyDto party = current(userId);
+        return partyRepository.leaderboard(party.id());
     }
 
     /**

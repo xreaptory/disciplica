@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.disciplica.shared.party.ChatMessageDto;
+import com.disciplica.shared.party.LeaderboardEntryDto;
 import com.disciplica.shared.party.PartyDto;
 import com.disciplica.shared.party.PartyInviteDto;
 import com.disciplica.shared.party.PartyMemberDto;
@@ -201,6 +202,32 @@ public class PartyRepository {
                 ORDER BY pm.created_at ASC
                 LIMIT 200
                 """, (rs, rowNum) -> mapMessage(rs), partyId);
+    }
+
+    /**
+     * Lädt die Bestenliste einer Gruppe: alle Mitglieder, sortiert nach Level
+     * (absteigend), dann Erfahrungspunkten und Benutzername. Die Platzierung
+     * ergibt sich aus der Reihenfolge.
+     *
+     * @param partyId die Kennung der Gruppe
+     * @return die Liste der Bestenlisten-Einträge in Platzierungsreihenfolge
+     */
+    public List<LeaderboardEntryDto> leaderboard(UUID partyId) {
+        return jdbcTemplate.query("""
+                SELECT u.id, u.username, pm.role, u.level, u.xp, u.gold
+                FROM party_members pm
+                JOIN users u ON u.id = pm.user_id
+                WHERE pm.party_id = ?
+                ORDER BY u.level DESC, u.xp DESC, lower(u.username) ASC
+                """, (rs, rowNum) -> new LeaderboardEntryDto(
+                rowNum + 1,
+                rs.getObject("id", UUID.class),
+                rs.getString("username"),
+                rs.getString("role"),
+                rs.getInt("level"),
+                rs.getInt("xp"),
+                rs.getInt("gold")
+        ), partyId);
     }
 
     /**

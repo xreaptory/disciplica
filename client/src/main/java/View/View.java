@@ -49,6 +49,7 @@ import View.api.ApiClientException;
 import View.avatar.AvatarPixelRenderer;
 import View.avatar.AvatarState;
 import com.disciplica.shared.party.ChatMessageDto;
+import com.disciplica.shared.party.LeaderboardEntryDto;
 import com.disciplica.shared.party.PartyDto;
 import com.disciplica.shared.party.PartyInviteDto;
 
@@ -117,6 +118,7 @@ public class View extends Stage {
     private Timeline inviteNotificationTimeline;
     private final Set<UUID> seenInviteIds = ConcurrentHashMap.newKeySet();
     private Scene scene;
+    private Runnable onLogout;
     private XYChart.Series<String, Number> dashboardCompletionRateSeries;
     private XYChart.Series<String, Number> dashboardCategoryStrengthSeries;
     private XYChart.Series<Number, String> dashboardStreakSeries;
@@ -166,6 +168,19 @@ public class View extends Stage {
      *                 bereitstellt
      */
     public View(Injector injector) {
+        this(injector, null);
+    }
+
+    /**
+     * Wie {@link #View(Injector)}, jedoch mit einer Aktion, die bei der
+     * Abmeldung ausgeführt wird (z.&nbsp;B. Rückkehr zum Anmeldefenster).
+     *
+     * @param injector der Abhängigkeits-Container
+     * @param onLogout die bei der Abmeldung auszuführende Aktion (darf
+     *                 {@code null} sein)
+     */
+    public View(Injector injector, Runnable onLogout) {
+        this.onLogout = onLogout;
         this.bundle = loadBundle();
         dashboardBTN.setText(t("nav.dashboard"));
         habitsBTN.setText(t("nav.habits"));
@@ -215,7 +230,7 @@ public class View extends Stage {
         Region navSpacer = new Region();
         VBox.setVgrow(navSpacer, Priority.ALWAYS);
         leftMenu.getChildren().addAll(navTitle, dashboardBTN, habitsBTN, statsBTN, partyBTN,
-                navSpacer, buildThemeSwitcher());
+                navSpacer, buildThemeSwitcher(), buildLogoutButton());
 
         hbox.getChildren().add(leftMenu);
 
@@ -327,6 +342,61 @@ public class View extends Stage {
 
         VBox box = new VBox(6, themeLabel, themeCombo);
         return box;
+    }
+
+    /**
+     * Baut die Abmelde-Schaltfläche für die Navigationsleiste.
+     *
+     * @return die Schaltfläche
+     */
+    private Button buildLogoutButton() {
+        Button logoutButton = new Button("Log Out");
+        logoutButton.getStyleClass().addAll("habitica-button", "danger");
+        logoutButton.setMaxWidth(Double.MAX_VALUE);
+        logoutButton.setFocusTraversable(false);
+        logoutButton.setOnAction(event -> logout());
+        return logoutButton;
+    }
+
+    /**
+     * Meldet den Benutzer ab: speichert offene Daten, beendet die
+     * Hintergrund-Aktualisierungen und kehrt zum Anmeldefenster zurück.
+     */
+    private void logout() {
+        if (inviteNotificationTimeline != null) {
+            inviteNotificationTimeline.stop();
+        }
+        if (dashboardRefreshTimeline != null) {
+            dashboardRefreshTimeline.stop();
+        }
+        mainController.saveAllAsync(this::finishLogout);
+    }
+
+    /**
+     * Schließt die Sitzung ab: macht das Token serverseitig ungültig (im
+     * Hintergrund), verwirft die lokale Sitzung, schließt das Fenster und
+     * öffnet wieder das Anmeldefenster.
+     */
+    private void finishLogout() {
+        if (sessionStore.isAuthenticated()) {
+            var client = sessionStore.apiClient();
+            Thread worker = new Thread(() -> {
+                try {
+                    client.logout();
+                } catch (RuntimeException ignored) {
+                    // Die Abmeldung erfolgt lokal in jedem Fall.
+                }
+            }, "disciplica-logout");
+            worker.setDaemon(true);
+            worker.start();
+        }
+        sessionStore.clear();
+        // Erst das Anmeldefenster zeigen, dann das Hauptfenster schließen, damit
+        // nie ein Moment ganz ohne Fenster entsteht (sonst beendet sich JavaFX).
+        if (onLogout != null) {
+            onLogout.run();
+        }
+        close();
     }
 
     /**
@@ -912,6 +982,13 @@ public class View extends Stage {
         configureHabiticaButton(sendButton, "info", 100);
         chatPanel.getChildren().addAll(createSectionTitle("Party Chat"), chatList, new HBox(10, chatField, sendButton));
 
+        VBox leaderboardPanel = new VBox(12);
+        leaderboardPanel.getStyleClass().add("habitica-panel");
+        ListView<String> leaderboardList = new ListView<>();
+        leaderboardList.setPrefHeight(200);
+        leaderboardList.getStyleClass().add("quest-list");
+        leaderboardPanel.getChildren().addAll(createSectionTitle("Party Leaderboard"), leaderboardList);
+
         // Wird über ein Array gehalten, damit die Annehmen/Ablehnen-Schaltflächen
         // (die innerhalb des Aktualisierens erzeugt werden) erneut aktualisieren können.
         final Runnable[] refreshHolder = new Runnable[1];
@@ -926,6 +1003,13 @@ public class View extends Stage {
             } catch (ApiClientException exception) {
                 memberList.setText("Create a party to start inviting friends.");
                 chatList.getItems().clear();
+            }
+            try {
+                leaderboardList.getItems().setAll(sessionStore.apiClient().partyLeaderboard().stream()
+                        .map(this::formatLeaderboardEntry)
+                        .toList());
+            } catch (ApiClientException exception) {
+                leaderboardList.getItems().clear();
             }
             refreshInvitations(invitationsBox, refreshHolder);
         };
@@ -963,7 +1047,7 @@ public class View extends Stage {
         });
 
         refreshParty.run();
-        page.getChildren().addAll(partyDetails, invitationsPanel, invitePanel, chatPanel);
+        page.getChildren().addAll(partyDetails, invitationsPanel, invitePanel, leaderboardPanel, chatPanel);
         ScrollPane scrollPane = new ScrollPane(page);
         scrollPane.setFitToWidth(true);
         scrollPane.getStyleClass().add("page-scroll");
@@ -1030,6 +1114,19 @@ public class View extends Stage {
      */
     private String formatChatMessage(ChatMessageDto message) {
         return message.senderUsername() + ": " + message.message();
+    }
+
+    /**
+     * Formatiert einen Bestenlisten-Eintrag für die Anzeige (Platz, Name,
+     * Level und Erfahrungspunkte; Leiter werden gekennzeichnet).
+     *
+     * @param entry der Bestenlisten-Eintrag
+     * @return die formatierte Zeile
+     */
+    private String formatLeaderboardEntry(LeaderboardEntryDto entry) {
+        String leader = "LEADER".equals(entry.role()) ? "  (Leader)" : "";
+        return "#" + entry.rank() + "   " + entry.username()
+                + "   —   Lvl " + entry.level() + " · " + entry.xp() + " XP" + leader;
     }
 
     /**

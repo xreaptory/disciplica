@@ -52,6 +52,15 @@ public class SessionStore {
     }
 
     /**
+     * Setzt die Sitzung zurück (Abmeldung): API-Client und Profil werden
+     * verworfen, sodass kein angemeldeter Zustand mehr vorliegt.
+     */
+    public void clear() {
+        this.apiClient = null;
+        this.userProfile = null;
+    }
+
+    /**
      * {@return {@code true}, wenn ein Benutzer angemeldet ist}
      */
     public boolean isAuthenticated() {
