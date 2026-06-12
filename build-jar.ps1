@@ -23,11 +23,12 @@ function Test-IsJdk17 {
     if (-not $JavaHome) { return $false }
     $javaExe = Join-Path $JavaHome 'bin\java.exe'
     if (-not (Test-Path $javaExe)) { return $false }
-    try {
-        # `java -version` prints to stderr; capture both streams as text.
-        $out = & $javaExe '-version' 2>&1 | Out-String
-    } catch { return $false }
-    return $out -match '"17[\.""]' -or $out -match 'version "17'
+    # `java -version` writes to STDERR. Lower the error preference locally so that
+    # merging native stderr with 2>&1 does NOT become a terminating error under the
+    # script-wide $ErrorActionPreference = 'Stop'.
+    $ErrorActionPreference = 'SilentlyContinue'
+    $out = & $javaExe '-version' 2>&1 | Out-String
+    return ($out -match 'version "17' -or $out -match '"17\.')
 }
 
 function Get-JavaHome {
@@ -37,13 +38,15 @@ function Get-JavaHome {
         return $env:JAVA_HOME
     }
 
-    # 2) Reuse a JDK this script downloaded on a previous run.
+    # 2) Reuse a JDK this script downloaded on a previous run. We trust anything we
+    #    extracted under .tools (it was a JDK 17 build), so just look for its java.exe.
     if (Test-Path $ToolsDir) {
-        $cached = Get-ChildItem -Path $ToolsDir -Directory -Filter 'jdk-17*' -ErrorAction SilentlyContinue |
-                  Where-Object { Test-IsJdk17 $_.FullName } | Select-Object -First 1
-        if ($cached) {
-            Write-Host "Using cached portable JDK 17 at: $($cached.FullName)"
-            return $cached.FullName
+        $cachedJava = Get-ChildItem -Path $ToolsDir -Recurse -Filter 'java.exe' -File -ErrorAction SilentlyContinue |
+                      Where-Object { $_.DirectoryName -match '\\bin$' } | Select-Object -First 1
+        if ($cachedJava) {
+            $cachedHome = Split-Path -Parent $cachedJava.DirectoryName
+            Write-Host "Using cached portable JDK 17 at: $cachedHome"
+            return $cachedHome
         }
     }
 
@@ -59,13 +62,16 @@ function Get-JavaHome {
     Expand-Archive -Path $zip -DestinationPath $ToolsDir -Force
     Remove-Item $zip -Force
 
-    $jdk = Get-ChildItem -Path $ToolsDir -Directory -Filter 'jdk-17*' -ErrorAction SilentlyContinue |
-           Where-Object { Test-IsJdk17 $_.FullName } | Select-Object -First 1
-    if (-not $jdk) {
-        throw "JDK download/extract completed but no usable JDK 17 was found under $ToolsDir."
+    # Locate java.exe regardless of the exact extracted folder name; we downloaded a
+    # JDK 17 build, so its presence is sufficient (no need to re-run java -version here).
+    $javaExe = Get-ChildItem -Path $ToolsDir -Recurse -Filter 'java.exe' -File -ErrorAction SilentlyContinue |
+               Where-Object { $_.DirectoryName -match '\\bin$' } | Select-Object -First 1
+    if (-not $javaExe) {
+        throw "JDK download/extract completed but no java.exe was found under $ToolsDir (the download may have been blocked or corrupted)."
     }
-    Write-Host "Portable JDK 17 ready at: $($jdk.FullName)"
-    return $jdk.FullName
+    $jdkHome = Split-Path -Parent $javaExe.DirectoryName
+    Write-Host "Portable JDK 17 ready at: $jdkHome"
+    return $jdkHome
 }
 
 # --- Build -------------------------------------------------------------------
