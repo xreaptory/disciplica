@@ -238,6 +238,26 @@ public class AuthService {
     }
 
     /**
+     * Zieht dem Benutzer Gold ab (z.&nbsp;B. ein Kauf im Avatar-Shop).
+     *
+     * @param userId die Kennung des Benutzers
+     * @param amount der abzuziehende Betrag
+     * @return das aktualisierte Profil
+     * @throws ApiException wenn der Betrag ungültig ist oder das Gold nicht
+     *                      ausreicht
+     */
+    @Transactional
+    public UserProfile spendGold(UUID userId, int amount) {
+        if (amount <= 0) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Amount must be positive");
+        }
+        if (!userRepository.spendGold(userId, amount)) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Not enough gold");
+        }
+        return me(userId);
+    }
+
+    /**
      * Lädt das Profil eines Benutzers anhand seiner Kennung.
      *
      * @param userId die Kennung des Benutzers

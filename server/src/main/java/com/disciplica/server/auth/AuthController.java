@@ -31,6 +31,7 @@ import com.disciplica.shared.auth.GoogleLoginRequest;
 import com.disciplica.shared.auth.LoginRequest;
 import com.disciplica.shared.auth.RefreshTokenRequest;
 import com.disciplica.shared.auth.RegisterRequest;
+import com.disciplica.shared.user.SpendGoldRequest;
 import com.disciplica.shared.user.UpdateAvatarProfileRequest;
 import com.disciplica.shared.user.UserProfile;
 
@@ -224,6 +225,20 @@ public class AuthController {
     public UserProfile updateAvatar(Authentication authentication, @Valid @RequestBody UpdateAvatarProfileRequest request) {
         UUID userId = currentUser.requireUserId(authentication);
         return authService.updateAvatar(userId, request);
+    }
+
+    /**
+     * Zieht dem angemeldeten Benutzer Gold ab (z.&nbsp;B. ein Kauf im
+     * Avatar-Shop) und gibt das aktualisierte Profil zurück.
+     *
+     * @param authentication der Anmeldekontext der Anfrage
+     * @param request        der abzuziehende Goldbetrag
+     * @return das aktualisierte Profil des Benutzers
+     */
+    @PostMapping("/me/spend-gold")
+    public UserProfile spendGold(Authentication authentication, @Valid @RequestBody SpendGoldRequest request) {
+        UUID userId = currentUser.requireUserId(authentication);
+        return authService.spendGold(userId, request.amount());
     }
 
     /**

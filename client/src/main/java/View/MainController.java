@@ -17,6 +17,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.domain.model.*;
 import View.api.SessionStore;
+import View.api.ApiClientException;
 import com.disciplica.shared.task.CreateTaskRequest;
 import com.disciplica.shared.task.DailyActivityDto;
 import com.disciplica.shared.task.TaskDto;
@@ -447,6 +448,16 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
      * @param amount der auszugebende Betrag
      */
     public void spendGoldAndPersist(int amount) {
+        if (useHostedTasks()) {
+            // Im angemeldeten Zustand ist das Gold auf dem Server maßgeblich.
+            try {
+                sessionStore.apiClient().spendGold(amount);
+            } catch (ApiClientException exception) {
+                throw new IllegalArgumentException(exception.getMessage(), exception);
+            }
+            invalidateStatsCache();
+            return;
+        }
         user.spendGold(amount);
         invalidateStatsCache();
         persistAllDataSafely();

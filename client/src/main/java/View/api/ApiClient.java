@@ -17,6 +17,7 @@ import com.disciplica.shared.task.CreateTaskRequest;
 import com.disciplica.shared.task.DailyActivityDto;
 import com.disciplica.shared.task.TaskDto;
 import com.disciplica.shared.task.UpdateTaskRequest;
+import com.disciplica.shared.user.SpendGoldRequest;
 import com.disciplica.shared.user.UpdateAvatarProfileRequest;
 import com.disciplica.shared.user.UserProfile;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -123,6 +124,17 @@ public class ApiClient {
      */
     public UserProfile updateAvatar(UpdateAvatarProfileRequest request) {
         return patch("/me/avatar", request, UserProfile.class);
+    }
+
+    /**
+     * Zieht dem angemeldeten Benutzer Gold ab (z.&nbsp;B. ein Kauf im
+     * Avatar-Shop).
+     *
+     * @param amount der abzuziehende Betrag
+     * @return das aktualisierte Profil
+     */
+    public UserProfile spendGold(int amount) {
+        return post("/me/spend-gold", new SpendGoldRequest(amount), UserProfile.class, true);
     }
 
     /**
