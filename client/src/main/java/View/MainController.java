@@ -49,7 +49,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     final private View simpleView;
     private UserStatsSnapshot cachedStats;
     private long cachedStatsNanos;
-    private static final long STATS_CACHE_TTL_NANOS = 1_000_000_000L;
+    private static final long STATS_CACHE_TTL_NANOS = 3_000_000_000L;
 
     /**
      * Erzeugt den Controller ohne Server-Anbindung (reiner Offline-Betrieb).
@@ -689,6 +689,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
             return;
         }
         TaskDto completed = sessionStore.apiClient().completeTask(taskId);
+        invalidateStatsCache();
         refreshHostedTaskList();
         simpleView.refreshDashboardData();
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "You earned " + completed.points() + " XP.");
@@ -711,6 +712,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         }
         try {
             TaskDto task = sessionStore.apiClient().scoreDownTask(taskId);
+            invalidateStatsCache();
             refreshHostedTaskList();
             simpleView.refreshDashboardData();
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You took damage for \"" + task.title() + "\".");
@@ -737,6 +739,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         }
         try {
             TaskDto reward = sessionStore.apiClient().buyReward(taskId);
+            invalidateStatsCache();
             refreshHostedTaskList();
             simpleView.refreshDashboardData();
             Alert alert = new Alert(Alert.AlertType.INFORMATION,
@@ -821,7 +824,8 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         return switch (type) {
             case DAILY -> "D";
             case HABIT -> "W";
-            case TODO, REWARD -> "O";
+            case TODO -> "O";
+            case REWARD -> "R";
         };
     }
 

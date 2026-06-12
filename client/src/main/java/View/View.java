@@ -486,15 +486,18 @@ public class View extends Stage {
                     String name = parts[1];
                     String description = parts[2];
                     String points = parts[3];
-                    title.setText(name + "  (" + points + " XP)");
-                    subtitle.setText(description);
-                    if ("D".equals(type)) {
-                        strip.getStyleClass().setAll("task-strip-medium");
-                    } else if ("W".equals(type)) {
-                        strip.getStyleClass().setAll("task-strip-hard");
-                    } else {
-                        strip.getStyleClass().setAll("task-strip-easy");
+                    String typeLabel;
+                    String valueLabel;
+                    String stripClass;
+                    switch (type) {
+                        case "D" -> { typeLabel = "Daily";  valueLabel = points + " XP";   stripClass = "task-strip-medium"; }
+                        case "W" -> { typeLabel = "Habit";  valueLabel = points + " XP";   stripClass = "task-strip-hard"; }
+                        case "R" -> { typeLabel = "Reward"; valueLabel = points + " gold"; stripClass = "task-strip-very-hard"; }
+                        default  -> { typeLabel = "To-Do";  valueLabel = points + " XP";   stripClass = "task-strip-easy"; }
                     }
+                    title.setText("[" + typeLabel + "]  " + name + "  (" + valueLabel + ")");
+                    subtitle.setText(description);
+                    strip.getStyleClass().setAll(stripClass);
                 } else {
                     title.setText(item);
                     subtitle.setText("");
