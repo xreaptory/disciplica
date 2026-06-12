@@ -4,6 +4,7 @@ import com.disciplica.shared.auth.AuthResponse;
 import com.disciplica.shared.auth.GoogleDesktopCompleteRequest;
 import com.disciplica.shared.auth.GoogleLoginRequest;
 import com.disciplica.shared.auth.LoginRequest;
+import com.disciplica.shared.auth.RefreshTokenRequest;
 import com.disciplica.shared.auth.RegisterRequest;
 import com.disciplica.shared.party.ChatMessageDto;
 import com.disciplica.shared.party.CreatePartyRequest;
@@ -29,6 +30,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * HTTP-Client für die Kommunikation des Clients mit dem Server.
@@ -166,7 +168,7 @@ public class ApiClient {
      * @param taskId die Kennung der Aufgabe
      */
     public void deleteTask(UUID taskId) {
-        send(request("/tasks/" + taskId).DELETE().build(), Void.class);
+        send(() -> request("/tasks/" + taskId).DELETE().build(), Void.class);
     }
 
     /**
@@ -277,7 +279,7 @@ public class ApiClient {
      * @return die umgewandelte Antwort
      */
     private <T> T get(String path, Class<T> responseType) {
-        return send(request(path).GET().build(), responseType);
+        return send(() -> request(path).GET().build(), responseType);
     }
 
     /**
@@ -290,7 +292,7 @@ public class ApiClient {
      * @return die umgewandelte Antwort
      */
     private <T> T get(String path, TypeReference<T> responseType) {
-        return send(request(path).GET().build(), responseType);
+        return send(() -> request(path).GET().build(), responseType);
     }
 
     /**
@@ -305,8 +307,8 @@ public class ApiClient {
      * @return die umgewandelte Antwort
      */
     private <T> T post(String path, Object body, Class<T> responseType, boolean authenticated) {
-        HttpRequest.Builder builder = authenticated ? request(path) : unauthenticatedRequest(path);
-        return send(builder.POST(bodyPublisher(body)).build(), responseType);
+        return send(() -> (authenticated ? request(path) : unauthenticatedRequest(path))
+                .POST(bodyPublisher(body)).build(), responseType);
     }
 
     /**
@@ -319,7 +321,7 @@ public class ApiClient {
      * @return die umgewandelte Antwort
      */
     private <T> T patch(String path, Object body, Class<T> responseType) {
-        return send(request(path).method("PATCH", bodyPublisher(body)).build(), responseType);
+        return send(() -> request(path).method("PATCH", bodyPublisher(body)).build(), responseType);
     }
 
     /**
@@ -369,14 +371,14 @@ public class ApiClient {
     /**
      * Sendet eine Anfrage und wandelt die Antwort in den angegebenen Typ um.
      *
-     * @param request      die zu sendende Anfrage
+     * @param requestFactory erzeugt die zu sendende Anfrage
      * @param responseType der erwartete Antworttyp
      * @param <T>          der Antworttyp
      * @return die umgewandelte Antwort oder {@code null} bei leerer Antwort
      * @throws ApiClientException bei einem Fehler der Kommunikation
      */
-    private <T> T send(HttpRequest request, Class<T> responseType) {
-        HttpResponse<String> response = exchange(request);
+    private <T> T send(Supplier<HttpRequest> requestFactory, Class<T> responseType) {
+        HttpResponse<String> response = sendWithAuthRetry(requestFactory);
         ensureSuccess(response);
         if (responseType == Void.class || response.body().isBlank()) {
             return null;
@@ -389,21 +391,80 @@ public class ApiClient {
     }
 
     /**
-     * Wie {@link #send(HttpRequest, Class)}, jedoch für generische Typen.
+     * Wie {@link #send(Supplier, Class)}, jedoch für generische Typen.
      *
-     * @param request      die zu sendende Anfrage
+     * @param requestFactory erzeugt die zu sendende Anfrage
      * @param responseType die Typreferenz der erwarteten Antwort
      * @param <T>          der Antworttyp
      * @return die umgewandelte Antwort
      * @throws ApiClientException bei einem Fehler der Kommunikation
      */
-    private <T> T send(HttpRequest request, TypeReference<T> responseType) {
-        HttpResponse<String> response = exchange(request);
+    private <T> T send(Supplier<HttpRequest> requestFactory, TypeReference<T> responseType) {
+        HttpResponse<String> response = sendWithAuthRetry(requestFactory);
         ensureSuccess(response);
         try {
             return objectMapper.readValue(response.body(), responseType);
         } catch (IOException exception) {
             throw new ApiClientException("Server request failed", exception);
+        }
+    }
+
+    /**
+     * Sendet die Anfrage und erneuert bei einer 401-Antwort einmalig das
+     * Access-Token, bevor die Anfrage wiederholt wird. So bleibt der Benutzer
+     * angemeldet, auch wenn das kurzlebige Access-Token abgelaufen ist.
+     *
+     * @param requestFactory erzeugt die Anfrage (mit aktuellem Access-Token)
+     * @return die HTTP-Antwort des Servers
+     */
+    private HttpResponse<String> sendWithAuthRetry(Supplier<HttpRequest> requestFactory) {
+        String triedToken = accessToken;
+        HttpResponse<String> response = exchange(requestFactory.get());
+        if (response.statusCode() == 401 && reauthorize(triedToken)) {
+            response = exchange(requestFactory.get());
+        }
+        return response;
+    }
+
+    /**
+     * Sorgt für ein gültiges Access-Token, wenn die letzte Anfrage mit 401
+     * abgelehnt wurde. Hat zwischenzeitlich bereits ein anderer Aufruf das
+     * Token erneuert, wird kein weiterer Erneuerungsversuch unternommen.
+     *
+     * @param triedToken das Access-Token, mit dem die fehlgeschlagene Anfrage
+     *                   gesendet wurde
+     * @return {@code true}, wenn nun ein (potenziell neues) Token vorliegt und
+     *         ein erneuter Versuch sinnvoll ist
+     */
+    private synchronized boolean reauthorize(String triedToken) {
+        if (accessToken != null && !accessToken.equals(triedToken)) {
+            return true;
+        }
+        return refreshAccessToken();
+    }
+
+    /**
+     * Tauscht das Refresh-Token gegen ein neues Access-Token (und ein neues
+     * Refresh-Token) ein.
+     *
+     * @return {@code true}, wenn die Erneuerung erfolgreich war
+     */
+    private boolean refreshAccessToken() {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return false;
+        }
+        try {
+            HttpRequest request = unauthenticatedRequest("/auth/refresh")
+                    .POST(bodyPublisher(new RefreshTokenRequest(refreshToken)))
+                    .build();
+            HttpResponse<String> response = exchange(request);
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                return false;
+            }
+            store(objectMapper.readValue(response.body(), AuthResponse.class));
+            return true;
+        } catch (ApiClientException | IOException exception) {
+            return false;
         }
     }
 

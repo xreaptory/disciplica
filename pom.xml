@@ -57,11 +57,8 @@
                     <configuration>
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
-<<<<<<< HEAD
                         <!-- Required by Spring MVC for @RequestParam name resolution without @RequestParam("name") -->
                         <parameters>true</parameters>
-=======
->>>>>>> 25093ff917d7ffc71f81bfbbb7d8f1fc752561ca
                     </configuration>
                 </plugin>
                 <plugin>
