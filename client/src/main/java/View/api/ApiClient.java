@@ -26,6 +26,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +38,14 @@ import java.util.UUID;
  * geschützten Aufrufen das Access-Token als {@code Authorization}-Header an.
  */
 public class ApiClient {
+    // Der kostenlose Render-Tarif fährt inaktive Instanzen herunter; der erste
+    // Aufruf kann daher abbrechen, während der Server wieder hochfährt. Ein
+    // großzügiges Zeitlimit plus ein erneuter Versuch fangen diesen Kaltstart ab.
+    private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(15);
+    private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(30);
+    private static final int MAX_ATTEMPTS = 2;
+    private static final Duration RETRY_BACKOFF = Duration.ofMillis(1500);
+
     private final URI baseUri;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
@@ -50,7 +59,7 @@ public class ApiClient {
      */
     public ApiClient(String baseUrl) {
         this.baseUri = URI.create(baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl);
-        this.httpClient = HttpClient.newHttpClient();
+        this.httpClient = HttpClient.newBuilder().connectTimeout(CONNECT_TIMEOUT).build();
         this.objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
 
@@ -308,6 +317,7 @@ public class ApiClient {
      */
     private HttpRequest.Builder unauthenticatedRequest(String path) {
         return HttpRequest.newBuilder(baseUri.resolve(path))
+                .timeout(REQUEST_TIMEOUT)
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json");
     }
@@ -337,18 +347,15 @@ public class ApiClient {
      * @throws ApiClientException bei einem Fehler der Kommunikation
      */
     private <T> T send(HttpRequest request, Class<T> responseType) {
+        HttpResponse<String> response = exchange(request);
+        ensureSuccess(response);
+        if (responseType == Void.class || response.body().isBlank()) {
+            return null;
+        }
         try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            ensureSuccess(response);
-            if (responseType == Void.class || response.body().isBlank()) {
-                return null;
-            }
             return objectMapper.readValue(response.body(), responseType);
         } catch (IOException exception) {
             throw new ApiClientException("Server request failed", exception);
-        } catch (InterruptedException exception) {
-            Thread.currentThread().interrupt();
-            throw new ApiClientException("Server request interrupted", exception);
         }
     }
 
@@ -362,12 +369,50 @@ public class ApiClient {
      * @throws ApiClientException bei einem Fehler der Kommunikation
      */
     private <T> T send(HttpRequest request, TypeReference<T> responseType) {
+        HttpResponse<String> response = exchange(request);
+        ensureSuccess(response);
         try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            ensureSuccess(response);
             return objectMapper.readValue(response.body(), responseType);
         } catch (IOException exception) {
             throw new ApiClientException("Server request failed", exception);
+        }
+    }
+
+    /**
+     * Sendet die Anfrage und versucht es bei einem Verbindungsfehler erneut.
+     * <p>
+     * Eine schlafende Render-Instanz weist die erste Verbindung oft ab oder
+     * trennt sie während des Hochfahrens; ein zweiter Versuch nach kurzer
+     * Wartezeit trifft dann meist den bereits wachen Server.
+     *
+     * @param request die zu sendende Anfrage
+     * @return die HTTP-Antwort des Servers
+     * @throws ApiClientException wenn auch der erneute Versuch fehlschlägt
+     */
+    private HttpResponse<String> exchange(HttpRequest request) {
+        IOException lastFailure = null;
+        for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+            try {
+                return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            } catch (IOException exception) {
+                lastFailure = exception;
+                if (attempt < MAX_ATTEMPTS) {
+                    sleepBeforeRetry();
+                }
+            } catch (InterruptedException exception) {
+                Thread.currentThread().interrupt();
+                throw new ApiClientException("Server request interrupted", exception);
+            }
+        }
+        throw new ApiClientException("Server request failed", lastFailure);
+    }
+
+    /**
+     * Wartet kurz vor einem erneuten Versuch, damit der Server hochfahren kann.
+     */
+    private void sleepBeforeRetry() {
+        try {
+            Thread.sleep(RETRY_BACKOFF.toMillis());
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
             throw new ApiClientException("Server request interrupted", exception);
