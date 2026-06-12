@@ -11,9 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
  * <p>
  * Wie bei Habitica läuft der Cron nicht über einen festen Zeitplan (eine
  * schlafende Render-Instanz würde ihn verpassen), sondern bei der ersten
- * Aktivität an einem neuen Tag: Verpasste Dailies (nicht erledigt) fügen
- * Schaden auf die Lebenspunkte zu und setzen die Serie zurück, anschließend
- * werden alle Dailies wieder auf „offen“ gesetzt.
+ * Aktivität an einem neuen Tag: Jede verpasste wiederkehrende Aufgabe (Daily
+ * wie Habit, nicht erledigt) fügt automatisch Schaden auf die Lebenspunkte zu
+ * und setzt die Serie zurück; anschließend werden alle wiederkehrenden Aufgaben
+ * wieder auf „offen“ gesetzt.
  */
 @Service
 public class CronService {
@@ -44,23 +45,26 @@ public class CronService {
         if (due == null || due == 0) {
             return;
         }
-        // 1) Schaden für verpasste (nicht erledigte) Dailies – vor dem Zurücksetzen.
+        // 1) Schaden für verpasste (nicht erledigte) wiederkehrende Aufgaben –
+        //    vor dem Zurücksetzen. Eigenes Design: jede wiederkehrende Aufgabe
+        //    (Daily wie Habit) zieht bei Versäumnis automatisch HP ab.
         jdbcTemplate.update("""
                 UPDATE users u
                 SET health = GREATEST(0, health - COALESCE((
                         SELECT SUM(GREATEST(1, t.points)) FROM tasks t
-                        WHERE t.user_id = u.id AND t.type = 'DAILY' AND t.completed = false
+                        WHERE t.user_id = u.id AND t.type IN ('DAILY', 'HABIT') AND t.completed = false
                     ), 0)),
                     updated_at = now()
                 WHERE u.id = ?
                 """, userId);
-        // 2) Dailies zurücksetzen: verpasste verlieren ihre Serie, alle werden wieder offen.
+        // 2) Wiederkehrende Aufgaben zurücksetzen: verpasste verlieren ihre
+        //    Serie, alle werden wieder offen.
         jdbcTemplate.update("""
                 UPDATE tasks
                 SET streak = CASE WHEN completed THEN streak ELSE 0 END,
                     completed = false,
                     updated_at = now()
-                WHERE user_id = ? AND type = 'DAILY'
+                WHERE user_id = ? AND type IN ('DAILY', 'HABIT')
                 """, userId);
         // 3) Tageswechsel vermerken.
         jdbcTemplate.update("UPDATE users SET last_cron = now() WHERE id = ?", userId);
