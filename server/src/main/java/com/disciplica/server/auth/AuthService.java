@@ -9,6 +9,8 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.UUID;
@@ -277,11 +279,14 @@ public class AuthService {
     private AuthResponse issueTokens(UserRow user) {
         String accessToken = jwtService.createAccessToken(user.id(), user.username());
         String refreshToken = hashingService.newOpaqueToken();
+        // Der PostgreSQL-JDBC-Treiber kann java.time.Instant nicht direkt binden
+        // (SQLState 07006 -> BadSqlGrammarException), daher OffsetDateTime verwenden.
+        OffsetDateTime expiresAt = OffsetDateTime.ofInstant(
+                Instant.now().plus(jwtProperties.refreshTokenDays(), ChronoUnit.DAYS), ZoneOffset.UTC);
         jdbcTemplate.update("""
                 INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
                 VALUES (?, ?, ?)
-                """, user.id(), hashingService.sha256(refreshToken),
-                Instant.now().plus(jwtProperties.refreshTokenDays(), ChronoUnit.DAYS));
+                """, user.id(), hashingService.sha256(refreshToken), expiresAt);
         return new AuthResponse(accessToken, refreshToken, userMapper.toProfile(user));
     }
 
