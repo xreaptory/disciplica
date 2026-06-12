@@ -141,6 +141,22 @@ public class PartyRepository {
     }
 
     /**
+     * Lädt alle offenen Einladungen, die an einen bestimmten Benutzer gerichtet
+     * sind, neueste zuerst.
+     *
+     * @param invitedUserId die Kennung des eingeladenen Benutzers
+     * @return die Liste der offenen Einladungen
+     */
+    public List<PartyInviteDto> findPendingInvitesForUser(UUID invitedUserId) {
+        return jdbcTemplate.query("""
+                SELECT id, party_id, invited_user_id, status, created_at
+                FROM party_invites
+                WHERE invited_user_id = ? AND status = 'PENDING'
+                ORDER BY created_at DESC
+                """, (rs, rowNum) -> mapInvite(rs), invitedUserId);
+    }
+
+    /**
      * Setzt den Status einer Einladung (z.&nbsp;B. angenommen oder abgelehnt).
      *
      * @param inviteId die Kennung der Einladung

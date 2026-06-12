@@ -50,6 +50,7 @@ import View.avatar.AvatarPixelRenderer;
 import View.avatar.AvatarState;
 import com.disciplica.shared.party.ChatMessageDto;
 import com.disciplica.shared.party.PartyDto;
+import com.disciplica.shared.party.PartyInviteDto;
 
 import java.io.IOException;
 import java.io.File;
@@ -63,6 +64,9 @@ import java.util.Random;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Das Hauptfenster der Anwendung.
@@ -110,6 +114,8 @@ public class View extends Stage {
     final Button completeButton = new Button();
     final Button saveButton = new Button();
     private Timeline dashboardRefreshTimeline;
+    private Timeline inviteNotificationTimeline;
+    private final Set<UUID> seenInviteIds = ConcurrentHashMap.newKeySet();
     private XYChart.Series<String, Number> dashboardCompletionRateSeries;
     private XYChart.Series<String, Number> dashboardCategoryStrengthSeries;
     private XYChart.Series<Number, String> dashboardStreakSeries;
@@ -214,6 +220,9 @@ public class View extends Stage {
 
         this.setOnCloseRequest(event -> {
             event.consume();
+            if (inviteNotificationTimeline != null) {
+                inviteNotificationTimeline.stop();
+            }
             mainController.saveAllAsync(this::close);
         });
 
@@ -227,6 +236,68 @@ public class View extends Stage {
         configureGlobalKeyboardShortcuts(scene);
         applyAccessibility(stackPane);
         mainController.loadDataAsync(this::refreshDashboardData);
+        startInviteNotifications();
+    }
+
+    /**
+     * Startet die regelmäßige Prüfung auf neue Gruppeneinladungen. Sobald eine
+     * bisher unbekannte offene Einladung auftaucht, wird der Benutzer per
+     * Hinweisfenster benachrichtigt.
+     */
+    private void startInviteNotifications() {
+        pollPartyInvites();
+        inviteNotificationTimeline = new Timeline(
+                new KeyFrame(Duration.seconds(25), event -> pollPartyInvites()));
+        inviteNotificationTimeline.setCycleCount(Timeline.INDEFINITE);
+        inviteNotificationTimeline.play();
+    }
+
+    /**
+     * Fragt im Hintergrund die offenen Einladungen ab und meldet neu
+     * hinzugekommene. Der Netzwerkaufruf läuft bewusst außerhalb des
+     * JavaFX-Fadens, damit die Oberfläche nicht blockiert.
+     */
+    private void pollPartyInvites() {
+        if (sessionStore == null || !sessionStore.isAuthenticated()) {
+            return;
+        }
+        Thread worker = new Thread(() -> {
+            try {
+                List<PartyInviteDto> fresh = sessionStore.apiClient().pendingInvites().stream()
+                        .filter(invite -> seenInviteIds.add(invite.id()))
+                        .toList();
+                if (!fresh.isEmpty()) {
+                    Platform.runLater(() -> notifyNewInvites(fresh));
+                }
+            } catch (ApiClientException ignored) {
+                // Vorübergehende Server- oder Verbindungsfehler einfach übergehen;
+                // der nächste Durchlauf versucht es erneut.
+            }
+        }, "party-invite-poll");
+        worker.setDaemon(true);
+        worker.start();
+    }
+
+    /**
+     * Zeigt ein Hinweisfenster über neue Gruppeneinladungen an.
+     *
+     * @param invites die neu hinzugekommenen offenen Einladungen
+     */
+    private void notifyNewInvites(List<PartyInviteDto> invites) {
+        String parties = invites.stream()
+                .map(PartyInviteDto::partyName)
+                .distinct()
+                .reduce((a, b) -> a + ", " + b)
+                .orElse("");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initOwner(this);
+        alert.setTitle("Party invitation");
+        alert.setHeaderText(invites.size() == 1
+                ? "You have a new party invitation"
+                : "You have " + invites.size() + " new party invitations");
+        alert.setContentText("Invited to: " + parties
+                + "\nOpen the Party tab to accept or decline.");
+        alert.show();
     }
 
     /**
@@ -791,7 +862,14 @@ public class View extends Stage {
         configureHabiticaField(inviteField, 260);
         Button inviteButton = new Button("Invite to Party");
         configureHabiticaButton(inviteButton, "success", 160);
-        invitePanel.getChildren().addAll(createSectionTitle("Invite"), new HBox(10, inviteField, inviteButton));
+        Label inviteStatus = createPageSubtitle("");
+        invitePanel.getChildren().addAll(createSectionTitle("Invite"),
+                new HBox(10, inviteField, inviteButton), inviteStatus);
+
+        VBox invitationsPanel = new VBox(12);
+        invitationsPanel.getStyleClass().add("habitica-panel");
+        VBox invitationsBox = new VBox(8);
+        invitationsPanel.getChildren().addAll(createSectionTitle("Invitations"), invitationsBox);
 
         VBox chatPanel = new VBox(12);
         chatPanel.getStyleClass().add("habitica-panel");
@@ -805,6 +883,9 @@ public class View extends Stage {
         configureHabiticaButton(sendButton, "info", 100);
         chatPanel.getChildren().addAll(createSectionTitle("Party Chat"), chatList, new HBox(10, chatField, sendButton));
 
+        // Wird über ein Array gehalten, damit die Annehmen/Ablehnen-Schaltflächen
+        // (die innerhalb des Aktualisierens erzeugt werden) erneut aktualisieren können.
+        final Runnable[] refreshHolder = new Runnable[1];
         Runnable refreshParty = () -> {
             try {
                 PartyDto party = sessionStore.apiClient().currentParty();
@@ -817,33 +898,99 @@ public class View extends Stage {
                 memberList.setText("Create a party to start inviting friends.");
                 chatList.getItems().clear();
             }
+            refreshInvitations(invitationsBox, refreshHolder);
         };
+        refreshHolder[0] = refreshParty;
 
         createParty.setOnAction(event -> {
-            sessionStore.apiClient().createParty(partyName.getText());
+            try {
+                sessionStore.apiClient().createParty(partyName.getText());
+            } catch (ApiClientException exception) {
+                memberList.setText(exception.getMessage());
+            }
             refreshParty.run();
         });
         inviteButton.setOnAction(event -> {
-            sessionStore.apiClient().invite(inviteField.getText());
-            inviteField.clear();
+            String target = inviteField.getText();
+            try {
+                sessionStore.apiClient().invite(target);
+                inviteStatus.setText("Invitation sent to " + target + ".");
+                inviteField.clear();
+            } catch (ApiClientException exception) {
+                inviteStatus.setText(exception.getMessage());
+            }
             refreshParty.run();
         });
         sendButton.setOnAction(event -> {
             if (!chatField.getText().isBlank()) {
-                sessionStore.apiClient().sendPartyMessage(chatField.getText());
-                chatField.clear();
+                try {
+                    sessionStore.apiClient().sendPartyMessage(chatField.getText());
+                    chatField.clear();
+                } catch (ApiClientException exception) {
+                    inviteStatus.setText(exception.getMessage());
+                }
                 refreshParty.run();
             }
         });
 
         refreshParty.run();
-        page.getChildren().addAll(partyDetails, invitePanel, chatPanel);
+        page.getChildren().addAll(partyDetails, invitationsPanel, invitePanel, chatPanel);
         ScrollPane scrollPane = new ScrollPane(page);
         scrollPane.setFitToWidth(true);
         scrollPane.getStyleClass().add("page-scroll");
         stackPane.getChildren().add(scrollPane);
         setActiveNav(partyBTN);
         applyAccessibility(stackPane);
+    }
+
+    /**
+     * Lädt die offenen Einladungen des Benutzers und stellt sie mit
+     * Annehmen-/Ablehnen-Schaltflächen dar.
+     *
+     * @param container     der Bereich, in dem die Einladungen angezeigt werden
+     * @param refreshHolder Halter der Aktualisierungsaktion der Gruppenseite
+     */
+    private void refreshInvitations(VBox container, Runnable[] refreshHolder) {
+        try {
+            List<PartyInviteDto> invites = sessionStore.apiClient().pendingInvites();
+            // Bereits angezeigte Einladungen merken, damit der Hintergrund-Poll
+            // dafür keine erneute Benachrichtigung auslöst.
+            invites.forEach(invite -> seenInviteIds.add(invite.id()));
+            container.getChildren().clear();
+            if (invites.isEmpty()) {
+                container.getChildren().add(createPageSubtitle("No pending invitations."));
+                return;
+            }
+            for (PartyInviteDto invite : invites) {
+                Label label = createPageSubtitle("Invitation to join \"" + invite.partyName() + "\"");
+                Button accept = new Button("Accept");
+                configureHabiticaButton(accept, "success", 110);
+                Button decline = new Button("Decline");
+                configureHabiticaButton(decline, "secondary", 110);
+                accept.setOnAction(event -> {
+                    try {
+                        sessionStore.apiClient().acceptInvite(invite.id());
+                    } catch (ApiClientException ignored) {
+                        // Aktualisierung unten zeigt den neuen Stand ohnehin an.
+                    }
+                    refreshHolder[0].run();
+                });
+                decline.setOnAction(event -> {
+                    try {
+                        sessionStore.apiClient().declineInvite(invite.id());
+                    } catch (ApiClientException ignored) {
+                        // Aktualisierung unten zeigt den neuen Stand ohnehin an.
+                    }
+                    refreshHolder[0].run();
+                });
+                HBox row = new HBox(10, label, accept, decline);
+                row.setAlignment(Pos.CENTER_LEFT);
+                container.getChildren().add(row);
+            }
+        } catch (ApiClientException exception) {
+            container.getChildren().clear();
+            container.getChildren().add(createPageSubtitle("Could not load invitations."));
+        }
     }
 
     /**

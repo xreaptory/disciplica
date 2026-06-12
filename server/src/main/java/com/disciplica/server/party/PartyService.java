@@ -93,6 +93,16 @@ public class PartyService {
     }
 
     /**
+     * Gibt alle offenen Einladungen zurück, die an den Benutzer gerichtet sind.
+     *
+     * @param userId die Kennung des eingeladenen Benutzers
+     * @return die Liste der offenen Einladungen
+     */
+    public List<PartyInviteDto> pendingInvites(UUID userId) {
+        return partyRepository.findPendingInvitesForUser(userId);
+    }
+
+    /**
      * Nimmt eine offene Einladung an und fügt den Benutzer der Gruppe hinzu.
      *
      * @param userId   die Kennung des eingeladenen Benutzers

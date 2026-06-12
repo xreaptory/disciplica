@@ -81,6 +81,18 @@ public class PartyController {
     }
 
     /**
+     * Gibt die offenen Einladungen zurück, die an den angemeldeten Benutzer
+     * gerichtet sind.
+     *
+     * @param authentication der Anmeldekontext der Anfrage
+     * @return die Liste der offenen Einladungen
+     */
+    @GetMapping("/party-invites")
+    public List<PartyInviteDto> pendingInvites(Authentication authentication) {
+        return partyService.pendingInvites(currentUser.requireUserId(authentication));
+    }
+
+    /**
      * Nimmt eine Gruppeneinladung an.
      *
      * @param authentication der Anmeldekontext der Anfrage

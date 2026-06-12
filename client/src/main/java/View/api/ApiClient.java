@@ -197,6 +197,35 @@ public class ApiClient {
     }
 
     /**
+     * {@return die offenen Einladungen, die an den angemeldeten Benutzer
+     * gerichtet sind}
+     */
+    public List<PartyInviteDto> pendingInvites() {
+        return get("/party-invites", new TypeReference<>() {
+        });
+    }
+
+    /**
+     * Nimmt eine Gruppeneinladung an.
+     *
+     * @param inviteId die Kennung der Einladung
+     * @return die angenommene Einladung
+     */
+    public PartyInviteDto acceptInvite(UUID inviteId) {
+        return post("/party-invites/" + inviteId + "/accept", null, PartyInviteDto.class, true);
+    }
+
+    /**
+     * Lehnt eine Gruppeneinladung ab.
+     *
+     * @param inviteId die Kennung der Einladung
+     * @return die abgelehnte Einladung
+     */
+    public PartyInviteDto declineInvite(UUID inviteId) {
+        return post("/party-invites/" + inviteId + "/decline", null, PartyInviteDto.class, true);
+    }
+
+    /**
      * {@return die Chat-Nachrichten der aktuellen Gruppe}
      */
     public List<ChatMessageDto> partyMessages() {
