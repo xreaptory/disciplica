@@ -462,9 +462,18 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
      * @return die aktuelle Werte-Momentaufnahme
      */
     public UserStatsSnapshot getCachedUserStats() {
+        long now = System.nanoTime();
+        if (cachedStats != null && (now - cachedStatsNanos) < STATS_CACHE_TTL_NANOS) {
+            return cachedStats;
+        }
+        // Auch im angemeldeten Zustand zwischenspeichern, damit die
+        // Dashboard-Aktualisierung (1 s) nicht jede Sekunde den Server abfragt
+        // und den JavaFX-Faden blockiert. Nach Aktionen wird der Cache
+        // verworfen (invalidateStatsCache), sodass neue Werte sofort erscheinen.
+        UserStatsSnapshot snapshot;
         if (sessionStore != null && sessionStore.isAuthenticated()) {
             UserProfile profile = sessionStore.apiClient().me();
-            return new UserStatsSnapshot(
+            snapshot = new UserStatsSnapshot(
                     profile.username(),
                     profile.level(),
                     "Warrior",
@@ -472,19 +481,17 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                     profile.gold(),
                     profile.health()
             );
+        } else {
+            snapshot = new UserStatsSnapshot(
+                    user.getUsername(),
+                    user.getLevel(),
+                    user.getTitle(),
+                    user.getExperience(),
+                    user.getGold(),
+                    user.getHealth()
+            );
         }
-        long now = System.nanoTime();
-        if (cachedStats != null && (now - cachedStatsNanos) < STATS_CACHE_TTL_NANOS) {
-            return cachedStats;
-        }
-        cachedStats = new UserStatsSnapshot(
-                user.getUsername(),
-                user.getLevel(),
-                user.getTitle(),
-                user.getExperience(),
-                user.getGold(),
-                user.getHealth()
-        );
+        cachedStats = snapshot;
         cachedStatsNanos = now;
         return cachedStats;
     }

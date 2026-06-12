@@ -50,3 +50,6 @@ build/
 ### PlantUML-Tool (nicht versionieren) ###
 plantuml.jar
 **/plantuml*.jar
+
+# Portable JDK downloaded by build-jar.ps1
+.tools/

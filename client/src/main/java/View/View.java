@@ -117,6 +117,7 @@ public class View extends Stage {
     final Button saveButton = new Button();
     private Timeline dashboardRefreshTimeline;
     private Timeline inviteNotificationTimeline;
+    private Timeline partyRefreshTimeline;
     private final Set<UUID> seenInviteIds = ConcurrentHashMap.newKeySet();
     private Scene scene;
     private Runnable onLogout;
@@ -370,6 +371,7 @@ public class View extends Stage {
         if (dashboardRefreshTimeline != null) {
             dashboardRefreshTimeline.stop();
         }
+        stopPartyAutoRefresh();
         mainController.saveAllAsync(this::finishLogout);
     }
 
@@ -1062,6 +1064,7 @@ public class View extends Stage {
         scrollPane.getStyleClass().add("page-scroll");
         stackPane.getChildren().add(scrollPane);
         setActiveNav(partyBTN);
+        startPartyAutoRefresh(refreshParty);
         applyAccessibility(stackPane);
     }
 
@@ -1161,6 +1164,39 @@ public class View extends Stage {
     private void setActiveNav(Button activeButton) {
         for (Button button : buttonsLMenu) {
             styleNavButton(button, button == activeButton);
+        }
+        // Beim Verlassen des Gruppenbereichs die Live-Aktualisierung stoppen.
+        if (activeButton != partyBTN) {
+            stopPartyAutoRefresh();
+        }
+    }
+
+    /**
+     * Startet die regelmäßige Live-Aktualisierung des Gruppenbereichs (Mitglieder,
+     * Bestenliste, Einladungen und Chat), solange die Seite geöffnet ist.
+     *
+     * @param refreshParty die Aktualisierungsaktion der Gruppenseite
+     */
+    private void startPartyAutoRefresh(Runnable refreshParty) {
+        stopPartyAutoRefresh();
+        partyRefreshTimeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+            try {
+                refreshParty.run();
+            } catch (RuntimeException ignored) {
+                // Vorübergehende Fehler nicht die Aktualisierung beenden lassen.
+            }
+        }));
+        partyRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
+        partyRefreshTimeline.play();
+    }
+
+    /**
+     * Stoppt die Live-Aktualisierung des Gruppenbereichs, falls sie läuft.
+     */
+    private void stopPartyAutoRefresh() {
+        if (partyRefreshTimeline != null) {
+            partyRefreshTimeline.stop();
+            partyRefreshTimeline = null;
         }
     }
 
@@ -1664,7 +1700,14 @@ public class View extends Stage {
             dashboardRefreshTimeline.stop();
         }
 
-        dashboardRefreshTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> refreshDashboardData()));
+        dashboardRefreshTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            try {
+                refreshDashboardData();
+            } catch (RuntimeException ignored) {
+                // Vorübergehende Server-/Verbindungsfehler dürfen die laufende
+                // Aktualisierung nicht beenden – beim nächsten Takt erneut.
+            }
+        }));
         dashboardRefreshTimeline.setCycleCount(Timeline.INDEFINITE);
         dashboardRefreshTimeline.play();
     }

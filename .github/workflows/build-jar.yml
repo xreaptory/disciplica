@@ -1,0 +1,50 @@
+name: Build Consumer JAR
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-jar:
+    name: Build runnable consumer JAR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      # Build only the client module (and the `shared` module it depends on via -am),
+      # skipping tests. The maven-shade-plugin attaches the runnable fat JAR with the
+      # `consumer` classifier, landing in client/target/*-consumer.jar.
+      - name: Build consumer JAR with Maven Wrapper
+        run: ./mvnw -B -ntp -pl client -am -DskipTests package
+
+      - name: Verify consumer JAR was produced
+        run: |
+          shopt -s nullglob
+          jars=(client/target/*consumer.jar)
+          if [ ${#jars[@]} -eq 0 ]; then
+            echo "::error::No consumer JAR found in client/target/ — the build did not produce *consumer.jar"
+            echo "Contents of client/target:"
+            ls -la client/target || echo "client/target does not exist"
+            exit 1
+          fi
+          echo "Found consumer JAR(s): ${jars[*]}"
+
+      - name: Upload consumer JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Disciplica-JAR
+          path: client/target/*consumer.jar
+          if-no-files-found: error
