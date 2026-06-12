@@ -105,7 +105,6 @@ public class View extends Stage {
     public TextField goldTF, healthTF;
 
     public Button addButton,removeButton,changeButton;
-    public Button habitDownButton, buyRewardButton;
 
     public ListView<String> listViewTasks;
 
@@ -433,14 +432,6 @@ public class View extends Stage {
         changeButton = new Button("Update Selected");
         changeButton.addEventHandler(Event.ANY,mainController);
         configureHabiticaButton(changeButton, "info", 144);
-        habitDownButton = new Button("Habit −");
-        habitDownButton.addEventHandler(Event.ANY, mainController);
-        configureHabiticaButton(habitDownButton, "danger", 110);
-        habitDownButton.setTooltip(new Tooltip("Score the selected habit negatively (lose HP)"));
-        buyRewardButton = new Button("Buy Reward");
-        buyRewardButton.addEventHandler(Event.ANY, mainController);
-        configureHabiticaButton(buyRewardButton, "secondary", 128);
-        buyRewardButton.setTooltip(new Tooltip("Buy the selected reward (spend gold)"));
         saveButton.setText("Save Data");
         saveButton.addEventHandler(Event.ANY, mainController);
         configureHabiticaButton(saveButton, "secondary", 128);
@@ -544,7 +535,7 @@ public class View extends Stage {
         controlButtons.setVgap(10);
         controlButtons.setPadding(new Insets(8,0,0,0));
 
-        controlButtons.getChildren().addAll(addButton,removeButton,changeButton,habitDownButton,buyRewardButton,saveButton);
+        controlButtons.getChildren().addAll(addButton,removeButton,changeButton,saveButton);
 
         Label l1 = createFieldLabel(t("habits.name"));
         gridPane.add(l1, 0, 0);
