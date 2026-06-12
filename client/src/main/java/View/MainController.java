@@ -19,6 +19,7 @@ import model.domain.model.*;
 import View.api.SessionStore;
 import com.disciplica.shared.task.CreateTaskRequest;
 import com.disciplica.shared.task.TaskDto;
+import View.api.ApiClientException;
 import com.disciplica.shared.task.TaskType;
 import com.disciplica.shared.task.UpdateTaskRequest;
 import com.disciplica.shared.user.UserProfile;
@@ -135,6 +136,16 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Data saved successfully.");
                 alert.showAndWait();
             });
+        }
+
+        if (source == simpleView.habitDownButton) {
+            scoreDownHostedHabit();
+            return;
+        }
+
+        if (source == simpleView.buyRewardButton) {
+            buyHostedReward();
+            return;
         }
 
         if (source == simpleView.addButton) {
@@ -677,6 +688,59 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
         alert.setHeaderText("Task completed");
         alert.showAndWait();
         ((Stage) simpleView.completeButton.getScene().getWindow()).close();
+    }
+
+    /**
+     * Bewertet die ausgewählte Gewohnheit negativ („−“) über den Server: zieht
+     * Lebenspunkte ab und aktualisiert die Anzeige. Nur im Online-Modus.
+     */
+    private void scoreDownHostedHabit() {
+        if (!useHostedTasks()) {
+            return;
+        }
+        UUID taskId = selectedHostedTaskId();
+        if (taskId == null) {
+            return;
+        }
+        try {
+            TaskDto task = sessionStore.apiClient().scoreDownTask(taskId);
+            refreshHostedTaskList();
+            simpleView.refreshDashboardData();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "You took damage for \"" + task.title() + "\".");
+            alert.setHeaderText("Habit scored down");
+            alert.showAndWait();
+        } catch (ApiClientException exception) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, exception.getMessage());
+            alert.setHeaderText("Could not score the habit");
+            alert.showAndWait();
+        }
+    }
+
+    /**
+     * Kauft die ausgewählte Belohnung über den Server (zieht Gold ab) und
+     * aktualisiert die Anzeige. Nur im Online-Modus.
+     */
+    private void buyHostedReward() {
+        if (!useHostedTasks()) {
+            return;
+        }
+        UUID taskId = selectedHostedTaskId();
+        if (taskId == null) {
+            return;
+        }
+        try {
+            TaskDto reward = sessionStore.apiClient().buyReward(taskId);
+            refreshHostedTaskList();
+            simpleView.refreshDashboardData();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                    "You bought \"" + reward.title() + "\" for " + reward.points() + " gold.");
+            alert.setHeaderText("Reward purchased");
+            alert.showAndWait();
+        } catch (ApiClientException exception) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, exception.getMessage());
+            alert.setHeaderText("Could not buy the reward");
+            alert.showAndWait();
+        }
     }
 
     /**
