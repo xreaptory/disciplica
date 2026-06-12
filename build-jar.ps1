@@ -1,6 +1,6 @@
 # Builds the runnable Disciplica consumer/fat JAR on Windows with zero prior setup.
 #
-# What it does, fully self-contained — no Java, Maven, or IDE needs to be installed:
+# What it does, fully self-contained -- no Java, Maven, or IDE needs to be installed:
 #   1. Ensures a JDK 17 is available. If none is found, it downloads a portable
 #      Eclipse Temurin JDK 17 into .tools\ next to this script (nothing is installed
 #      system-wide, nothing touches your PATH or registry).
@@ -90,7 +90,7 @@ if ($LASTEXITCODE -ne 0) {
 $targetDir = Join-Path $RepoRoot 'client\target'
 $jars = @(Get-ChildItem -Path $targetDir -Filter '*consumer.jar' -ErrorAction SilentlyContinue)
 if ($jars.Count -eq 0) {
-    Write-Host "ERROR: No consumer JAR found in client\target\ — the build did not produce *consumer.jar" -ForegroundColor Red
+    Write-Host "ERROR: No consumer JAR found in client\target\ -- the build did not produce *consumer.jar" -ForegroundColor Red
     if (Test-Path $targetDir) {
         Write-Host "Contents of client\target:"
         Get-ChildItem -Path $targetDir | Format-Table -AutoSize | Out-String | Write-Host
@@ -104,4 +104,5 @@ $jar = $jars[0]
 Write-Host ""
 Write-Host "=== BUILD SUCCEEDED ===" -ForegroundColor Green
 Write-Host "Runnable JAR: $($jar.FullName)"
-Write-Host "Run it with:  `"$javaHome\bin\java.exe`" -jar `"$($jar.FullName)`""
+$javaExe = Join-Path $javaHome 'bin\java.exe'
+Write-Host ('Run it with:  "{0}" -jar "{1}"' -f $javaExe, $jar.FullName)
