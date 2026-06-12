@@ -196,6 +196,11 @@
     -fx-padding: 4 0 4 0;
 }
 
+/* Einfache Text-Listen (Bestenliste, Chat) lesbar in allen Themes halten. */
+.quest-list .list-cell {
+    -fx-text-fill: -c-text;
+}
+
 .list-cell:selected .habitica-card {
     -fx-border-color: -c-gold;
     -fx-background-color: -c-card-bg-hover;

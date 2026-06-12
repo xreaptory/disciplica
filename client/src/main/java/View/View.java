@@ -44,6 +44,7 @@ import model.domain.model.AbstractTask;
 import model.domain.model.DailyHabit;
 import model.domain.model.WeeklyHabit;
 import model.service.UserService;
+import model.service.LevelCalculator;
 import View.api.SessionStore;
 import View.api.ApiClientException;
 import View.avatar.AvatarPixelRenderer;
@@ -124,6 +125,7 @@ public class View extends Stage {
     private final Set<UUID> seenInviteIds = ConcurrentHashMap.newKeySet();
     private Scene scene;
     private Runnable onLogout;
+    private final LevelCalculator levelCalculator = new LevelCalculator();
     private XYChart.Series<String, Number> dashboardCompletionRateSeries;
     private XYChart.Series<String, Number> dashboardCategoryStrengthSeries;
     private XYChart.Series<Number, String> dashboardStreakSeries;
@@ -1230,10 +1232,10 @@ public class View extends Stage {
         expirienceTF.setText(String.valueOf(stats.experience()));
         goldTF.setText(String.valueOf(stats.gold()));
         healthTF.setText(String.valueOf(stats.health()));
-        int level = currentLevel;
-        int xp = stats.experience();
-        double required = Math.max(1, level * 50.0);
-        xpProgressBar.setProgress(Math.min(1.0, xp / required));
+        int xp = Math.max(0, stats.experience());
+        int xpIntoLevel = levelCalculator.xpIntoCurrentLevel(xp);
+        int xpForLevel = levelCalculator.thresholdForLevel(levelCalculator.calculateLevel(xp));
+        xpProgressBar.setProgress(xpForLevel <= 0 ? 0.0 : Math.min(1.0, (double) xpIntoLevel / xpForLevel));
         hpProgressBar.setProgress(Math.min(1.0, stats.health() / 50.0));
         updateAvatarLayers();
 
