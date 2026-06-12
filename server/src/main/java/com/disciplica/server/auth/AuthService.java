@@ -112,7 +112,7 @@ public class AuthService {
             jdbcTemplate.update("INSERT INTO user_credentials (user_id, password_hash) VALUES (?, ?)",
                     user.id(), passwordEncoder.encode(request.password()));
             jdbcTemplate.update("INSERT INTO avatar_profiles (user_id) VALUES (?)", user.id());
-            return issueTokens(user);
+            return issueTokens(user, true);
         } catch (DuplicateKeyException exception) {
             throw new ApiException(HttpStatus.CONFLICT, "Username or email already exists");
         }
@@ -138,7 +138,7 @@ public class AuthService {
         if (!passwordEncoder.matches(request.password(), hash)) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
-        return issueTokens(user);
+        return issueTokens(user, false);
     }
 
     /**
@@ -162,7 +162,7 @@ public class AuthService {
         jdbcTemplate.update("UPDATE refresh_tokens SET revoked_at = now() WHERE token_hash = ?", tokenHash);
         UserRow user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "User not found"));
-        return issueTokens(user);
+        return issueTokens(user, false);
     }
 
     /**
@@ -217,8 +217,13 @@ public class AuthService {
                 SELECT user_id FROM oauth_accounts WHERE provider = 'google' AND provider_subject = ?
                 """, (rs, rowNum) -> rs.getObject("user_id", UUID.class), subject).stream().findFirst().orElse(null);
         UserRow user;
+        boolean newUser = false;
         if (userId == null) {
-            user = userRepository.findByEmail(email).orElseGet(() -> userRepository.create(username, email));
+            // Ein neues Konto entsteht nur, wenn es noch keinen Benutzer mit
+            // dieser E-Mail gibt (sonst wird Google nur verknüpft).
+            java.util.Optional<UserRow> existing = userRepository.findByEmail(email);
+            newUser = existing.isEmpty();
+            user = existing.orElseGet(() -> userRepository.create(username, email));
             jdbcTemplate.update("""
                     INSERT INTO oauth_accounts (user_id, provider, provider_subject, email)
                     VALUES (?, 'google', ?, ?)
@@ -229,7 +234,7 @@ public class AuthService {
             user = userRepository.findById(userId)
                     .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Google account is not linked"));
         }
-        return issueTokens(user);
+        return issueTokens(user, newUser);
     }
 
     /**
@@ -273,10 +278,11 @@ public class AuthService {
      * Erstellt Access- und Refresh-Token für einen Benutzer und speichert das
      * Refresh-Token (als Hash) in der Datenbank.
      *
-     * @param user die Datenbankzeile des Benutzers
+     * @param user    die Datenbankzeile des Benutzers
+     * @param newUser {@code true}, wenn das Konto gerade neu angelegt wurde
      * @return die ausgestellten Tokens samt Profil
      */
-    private AuthResponse issueTokens(UserRow user) {
+    private AuthResponse issueTokens(UserRow user, boolean newUser) {
         String accessToken = jwtService.createAccessToken(user.id(), user.username());
         String refreshToken = hashingService.newOpaqueToken();
         // Der PostgreSQL-JDBC-Treiber kann java.time.Instant nicht direkt binden
@@ -287,7 +293,7 @@ public class AuthService {
                 INSERT INTO refresh_tokens (user_id, token_hash, expires_at)
                 VALUES (?, ?, ?)
                 """, user.id(), hashingService.sha256(refreshToken), expiresAt);
-        return new AuthResponse(accessToken, refreshToken, userMapper.toProfile(user));
+        return new AuthResponse(accessToken, refreshToken, userMapper.toProfile(user), newUser);
     }
 
     /**

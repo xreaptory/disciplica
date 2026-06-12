@@ -218,7 +218,7 @@ public class LoginView {
         }
         runAuth(() -> registerMode
                 ? apiClient.register(new RegisterRequest(username, email, password))
-                : apiClient.login(new LoginRequest(email, password)), registerMode);
+                : apiClient.login(new LoginRequest(email, password)));
     }
 
     /**
@@ -252,7 +252,7 @@ public class LoginView {
      * Startet die Anmeldung über Google.
      */
     private void google() {
-        runAuth(this::runGoogleOAuth, false);
+        runAuth(this::runGoogleOAuth);
     }
 
     /**
@@ -267,11 +267,9 @@ public class LoginView {
      * Führt einen Anmeldevorgang in einem Hintergrund-Thread aus, sperrt
      * währenddessen die Schaltflächen und reagiert auf Erfolg bzw. Fehler.
      *
-     * @param authCall   der auszuführende Anmeldevorgang
-     * @param newAccount {@code true}, wenn gerade ein neues Konto registriert
-     *                   wird (steuert das Onboarding)
+     * @param authCall der auszuführende Anmeldevorgang
      */
-    private void runAuth(AuthCall authCall, boolean newAccount) {
+    private void runAuth(AuthCall authCall) {
         submitButton.setDisable(true);
         googleButton.setDisable(true);
         offlineButton.setDisable(true);
@@ -286,7 +284,7 @@ public class LoginView {
             apiClient.store(response);
             sessionStore.authenticate(apiClient, response.user());
             stage.hide();
-            onAuthenticated.accept(newAccount);
+            onAuthenticated.accept(response.newUser());
         });
         task.setOnFailed(event -> {
             submitButton.setDisable(false);

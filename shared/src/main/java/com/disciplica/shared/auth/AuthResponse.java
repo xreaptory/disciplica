@@ -13,10 +13,13 @@ import com.disciplica.shared.user.UserProfile;
  * @param refreshToken langlebiges Token, mit dem ein neues Access-Token
  *                     angefordert werden kann
  * @param user         Profildaten des angemeldeten Benutzers
+ * @param newUser      {@code true}, wenn mit dieser Anmeldung gerade ein neues
+ *                     Konto angelegt wurde (steuert das Onboarding)
  */
 public record AuthResponse(
         String accessToken,
         String refreshToken,
-        UserProfile user
+        UserProfile user,
+        boolean newUser
 ) {
 }
