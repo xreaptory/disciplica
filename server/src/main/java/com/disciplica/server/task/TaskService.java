@@ -11,6 +11,7 @@ import com.disciplica.server.support.ApiException;
 import com.disciplica.server.user.LevelCalculator;
 import com.disciplica.server.user.UserRepository;
 import com.disciplica.shared.task.CreateTaskRequest;
+import com.disciplica.shared.task.DailyActivityDto;
 import com.disciplica.shared.task.TaskDto;
 import com.disciplica.shared.task.TaskType;
 import com.disciplica.shared.task.UpdateTaskRequest;
@@ -56,6 +57,18 @@ public class TaskService {
     public List<TaskDto> list(UUID userId) {
         cronService.runIfNeeded(userId);
         return taskRepository.findByUser(userId);
+    }
+
+    /**
+     * Liefert die tagesweise Aktivität des Benutzers für das Dashboard.
+     *
+     * @param userId die Kennung des Benutzers
+     * @param days   die Anzahl der betrachteten Tage (auf 1..365 begrenzt)
+     * @return die Liste der Tagesaktivitäten
+     */
+    public List<DailyActivityDto> dailyActivity(UUID userId, int days) {
+        int bounded = Math.max(1, Math.min(days, 365));
+        return taskRepository.dailyActivity(userId, bounded);
     }
 
     /**

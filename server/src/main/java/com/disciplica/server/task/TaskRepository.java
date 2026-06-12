@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.disciplica.shared.task.CreateTaskRequest;
+import com.disciplica.shared.task.DailyActivityDto;
 import com.disciplica.shared.task.TaskDto;
 import com.disciplica.shared.task.TaskType;
 import com.disciplica.shared.task.UpdateTaskRequest;
@@ -154,6 +155,30 @@ public class TaskRepository {
                 )
                 SELECT * FROM updated
                 """, (rs, rowNum) -> map(rs), userId, taskId, userId, userId).stream().findFirst();
+    }
+
+    /**
+     * Liefert die tagesweise zusammengefasste Aktivität eines Benutzers über die
+     * letzten {@code days} Tage (nur Tage mit Aktivität, aufsteigend).
+     *
+     * @param userId die Kennung des Benutzers
+     * @param days   die Anzahl der betrachteten Tage
+     * @return die Liste der Tagesaktivitäten
+     */
+    public List<DailyActivityDto> dailyActivity(UUID userId, int days) {
+        return jdbcTemplate.query("""
+                SELECT to_char((completed_at AT TIME ZONE 'UTC')::date, 'YYYY-MM-DD') AS day,
+                       COUNT(*)::int AS completions,
+                       COALESCE(SUM(xp_earned), 0)::int AS xp
+                FROM task_completions
+                WHERE user_id = ? AND completed_at >= now() - ? * INTERVAL '1 day'
+                GROUP BY (completed_at AT TIME ZONE 'UTC')::date
+                ORDER BY (completed_at AT TIME ZONE 'UTC')::date
+                """, (rs, rowNum) -> new DailyActivityDto(
+                rs.getString("day"),
+                rs.getInt("completions"),
+                rs.getInt("xp")
+        ), userId, days);
     }
 
     /**

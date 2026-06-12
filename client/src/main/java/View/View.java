@@ -52,12 +52,16 @@ import com.disciplica.shared.party.ChatMessageDto;
 import com.disciplica.shared.party.LeaderboardEntryDto;
 import com.disciplica.shared.party.PartyDto;
 import com.disciplica.shared.party.PartyInviteDto;
+import com.disciplica.shared.task.DailyActivityDto;
+import com.disciplica.shared.task.TaskDto;
+import com.disciplica.shared.task.TaskType;
 
 import java.io.IOException;
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -1629,8 +1633,21 @@ public class View extends Stage {
      */
     private Map<String, Integer> createCompletionRateData(int days) {
         Map<String, Integer> data = new LinkedHashMap<>();
-        int totalHabits = Math.max(1, mainController.getUser().getTasks().size());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(days <= 30 ? "MM-dd" : "MMM");
+        if (mainController.isHostedMode()) {
+            int totalTasks = Math.max(1, mainController.hostedTasksCached().size());
+            Map<String, Integer> byDate = new LinkedHashMap<>();
+            for (DailyActivityDto activity : mainController.hostedActivityCached(days)) {
+                byDate.put(activity.date(), activity.completions());
+            }
+            for (int daysAgo = days - 1; daysAgo >= 0; daysAgo--) {
+                LocalDate day = LocalDate.now().minusDays(daysAgo);
+                int completed = byDate.getOrDefault(day.toString(), 0);
+                data.put(day.format(formatter), (int) Math.round((completed * 100.0) / totalTasks));
+            }
+            return data;
+        }
+        int totalHabits = Math.max(1, mainController.getUser().getTasks().size());
         for (int daysAgo = days - 1; daysAgo >= 0; daysAgo--) {
             LocalDate day = LocalDate.now().minusDays(daysAgo);
             int completed = mainController.getUser().getCompletionCountForDate(day);
@@ -1649,13 +1666,25 @@ public class View extends Stage {
         int dailyStrength = 0;
         int weeklyStrength = 0;
         int oneTimeStrength = 0;
-        for (AbstractTask task : mainController.getUser().getTasks()) {
-            if (task instanceof DailyHabit) {
-                dailyStrength += task.calculatePoints();
-            } else if (task instanceof WeeklyHabit) {
-                weeklyStrength += task.calculatePoints();
-            } else {
-                oneTimeStrength += task.calculatePoints();
+        if (mainController.isHostedMode()) {
+            for (TaskDto task : mainController.hostedTasksCached()) {
+                if (task.type() == TaskType.DAILY) {
+                    dailyStrength += task.points();
+                } else if (task.type() == TaskType.HABIT) {
+                    weeklyStrength += task.points();
+                } else {
+                    oneTimeStrength += task.points();
+                }
+            }
+        } else {
+            for (AbstractTask task : mainController.getUser().getTasks()) {
+                if (task instanceof DailyHabit) {
+                    dailyStrength += task.calculatePoints();
+                } else if (task instanceof WeeklyHabit) {
+                    weeklyStrength += task.calculatePoints();
+                } else {
+                    oneTimeStrength += task.calculatePoints();
+                }
             }
         }
         Map<String, Integer> data = new LinkedHashMap<>();
@@ -1673,6 +1702,14 @@ public class View extends Stage {
     private Map<String, Integer> createStreakData() {
         Map<String, Integer> data = new LinkedHashMap<>();
         int limit = 10;
+        if (mainController.isHostedMode()) {
+            mainController.hostedTasksCached().stream()
+                    .filter(task -> task.streak() > 0)
+                    .sorted((a, b) -> Integer.compare(b.streak(), a.streak()))
+                    .limit(limit)
+                    .forEach(task -> data.put(task.title(), task.streak()));
+            return data;
+        }
         int count = 0;
         for (AbstractTask task : mainController.getUser().getTasksSortedByStreak()) {
             if (count >= limit) {
@@ -1684,6 +1721,29 @@ public class View extends Stage {
             }
         }
         return data;
+    }
+
+    /**
+     * Liefert die XP-Verlaufswerte je Tag für den Zeitraum: im angemeldeten
+     * Zustand aus der Server-Aktivität, sonst aus dem lokalen Modell.
+     *
+     * @param days der Zeitraum in Tagen
+     * @return die XP-Werte je Tag (älteste zuerst)
+     */
+    private List<Integer> xpHistoryWindow(int days) {
+        if (mainController.isHostedMode()) {
+            Map<String, Integer> byDate = new LinkedHashMap<>();
+            for (DailyActivityDto activity : mainController.hostedActivityCached(days)) {
+                byDate.put(activity.date(), activity.xpEarned());
+            }
+            List<Integer> window = new ArrayList<>();
+            for (int daysAgo = days - 1; daysAgo >= 0; daysAgo--) {
+                LocalDate day = LocalDate.now().minusDays(daysAgo);
+                window.add(byDate.getOrDefault(day.toString(), 0));
+            }
+            return window;
+        }
+        return mainController.getUser().getXpHistoryWindow(days);
     }
 
     /**
@@ -1744,7 +1804,7 @@ public class View extends Stage {
             dashboardStreakSeries.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey()));
         }
 
-        List<Integer> xpWindow = mainController.getUser().getXpHistoryWindow(days);
+        List<Integer> xpWindow = xpHistoryWindow(days);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(days <= 30 ? "MM-dd" : "MMM");
         dashboardXpAreaSeries.getData().clear();
         for (int index = 0; index < xpWindow.size(); index++) {

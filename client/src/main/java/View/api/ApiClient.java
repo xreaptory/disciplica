@@ -14,6 +14,7 @@ import com.disciplica.shared.party.PartyDto;
 import com.disciplica.shared.party.PartyInviteDto;
 import com.disciplica.shared.party.SendChatMessageRequest;
 import com.disciplica.shared.task.CreateTaskRequest;
+import com.disciplica.shared.task.DailyActivityDto;
 import com.disciplica.shared.task.TaskDto;
 import com.disciplica.shared.task.UpdateTaskRequest;
 import com.disciplica.shared.user.UpdateAvatarProfileRequest;
@@ -125,7 +126,18 @@ public class ApiClient {
     }
 
     /**
-     * {@return alle Aufgaben des angemeldeten Benutzers}
+     * Lädt die tagesweise Aktivität (Abschlüsse, XP) für das Dashboard.
+     *
+     * @param days die Anzahl der betrachteten Tage
+     * @return die Tagesaktivitäten
+     */
+    public List<DailyActivityDto> taskHistory(int days) {
+        return get("/tasks/history?days=" + days, new TypeReference<>() {
+        });
+    }
+
+    /**
+     * {@return die Aufgaben des angemeldeten Benutzers}
      */
     public List<TaskDto> tasks() {
         return get("/tasks", new TypeReference<>() {

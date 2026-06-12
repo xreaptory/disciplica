@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.disciplica.server.security.CurrentUser;
 import com.disciplica.shared.task.CreateTaskRequest;
+import com.disciplica.shared.task.DailyActivityDto;
 import com.disciplica.shared.task.TaskDto;
 import com.disciplica.shared.task.UpdateTaskRequest;
 
@@ -52,6 +54,19 @@ public class TaskController {
     @GetMapping
     public List<TaskDto> list(Authentication authentication) {
         return taskService.list(currentUser.requireUserId(authentication));
+    }
+
+    /**
+     * Gibt die tagesweise Aktivität des Benutzers für das Dashboard zurück.
+     *
+     * @param authentication der Anmeldekontext der Anfrage
+     * @param days           die Anzahl der betrachteten Tage (Standard 7)
+     * @return die Liste der Tagesaktivitäten
+     */
+    @GetMapping("/history")
+    public List<DailyActivityDto> history(Authentication authentication,
+                                          @RequestParam(name = "days", defaultValue = "7") int days) {
+        return taskService.dailyActivity(currentUser.requireUserId(authentication), days);
     }
 
     /**

@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import model.domain.model.*;
 import View.api.SessionStore;
 import com.disciplica.shared.task.CreateTaskRequest;
+import com.disciplica.shared.task.DailyActivityDto;
 import com.disciplica.shared.task.TaskDto;
 import com.disciplica.shared.task.TaskType;
 import com.disciplica.shared.task.UpdateTaskRequest;
@@ -25,6 +26,7 @@ import com.disciplica.shared.user.UserProfile;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -49,6 +51,11 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     private UserStatsSnapshot cachedStats;
     private long cachedStatsNanos;
     private static final long STATS_CACHE_TTL_NANOS = 3_000_000_000L;
+    private List<TaskDto> cachedHostedTasks;
+    private long cachedHostedTasksNanos;
+    private List<DailyActivityDto> cachedHostedActivity;
+    private int cachedHostedActivityDays;
+    private long cachedHostedActivityNanos;
 
     /**
      * Erzeugt den Controller ohne Server-Anbindung (reiner Offline-Betrieb).
@@ -493,6 +500,56 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     private void invalidateStatsCache() {
         cachedStats = null;
         cachedStatsNanos = 0L;
+        cachedHostedTasks = null;
+        cachedHostedActivity = null;
+    }
+
+    /**
+     * {@return {@code true}, wenn die Aufgaben über den Server verwaltet werden}
+     */
+    public boolean isHostedMode() {
+        return useHostedTasks();
+    }
+
+    /**
+     * Liefert die Server-Aufgaben für das Dashboard, kurzzeitig zwischengespeichert,
+     * damit die 1-Sekunden-Aktualisierung nicht ständig den Server abfragt.
+     *
+     * @return die Aufgaben oder eine leere Liste im Offline-Modus
+     */
+    public List<TaskDto> hostedTasksCached() {
+        if (!useHostedTasks()) {
+            return List.of();
+        }
+        long now = System.nanoTime();
+        if (cachedHostedTasks != null && (now - cachedHostedTasksNanos) < STATS_CACHE_TTL_NANOS) {
+            return cachedHostedTasks;
+        }
+        cachedHostedTasks = sessionStore.apiClient().tasks();
+        cachedHostedTasksNanos = now;
+        return cachedHostedTasks;
+    }
+
+    /**
+     * Liefert die tagesweise Server-Aktivität für das Dashboard, kurzzeitig
+     * zwischengespeichert.
+     *
+     * @param days die Anzahl der betrachteten Tage
+     * @return die Tagesaktivitäten oder eine leere Liste im Offline-Modus
+     */
+    public List<DailyActivityDto> hostedActivityCached(int days) {
+        if (!useHostedTasks()) {
+            return List.of();
+        }
+        long now = System.nanoTime();
+        if (cachedHostedActivity != null && cachedHostedActivityDays == days
+                && (now - cachedHostedActivityNanos) < STATS_CACHE_TTL_NANOS) {
+            return cachedHostedActivity;
+        }
+        cachedHostedActivity = sessionStore.apiClient().taskHistory(days);
+        cachedHostedActivityDays = days;
+        cachedHostedActivityNanos = now;
+        return cachedHostedActivity;
     }
 
     /**
