@@ -443,6 +443,27 @@
     -fx-text-fill: #6133b4;
 }
 
+.onboarding-card {
+    -fx-background-color: #24183b;
+    -fx-background-radius: 14;
+}
+
+.onboarding-guide-box {
+    -fx-spacing: 6;
+    -fx-padding: 2 0 12 0;
+}
+
+.onboarding-guide-name {
+    -fx-text-fill: #fed605;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.onboarding-guide-text {
+    -fx-text-fill: #ede6ff;
+    -fx-font-size: 18px;
+}
+
 .onboarding-section-title {
     -fx-text-fill: #6133b4;
     -fx-font-size: 17px;
