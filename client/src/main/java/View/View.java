@@ -481,6 +481,15 @@ public class View extends Stage {
                     String name = parts[1];
                     String description = parts[2];
                     String points = parts[3];
+                    boolean done = parts.length >= 5 && "true".equalsIgnoreCase(parts[4].trim());
+                    int streak = 0;
+                    if (parts.length >= 6) {
+                        try {
+                            streak = Integer.parseInt(parts[5].trim());
+                        } catch (NumberFormatException ignored) {
+                            streak = 0;
+                        }
+                    }
                     String typeLabel;
                     String valueLabel;
                     String stripClass;
@@ -490,13 +499,21 @@ public class View extends Stage {
                         case "R" -> { typeLabel = "Reward"; valueLabel = points + " gold"; stripClass = "task-strip-very-hard"; }
                         default  -> { typeLabel = "To-Do";  valueLabel = points + " XP";   stripClass = "task-strip-easy"; }
                     }
-                    title.setText("[" + typeLabel + "]  " + name + "  (" + valueLabel + ")");
-                    subtitle.setText(description);
+                    title.setText((done ? "✓ " : "") + "[" + typeLabel + "]  " + name + "  (" + valueLabel + ")");
+                    String subtitleText = description;
+                    if (streak > 0) {
+                        subtitleText = (description == null || description.isBlank())
+                                ? "🔥 " + streak + " streak"
+                                : description + "   •   🔥 " + streak;
+                    }
+                    subtitle.setText(subtitleText);
                     strip.getStyleClass().setAll(stripClass);
+                    row.setOpacity(done ? 0.5 : 1.0);
                 } else {
                     title.setText(item);
                     subtitle.setText("");
                     strip.getStyleClass().setAll("task-strip-easy");
+                    row.setOpacity(1.0);
                 }
                 setText(null);
                 setGraphic(row);
