@@ -58,12 +58,20 @@ public class HabitTrackerApp extends Application {
 
     /**
      * Wird nach erfolgreicher Anmeldung aufgerufen: zeigt das Hauptfenster und
-     * startet einmalig die Hintergrunddienste. Bei der Abmeldung kehrt die
-     * Anwendung über {@link #showLogin()} wieder zum Anmeldefenster zurück.
+     * startet einmalig die Hintergrunddienste. Der Onboarding-Assistent (Helden
+     * erstellen) erscheint nur bei einer frischen Registrierung – bereits
+     * registrierte Benutzer gelangen direkt zum Dashboard. Bei der Abmeldung
+     * kehrt die Anwendung über {@link #showLogin()} wieder zum Anmeldefenster
+     * zurück.
+     *
+     * @param newAccount {@code true}, wenn gerade ein neues Konto registriert
+     *                   wurde
      */
-    private void onAuthenticated() {
-        SessionStore sessionStore = injector.getInstance(SessionStore.class);
-        new OnboardingDialog(primaryStage, sessionStore).show();
+    private void onAuthenticated(boolean newAccount) {
+        if (newAccount) {
+            SessionStore sessionStore = injector.getInstance(SessionStore.class);
+            new OnboardingDialog(primaryStage, sessionStore).show();
+        }
         new View(injector, this::showLogin);
         lazyInitializeBackgroundServices();
     }

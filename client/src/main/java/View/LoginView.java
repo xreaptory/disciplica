@@ -7,6 +7,7 @@ import com.disciplica.shared.auth.AuthResponse;
 import com.disciplica.shared.auth.LoginRequest;
 import com.disciplica.shared.auth.RegisterRequest;
 import com.sun.net.httpserver.HttpServer;
+import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.concurrent.Task;
@@ -69,7 +70,7 @@ public class LoginView {
 
     private final Stage stage;
     private final SessionStore sessionStore;
-    private final Runnable onAuthenticated;
+    private final Consumer<Boolean> onAuthenticated;
     private final ApiClient apiClient;
     private final String apiBaseUrl;
     private boolean registerMode;
@@ -91,9 +92,11 @@ public class LoginView {
      * @param sessionStore    der Sitzungsspeicher, in den die Anmeldung
      *                        eingetragen wird
      * @param onAuthenticated die Aktion, die nach erfolgreicher Anmeldung
-     *                        ausgeführt wird
+     *                        ausgeführt wird; der übergebene Wert ist
+     *                        {@code true}, wenn gerade ein neues Konto
+     *                        registriert wurde (für das Onboarding)
      */
-    public LoginView(Stage stage, SessionStore sessionStore, Runnable onAuthenticated) {
+    public LoginView(Stage stage, SessionStore sessionStore, Consumer<Boolean> onAuthenticated) {
         this.stage = stage;
         this.sessionStore = sessionStore;
         this.onAuthenticated = onAuthenticated;
@@ -215,7 +218,7 @@ public class LoginView {
         }
         runAuth(() -> registerMode
                 ? apiClient.register(new RegisterRequest(username, email, password))
-                : apiClient.login(new LoginRequest(email, password)));
+                : apiClient.login(new LoginRequest(email, password)), registerMode);
     }
 
     /**
@@ -249,7 +252,7 @@ public class LoginView {
      * Startet die Anmeldung über Google.
      */
     private void google() {
-        runAuth(this::runGoogleOAuth);
+        runAuth(this::runGoogleOAuth, false);
     }
 
     /**
@@ -257,16 +260,18 @@ public class LoginView {
      */
     private void continueOffline() {
         stage.hide();
-        onAuthenticated.run();
+        onAuthenticated.accept(false);
     }
 
     /**
      * Führt einen Anmeldevorgang in einem Hintergrund-Thread aus, sperrt
      * währenddessen die Schaltflächen und reagiert auf Erfolg bzw. Fehler.
      *
-     * @param authCall der auszuführende Anmeldevorgang
+     * @param authCall   der auszuführende Anmeldevorgang
+     * @param newAccount {@code true}, wenn gerade ein neues Konto registriert
+     *                   wird (steuert das Onboarding)
      */
-    private void runAuth(AuthCall authCall) {
+    private void runAuth(AuthCall authCall, boolean newAccount) {
         submitButton.setDisable(true);
         googleButton.setDisable(true);
         offlineButton.setDisable(true);
@@ -281,7 +286,7 @@ public class LoginView {
             apiClient.store(response);
             sessionStore.authenticate(apiClient, response.user());
             stage.hide();
-            onAuthenticated.run();
+            onAuthenticated.accept(newAccount);
         });
         task.setOnFailed(event -> {
             submitButton.setDisable(false);
