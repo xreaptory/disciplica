@@ -95,6 +95,30 @@ public class UserRepository {
     }
 
     /**
+     * Zieht dem Benutzer Gold ab, sofern genügend vorhanden ist (atomar).
+     *
+     * @param id     die Kennung des Benutzers
+     * @param amount der abzuziehende Betrag
+     * @return {@code true}, wenn das Gold abgezogen wurde; {@code false}, wenn
+     *         der Bestand nicht ausreicht
+     */
+    public boolean spendGold(UUID id, int amount) {
+        return jdbcTemplate.update(
+                "UPDATE users SET gold = gold - ?, updated_at = now() WHERE id = ? AND gold >= ?",
+                amount, id, amount) > 0;
+    }
+
+    /**
+     * Stellt die Lebenspunkte eines Benutzers vollständig wieder her (50). Wird
+     * z.&nbsp;B. bei einem Levelaufstieg verwendet.
+     *
+     * @param id die Kennung des Benutzers
+     */
+    public void restoreHealth(UUID id) {
+        jdbcTemplate.update("UPDATE users SET health = 50, updated_at = now() WHERE id = ?", id);
+    }
+
+    /**
      * Wandelt die aktuelle Zeile eines Datenbankergebnisses in eine
      * {@link UserRow} um.
      *

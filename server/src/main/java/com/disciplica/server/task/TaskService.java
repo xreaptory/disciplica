@@ -12,6 +12,7 @@ import com.disciplica.server.user.LevelCalculator;
 import com.disciplica.server.user.UserRepository;
 import com.disciplica.shared.task.CreateTaskRequest;
 import com.disciplica.shared.task.TaskDto;
+import com.disciplica.shared.task.TaskType;
 import com.disciplica.shared.task.UpdateTaskRequest;
 
 /**
@@ -24,30 +25,75 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final LevelCalculator levelCalculator;
+    private final CronService cronService;
 
     /**
      * Erzeugt den Dienst mit seinen Abhängigkeiten.
      *
      * @param taskRepository  der Datenbankzugriff auf Aufgaben
-     * @param userRepository  der Datenbankzugriff auf Benutzer (für Level)
+     * @param userRepository  der Datenbankzugriff auf Benutzer (für Level/Gold)
      * @param levelCalculator berechnet das Level aus den Erfahrungspunkten
+     * @param cronService     führt den täglichen Tageswechsel aus
      */
     public TaskService(TaskRepository taskRepository,
                        UserRepository userRepository,
-                       LevelCalculator levelCalculator) {
+                       LevelCalculator levelCalculator,
+                       CronService cronService) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.levelCalculator = levelCalculator;
+        this.cronService = cronService;
     }
 
     /**
-     * Listet alle Aufgaben eines Benutzers auf.
+     * Listet alle Aufgaben eines Benutzers auf. Vorher wird – falls ein neuer
+     * Tag begonnen hat – der Tageswechsel ausgeführt (Dailies zurücksetzen,
+     * Schaden für verpasste Dailies).
      *
      * @param userId die Kennung des Benutzers
      * @return die Liste der Aufgaben
      */
     public List<TaskDto> list(UUID userId) {
+        cronService.runIfNeeded(userId);
         return taskRepository.findByUser(userId);
+    }
+
+    /**
+     * Bewertet eine Gewohnheit negativ („−“): Serie sinkt, Lebenspunkte werden
+     * abgezogen.
+     *
+     * @param userId die Kennung des Benutzers
+     * @param taskId die Kennung der Aufgabe
+     * @return die aktualisierte Aufgabe
+     * @throws ApiException wenn die Aufgabe nicht gefunden wird
+     */
+    @Transactional
+    public TaskDto scoreDown(UUID userId, UUID taskId) {
+        return taskRepository.scoreDown(userId, taskId)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Task not found"));
+    }
+
+    /**
+     * Kauft eine Belohnung: zieht das Gold (= Punktewert) ab, sofern genügend
+     * vorhanden ist.
+     *
+     * @param userId die Kennung des Benutzers
+     * @param taskId die Kennung der Belohnung
+     * @return die gekaufte Belohnung
+     * @throws ApiException wenn die Aufgabe fehlt, keine Belohnung ist oder das
+     *                      Gold nicht ausreicht
+     */
+    @Transactional
+    public TaskDto buyReward(UUID userId, UUID taskId) {
+        TaskDto task = taskRepository.findByUserAndId(userId, taskId)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Task not found"));
+        if (task.type() != TaskType.REWARD) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Task is not a reward");
+        }
+        if (!userRepository.spendGold(userId, task.points())) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Not enough gold");
+        }
+        return task;
     }
 
     /**
@@ -117,8 +163,14 @@ public class TaskService {
     private void recomputeLevel(UUID userId) {
         userRepository.findById(userId).ifPresent(user -> {
             int level = levelCalculator.calculateLevel(user.xp());
-            if (level != user.level()) {
-                userRepository.updateLevel(userId, level);
+            if (level == user.level()) {
+                return;
+            }
+            userRepository.updateLevel(userId, level);
+            if (level > user.level()) {
+                // Levelaufstieg heilt vollständig (wie bei Habitica) und verhindert
+                // damit eine Sackgasse bei 0 Lebenspunkten.
+                userRepository.restoreHealth(userId);
             }
         });
     }

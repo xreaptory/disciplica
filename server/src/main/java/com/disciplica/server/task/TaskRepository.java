@@ -157,6 +157,33 @@ public class TaskRepository {
     }
 
     /**
+     * Bewertet eine Gewohnheit negativ („−“): verringert die Serie und fügt dem
+     * Benutzer Schaden auf die Lebenspunkte zu (mindestens 1, abhängig vom
+     * Punktewert). Es werden keine Erfahrungspunkte oder Gold vergeben.
+     *
+     * @param userId die Kennung des Benutzers
+     * @param taskId die Kennung der Aufgabe
+     * @return die aktualisierte Aufgabe oder ein leeres {@link Optional}, falls
+     *         keine passende Aufgabe existiert
+     */
+    public Optional<TaskDto> scoreDown(UUID userId, UUID taskId) {
+        return jdbcTemplate.query("""
+                WITH updated AS (
+                    UPDATE tasks
+                    SET streak = GREATEST(0, streak - 1), updated_at = now()
+                    WHERE user_id = ? AND id = ?
+                    RETURNING id, type, title, description, points, streak, completed, category, created_at, updated_at
+                ), dmg AS (
+                    UPDATE users
+                    SET health = GREATEST(0, health - GREATEST(1, (SELECT points FROM updated))),
+                        updated_at = now()
+                    WHERE id = ? AND EXISTS (SELECT 1 FROM updated)
+                )
+                SELECT * FROM updated
+                """, (rs, rowNum) -> map(rs), userId, taskId, userId).stream().findFirst();
+    }
+
+    /**
      * Wandelt die aktuelle Zeile eines Datenbankergebnisses in ein
      * {@link TaskDto} um.
      *

@@ -103,4 +103,29 @@ public class TaskController {
     public TaskDto complete(Authentication authentication, @PathVariable UUID id) {
         return taskService.complete(currentUser.requireUserId(authentication), id);
     }
+
+    /**
+     * Bewertet eine Gewohnheit negativ („−“): zieht dem Benutzer Lebenspunkte
+     * ab und verringert die Serie.
+     *
+     * @param authentication der Anmeldekontext der Anfrage
+     * @param id             die Kennung der Gewohnheit
+     * @return die aktualisierte Aufgabe
+     */
+    @PostMapping("/{id}/down")
+    public TaskDto scoreDown(Authentication authentication, @PathVariable UUID id) {
+        return taskService.scoreDown(currentUser.requireUserId(authentication), id);
+    }
+
+    /**
+     * Kauft eine Belohnung und zieht dem Benutzer das entsprechende Gold ab.
+     *
+     * @param authentication der Anmeldekontext der Anfrage
+     * @param id             die Kennung der Belohnung
+     * @return die gekaufte Belohnung
+     */
+    @PostMapping("/{id}/buy")
+    public TaskDto buyReward(Authentication authentication, @PathVariable UUID id) {
+        return taskService.buyReward(currentUser.requireUserId(authentication), id);
+    }
 }

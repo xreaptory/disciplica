@@ -164,6 +164,26 @@ public class ApiClient {
     }
 
     /**
+     * Bewertet eine Gewohnheit negativ („−“): zieht Lebenspunkte ab.
+     *
+     * @param taskId die Kennung der Gewohnheit
+     * @return die aktualisierte Aufgabe
+     */
+    public TaskDto scoreDownTask(UUID taskId) {
+        return post("/tasks/" + taskId + "/down", null, TaskDto.class, true);
+    }
+
+    /**
+     * Kauft eine Belohnung und zieht das entsprechende Gold ab.
+     *
+     * @param taskId die Kennung der Belohnung
+     * @return die gekaufte Belohnung
+     */
+    public TaskDto buyReward(UUID taskId) {
+        return post("/tasks/" + taskId + "/buy", null, TaskDto.class, true);
+    }
+
+    /**
      * Löscht eine Aufgabe.
      *
      * @param taskId die Kennung der Aufgabe
