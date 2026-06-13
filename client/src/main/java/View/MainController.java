@@ -464,6 +464,38 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
     }
 
     /**
+     * Leitet aus dem Level einen Titel (Rang) ab, der mit dem Fortschritt
+     * aufsteigt.
+     *
+     * @param level das aktuelle Level
+     * @return der zum Level passende Titel
+     */
+    private static String titleForLevel(int level) {
+        if (level >= 30) {
+            return "Legend";
+        }
+        if (level >= 20) {
+            return "Hero";
+        }
+        if (level >= 15) {
+            return "Champion";
+        }
+        if (level >= 10) {
+            return "Knight";
+        }
+        if (level >= 7) {
+            return "Warrior";
+        }
+        if (level >= 4) {
+            return "Adept";
+        }
+        if (level >= 2) {
+            return "Apprentice";
+        }
+        return "Novice";
+    }
+
+    /**
      * Liefert eine Momentaufnahme der Benutzerwerte. Im angemeldeten Zustand
      * werden die Werte vom Server geholt, sonst kurzzeitig zwischengespeichert.
      *
@@ -484,7 +516,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
             snapshot = new UserStatsSnapshot(
                     profile.username(),
                     profile.level(),
-                    "Warrior",
+                    titleForLevel(profile.level()),
                     profile.xp(),
                     profile.gold(),
                     profile.health()
@@ -493,7 +525,7 @@ public class MainController implements EventHandler<Event>, ChangeListener<Strin
             snapshot = new UserStatsSnapshot(
                     user.getUsername(),
                     user.getLevel(),
-                    user.getTitle(),
+                    titleForLevel(user.getLevel()),
                     user.getExperience(),
                     user.getGold(),
                     user.getHealth()

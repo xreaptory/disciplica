@@ -496,10 +496,10 @@ public class View extends Stage {
                     String valueLabel;
                     String stripClass;
                     switch (type) {
-                        case "D" -> { typeLabel = "Daily";  valueLabel = points + " XP";   stripClass = "task-strip-medium"; }
-                        case "W" -> { typeLabel = "Habit";  valueLabel = points + " XP";   stripClass = "task-strip-hard"; }
-                        case "R" -> { typeLabel = "Reward"; valueLabel = points + " gold"; stripClass = "task-strip-very-hard"; }
-                        default  -> { typeLabel = "To-Do";  valueLabel = points + " XP";   stripClass = "task-strip-easy"; }
+                        case "D" -> { typeLabel = "Recurring"; valueLabel = points + " XP";   stripClass = "task-strip-medium"; }
+                        case "W" -> { typeLabel = "Recurring"; valueLabel = points + " XP";   stripClass = "task-strip-medium"; }
+                        case "R" -> { typeLabel = "Reward";    valueLabel = points + " gold"; stripClass = "task-strip-very-hard"; }
+                        default  -> { typeLabel = "To-Do";     valueLabel = points + " XP";   stripClass = "task-strip-easy"; }
                     }
                     title.setText((done ? "✓ " : "") + "[" + typeLabel + "]  " + name + "  (" + valueLabel + ")");
                     String subtitleText = description;
